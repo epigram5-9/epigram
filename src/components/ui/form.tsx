@@ -15,8 +15,9 @@ type FormFieldContextValue<TFieldValues extends FieldValues = FieldValues, TName
 const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue);
 
 function FormField<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({ ...props }: ControllerProps<TFieldValues, TName>) {
+  const value = React.useMemo(() => ({ name: props.name }), [props.name]);
   return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
+    <FormFieldContext.Provider value={value}>
       <Controller {...props} />
     </FormFieldContext.Provider>
   );
@@ -53,8 +54,9 @@ const FormItemContext = React.createContext<FormItemContextValue>({} as FormItem
 
 const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => {
   const id = React.useId();
-
   return (
+    // NOTE: React.useId()이기 때문에 useMemo로 감쌀 필요가 없음
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
     <FormItemContext.Provider value={{ id }}>
       <div ref={ref} className={cn('space-y-2', className)} {...props} />
     </FormItemContext.Provider>

@@ -29,8 +29,7 @@ module.exports = {
     'no-console': 'error',
     'react/jsx-props-no-spreading': 'off',
     'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['error', { variables: false, functions: false, classes: false }],
-    'react/jsx-no-constructed-context-values': 'off',
+    '@typescript-eslint/no-use-before-define': ['off'],
   },
   settings: {
     react: {
