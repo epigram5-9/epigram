@@ -33,7 +33,7 @@ module.exports = {
         'gray-300': '#ABABAB',
         'gray-400': '#919191',
         'background-100': '#F5F7FA',
-        error: '#FF6577',
+        'state-error': '#FF6577',
         'line-100': '#F2F2F2',
         'line-200': '#CFDBEA',
         'illust-yellow': '#FBC85B',
