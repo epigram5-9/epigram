@@ -6,9 +6,11 @@ function SearchLayout() {
   return (
     <>
       <header />
-      <div className='container mx-auto w-[640px] bg-blue-100'>
+      <div className='container mx-auto max-w-screen-sm bg-blue-100'>
         <SearchBar />
         <RecentSearches />
+        <SearchResults />
+        <SearchResults />
         <SearchResults />
         <SearchResults />
         <SearchResults />
