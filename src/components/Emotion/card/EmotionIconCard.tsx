@@ -46,8 +46,9 @@ function EmotionIconCard({ iconType = '감동', state = 'Default', size = 'sm' }
       break;
     case 'sm':
     default:
-      sizeClass = 'w-14 h-[84px]';
-      iconSizeClass = 'w-8 h-8 p-4';
+      sizeClass = 'w-14 h-21';
+      iconSizeClass = 'w-8 h-8';
+      textSizeClass = 'text-xs leading-tight';
       break;
   }
 
@@ -59,27 +60,27 @@ function EmotionIconCard({ iconType = '감동', state = 'Default', size = 'sm' }
   let textColorClass = 'text-neutral-400';
 
   if (state === 'Clicked') {
-    textColorClass = 'text-neutral-700';
+    textColorClass = 'hidden';
 
     // iconType에 따라 다른 border 색상을 설정
     switch (iconType) {
       case '감동':
-        borderClass = 'border-2 border-amber-300';
+        borderClass = 'border-4 border-illust-yellow';
         break;
       case '기쁨':
-        borderClass = 'border-2 border-emerald-400';
+        borderClass = 'border-4 border-illust-green';
         break;
       case '고민':
-        borderClass = 'border-2 border-indigo-400';
+        borderClass = 'border-4 border-illust-purple';
         break;
       case '슬픔':
-        borderClass = 'border-2 border-blue-400';
+        borderClass = 'border-4 border-illust-blue';
         break;
       case '분노':
-        borderClass = 'border-2 border-rose-400';
+        borderClass = 'border-4 border-illust-red';
         break;
       default:
-        borderClass = 'border-2 border-neutral-400';
+        borderClass = 'border-4 border-sub_blue_1';
         break;
     }
   }

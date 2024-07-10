@@ -10,7 +10,11 @@ function ExampleComponent() {
       <EmotionIconCard iconType='기쁨' state='Unclicked' size='md' />
 
       {/* 클릭된 상태 (Clicked), 슬픔 아이콘, 큰 크기 (lg) */}
+      <EmotionIconCard iconType='감동' state='Clicked' size='lg' />
+      <EmotionIconCard iconType='기쁨' state='Clicked' size='lg' />
+      <EmotionIconCard iconType='고민' state='Clicked' size='lg' />
       <EmotionIconCard iconType='슬픔' state='Clicked' size='lg' />
+      <EmotionIconCard iconType='분노' state='Clicked' size='lg' />
     </div>
   );
 }
