@@ -54,7 +54,7 @@ function EmotionIconCard({ iconType = '감동', state = 'Default', size = 'sm', 
   }
 
   // 상태에 따른 아이콘 경로 설정
-  const iconPath = state === 'Unclicked' ? iconPaths.BW[iconType] : iconPaths.Color[iconType];
+  const iconPath = state === 'Clicked' || state === 'Default' ? iconPaths.Color[iconType] : iconPaths.BW[iconType];
 
   // 상태에 따른 클래스 설정
   let borderClass = '';
