@@ -1,14 +1,7 @@
 import React from 'react';
 import cn from '@/lib/utils';
 import Image from 'next/image';
-
-// EmotionIconCardProps 인터페이스 정의
-export interface EmotionIconCardProps {
-  iconType: '감동' | '기쁨' | '고민' | '슬픔' | '분노'; // 아이콘 종류
-  state: 'Default' | 'Unclicked' | 'Clicked'; // 상태
-  size: 'sm' | 'md' | 'lg'; // 크기
-  onClick?: () => void; // 클릭 이벤트 핸들러
-}
+import { EmotionIconCardProps } from '@/types/EmotionTypes';
 
 // 아이콘 파일 경로 매핑
 const iconPaths = {
@@ -118,4 +111,4 @@ EmotionIconCard.defaultProps = {
   onClick: () => {},
 };
 
-export { EmotionIconCard };
+export default EmotionIconCard;

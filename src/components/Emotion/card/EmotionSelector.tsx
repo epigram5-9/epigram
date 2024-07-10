@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import InteractiveEmotionIconCard from '@/components/Emotion/card/InteractiveEmotionIconCard';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { EmotionType, EmotionState } from '@/types/EmotionTypes';
 
 // EmotionSelector 컴포넌트 함수 선언
 function EmotionSelector() {
@@ -8,28 +9,28 @@ function EmotionSelector() {
   const isMobile = useMediaQuery('(max-width: 767px)');
 
   // 감정 카드 상태 관리
-  const [states, setStates] = useState({
-    감동: 'Default' as 'Default' | 'Unclicked' | 'Clicked',
-    기쁨: 'Default' as 'Default' | 'Unclicked' | 'Clicked',
-    고민: 'Default' as 'Default' | 'Unclicked' | 'Clicked',
-    슬픔: 'Default' as 'Default' | 'Unclicked' | 'Clicked',
-    분노: 'Default' as 'Default' | 'Unclicked' | 'Clicked',
+  const [states, setStates] = useState<Record<EmotionType, EmotionState>>({
+    감동: 'Default',
+    기쁨: 'Default',
+    고민: 'Default',
+    슬픔: 'Default',
+    분노: 'Default',
   });
 
   // 감정 카드 클릭 핸들러
-  const handleCardClick = (iconType: '감동' | '기쁨' | '고민' | '슬픔' | '분노') => {
+  const handleCardClick = (iconType: EmotionType) => {
     setStates((prevStates) => {
       const newStates = { ...prevStates };
 
       if (prevStates[iconType] === 'Clicked') {
         // 현재 클릭된 카드가 다시 클릭되면 모두 Default로 설정
         Object.keys(newStates).forEach((key) => {
-          newStates[key as '감동' | '기쁨' | '고민' | '슬픔' | '분노'] = 'Default';
+          newStates[key as EmotionType] = 'Default';
         });
       } else {
         // 하나의 카드가 클릭되면 그 카드만 Clicked, 나머지는 Unclicked로 설정
         Object.keys(newStates).forEach((key) => {
-          newStates[key as '감동' | '기쁨' | '고민' | '슬픔' | '분노'] = key === iconType ? 'Clicked' : 'Unclicked';
+          newStates[key as EmotionType] = key === iconType ? 'Clicked' : 'Unclicked';
         });
       }
 
