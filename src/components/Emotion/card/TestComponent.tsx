@@ -1,5 +1,5 @@
 import React from 'react';
-import EmotionIconCardContainer from '@/components/Emotion/card/EmotionIconCardContainer';
+import EmotionIconCardContainer from '@/components/Emotion/card/InteractiveEmotionIconCard';
 
 function ExampleComponent() {
   return (
