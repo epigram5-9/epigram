@@ -8,130 +8,182 @@ module.exports = {
         iropkeBatang: ['IropkeBatang'],
       },
       fontSize: {
-        '3xl': [
+        // Pretendard settings
+        'pretendard-3xl': [
           '32px',
           {
             lineHeight: '42px',
-            fontWeight: '700', // Bold
+            fontWeight: '700',
           },
         ],
-        '2xl': [
+        'pretendard-2xl-bold': [
           '24px',
           {
             lineHeight: '32px',
-            fontWeight: '700', // Bold
+            fontWeight: '700',
           },
         ],
-        '2xl-semibold': [
+        'pretendard-2xl-semibold': [
           '24px',
           {
             lineHeight: '32px',
-            fontWeight: '600', // Semibold
+            fontWeight: '600',
           },
         ],
-        '2xl-medium': [
+        'pretendard-2xl-medium': [
           '24px',
           {
             lineHeight: '32px',
-            fontWeight: '500', // Medium
+            fontWeight: '500',
           },
         ],
-        '2xl-regular': [
+        'pretendard-2xl-regular': [
           '24px',
           {
             lineHeight: '32px',
-            fontWeight: '400', // Regular
+            fontWeight: '400',
           },
         ],
-        xl: [
+        'pretendard-xl-semibold': [
           '20px',
           {
             lineHeight: '32px',
-            fontWeight: '600', // Semibold
+            fontWeight: '600',
           },
         ],
-        'xl-medium': [
+        'pretendard-xl-medium': [
           '20px',
           {
             lineHeight: '32px',
-            fontWeight: '500', // Medium
+            fontWeight: '500',
           },
         ],
-        'xl-regular': [
+        'pretendard-xl-regular': [
           '20px',
           {
             lineHeight: '32px',
-            fontWeight: '400', // Regular
+            fontWeight: '400',
           },
         ],
-        'lg-semibold': [
+        'pretendard-lg-semibold': [
           '16px',
           {
             lineHeight: '26px',
-            fontWeight: '600', // Semibold
+            fontWeight: '600',
           },
         ],
-        'lg-medium': [
+        'pretendard-lg-medium': [
           '16px',
           {
             lineHeight: '26px',
-            fontWeight: '500', // Medium
+            fontWeight: '500',
           },
         ],
-        'lg-regular': [
+        'pretendard-lg-regular': [
           '16px',
           {
             lineHeight: '26px',
-            fontWeight: '400', // Regular
+            fontWeight: '400',
           },
         ],
-        md: [
+        'pretendard-md-bold': [
           '14px',
           {
             lineHeight: '24px',
-            fontWeight: '700', // Bold
+            fontWeight: '700',
           },
         ],
-        'md-semibold': [
+        'pretendard-md-semibold': [
           '14px',
           {
             lineHeight: '24px',
-            fontWeight: '600', // Semibold
+            fontWeight: '600',
           },
         ],
-        'md-medium': [
+        'pretendard-md-medium': [
           '14px',
           {
             lineHeight: '24px',
-            fontWeight: '500', // Medium
+            fontWeight: '500',
           },
         ],
-        'md-regular': [
+        'pretendard-md-regular': [
           '14px',
           {
             lineHeight: '24px',
-            fontWeight: '400', // Regular
+            fontWeight: '400',
           },
         ],
-        sm: [
+        'pretendard-sm-medium': [
           '13px',
           {
             lineHeight: '22px',
-            fontWeight: '500', // Medium
+            fontWeight: '500',
           },
         ],
-        'xs-semibold': [
+        'pretendard-xs-semibold': [
           '12px',
           {
             lineHeight: '20px',
-            fontWeight: '600', // Semibold
+            fontWeight: '600',
           },
         ],
-        'xs-regular': [
+        'pretendard-xs-regular': [
           '12px',
           {
             lineHeight: '18px',
-            fontWeight: '400', // Regular
+            fontWeight: '400',
+          },
+        ],
+
+        // IropkeBatang settings
+        'iropke-4xl': [
+          '40px',
+          {
+            lineHeight: '52px',
+            fontWeight: '500',
+          },
+        ],
+        'iropke-3xl': [
+          '32px',
+          {
+            lineHeight: '48px',
+            fontWeight: '500',
+          },
+        ],
+        'iropke-2xl': [
+          '24px',
+          {
+            lineHeight: '40px',
+            fontWeight: '500',
+          },
+        ],
+        'iropke-xl': [
+          '20px',
+          {
+            lineHeight: '28px',
+            fontWeight: '500',
+          },
+        ],
+        'iropke-lg': [
+          '16px',
+          {
+            lineHeight: '26px',
+            fontWeight: '500',
+          },
+        ],
+        'iropke-md': [
+          '14px',
+          {
+            lineHeight: '24px',
+            fontWeight: '500',
+          },
+        ],
+        'iropke-xs': [
+          '12px',
+          {
+            lineHeight: '18px',
+            fontWeight: '500',
           },
         ],
       },
