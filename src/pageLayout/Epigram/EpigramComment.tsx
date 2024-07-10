@@ -1,3 +1,4 @@
+import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 
 function CommentSection() {
@@ -10,7 +11,10 @@ function CommentSection() {
             <div className='w-12 h-12'>
               <Image src='/profile.svg' alt='프로필 사진' width={48} height={48} />
             </div>
-            <textarea className='bg-background-100 w-full text-black p-4 text-xl  border-solid border-line-200 border-2 rounded-lg resize-none' placeholder='100자 이내로 입력해 주세요.' />
+            <Textarea
+              className='bg-background-100 w-full text-black p-4 text-xl border-solid border-line-200 border-2 rounded-lg resize-none focus-visible:ring-0'
+              placeholder='100자 이내로 입력해 주세요.'
+            />
           </div>
         </div>
       </div>
