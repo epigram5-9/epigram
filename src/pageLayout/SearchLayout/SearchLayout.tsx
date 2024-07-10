@@ -1,7 +1,7 @@
 import React from 'react';
-import SearchBar from '../../components/Search/SearchBar';
-import RecentSearches from '../../components/Search/RecentSearches';
-import SearchResults from '../../components/Search/SearchResults';
+import SearchBar from '@/components/Search/SearchBar';
+import RecentSearches from '@/components/Search/RecentSearches';
+import SearchResults from '@/components/Search/SearchResults';
 
 function SearchLayout() {
   return (
