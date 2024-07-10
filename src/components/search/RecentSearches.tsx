@@ -1,3 +1,5 @@
+import React from 'react';
+
 function RecentSearches() {
   return (
     <div className='flex flex-col items-start gap-4 md:gap-6 lg:gap-10 my-6 md:my-8 lg:my-10 px-6'>

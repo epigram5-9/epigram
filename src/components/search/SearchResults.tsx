@@ -1,3 +1,5 @@
+import React from 'react';
+
 function SearchResults() {
   return (
     <div className='flex flex-col py-4 px-6 lg:p-6 gap-2 lg:gap-[16px] border-b border-gray-100'>

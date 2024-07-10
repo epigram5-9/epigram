@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import SEARCH_ICON from '../../../public/md.svg';
 
