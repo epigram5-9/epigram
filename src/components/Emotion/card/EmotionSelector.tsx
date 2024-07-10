@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import InteractiveEmotionIconCard from '@/components/Emotion/card/InteractiveEmotionIconCard';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 // EmotionSelector 컴포넌트 함수 선언
 function EmotionSelector() {
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)');
+  const isMobile = useMediaQuery('(max-width: 767px)');
+
   // 감정 카드 상태 관리
   const [states, setStates] = useState({
     감동: 'Default' as 'Default' | 'Unclicked' | 'Clicked',
@@ -33,10 +37,21 @@ function EmotionSelector() {
     });
   };
 
+  let containerClass = 'w-[544px] h-[136px] gap-4';
+  let cardSize: 'lg' | 'md' | 'sm' = 'lg';
+
+  if (isTablet) {
+    containerClass = 'w-[352px] h-[96px] gap-2';
+    cardSize = 'md';
+  } else if (isMobile) {
+    containerClass = 'w-[312px] h-[84px] gap-2';
+    cardSize = 'sm';
+  }
+
   return (
-    <div className='w-[544px] h-[136px] justify-start items-start gap-4 inline-flex'>
+    <div className={`justify-start items-start inline-flex ${containerClass}`}>
       {(['감동', '기쁨', '고민', '슬픔', '분노'] as const).map((iconType) => (
-        <InteractiveEmotionIconCard key={iconType} iconType={iconType} size='lg' state={states[iconType]} onClick={() => handleCardClick(iconType)} />
+        <InteractiveEmotionIconCard key={iconType} iconType={iconType} size={cardSize} state={states[iconType]} onClick={() => handleCardClick(iconType)} />
       ))}
     </div>
   );
