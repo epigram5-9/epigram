@@ -7,6 +7,134 @@ module.exports = {
         pretendard: ['Pretendard'],
         iropkeBatang: ['IropkeBatang'],
       },
+      fontSize: {
+        '3xl': [
+          '32px',
+          {
+            lineHeight: '42px',
+            fontWeight: '700', // Bold
+          },
+        ],
+        '2xl': [
+          '24px',
+          {
+            lineHeight: '32px',
+            fontWeight: '700', // Bold
+          },
+        ],
+        '2xl-semibold': [
+          '24px',
+          {
+            lineHeight: '32px',
+            fontWeight: '600', // Semibold
+          },
+        ],
+        '2xl-medium': [
+          '24px',
+          {
+            lineHeight: '32px',
+            fontWeight: '500', // Medium
+          },
+        ],
+        '2xl-regular': [
+          '24px',
+          {
+            lineHeight: '32px',
+            fontWeight: '400', // Regular
+          },
+        ],
+        xl: [
+          '20px',
+          {
+            lineHeight: '32px',
+            fontWeight: '600', // Semibold
+          },
+        ],
+        'xl-medium': [
+          '20px',
+          {
+            lineHeight: '32px',
+            fontWeight: '500', // Medium
+          },
+        ],
+        'xl-regular': [
+          '20px',
+          {
+            lineHeight: '32px',
+            fontWeight: '400', // Regular
+          },
+        ],
+        'lg-semibold': [
+          '16px',
+          {
+            lineHeight: '26px',
+            fontWeight: '600', // Semibold
+          },
+        ],
+        'lg-medium': [
+          '16px',
+          {
+            lineHeight: '26px',
+            fontWeight: '500', // Medium
+          },
+        ],
+        'lg-regular': [
+          '16px',
+          {
+            lineHeight: '26px',
+            fontWeight: '400', // Regular
+          },
+        ],
+        md: [
+          '14px',
+          {
+            lineHeight: '24px',
+            fontWeight: '700', // Bold
+          },
+        ],
+        'md-semibold': [
+          '14px',
+          {
+            lineHeight: '24px',
+            fontWeight: '600', // Semibold
+          },
+        ],
+        'md-medium': [
+          '14px',
+          {
+            lineHeight: '24px',
+            fontWeight: '500', // Medium
+          },
+        ],
+        'md-regular': [
+          '14px',
+          {
+            lineHeight: '24px',
+            fontWeight: '400', // Regular
+          },
+        ],
+        sm: [
+          '13px',
+          {
+            lineHeight: '22px',
+            fontWeight: '500', // Medium
+          },
+        ],
+        'xs-semibold': [
+          '12px',
+          {
+            lineHeight: '20px',
+            fontWeight: '600', // Semibold
+          },
+        ],
+        'xs-regular': [
+          '12px',
+          {
+            lineHeight: '18px',
+            fontWeight: '400', // Regular
+          },
+        ],
+      },
       colors: {
         'black-100': '#787878',
         'black-200': '#6B6B6B',
