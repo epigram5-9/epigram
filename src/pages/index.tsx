@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import CommentCard from '@/components/Card/CommentCard';
 
 export default function Home() {
   // NOTE: 테스트를 위해서 typescript-eslint/no-unused-vars도 잠시 끔!
@@ -31,6 +32,7 @@ export default function Home() {
         <div>Epigram Main</div>
         <p className='font-pretendard text-gray-100 bg-blue-700'>Pretendard</p>
         <p className='font-iropkeBatang text-illust-yellow bg-error'>Iropke Batang</p>
+        <CommentCard size='sm' status='edit' />
       </main>
     </>
   );
