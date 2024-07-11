@@ -34,7 +34,7 @@ export default function Home() {
         <p className='font-pretendard text-gray-100 bg-blue-700'>Pretendard</p>
         <p className='font-iropkeBatang text-illust-yellow bg-error'>Iropke Batang</p>
 
-        <EpigramCard size='lg' />
+        <EpigramCard />
       </main>
     </>
   );
