@@ -133,6 +133,10 @@ body {
   overflow-x: hidden;
 }
 
+body {
+  font-family: 'Pretendard';
+}
+
 a {
   color: inherit;
   text-decoration: none;
