@@ -1,6 +1,8 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
 import { GetUserRequestType } from '@/schema/user';
+import { GetEpigramRequestType } from '@/schema/epigram';
 import { getMe, getUser } from './user';
+import getEpigram from './epigram';
 
 const quries = createQueryKeyStore({
   user: {
@@ -11,6 +13,12 @@ const quries = createQueryKeyStore({
     getUser: (request: GetUserRequestType) => ({
       queryKey: [request],
       queryFn: () => getUser(request),
+    }),
+  },
+  epigram: {
+    getEpigram: (request: GetEpigramRequestType) => ({
+      queryKey: ['epigram', request],
+      queryFn: () => getEpigram(request),
     }),
   },
 });

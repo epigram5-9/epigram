@@ -1,30 +1,46 @@
+import useEpigramQuery from '@/hooks/epigramQueryHook';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 function EpigramFigure() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data: epigram, isLoading, error } = useEpigramQuery({ id: id as string });
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div> 에러 발생!! {(error as Error).message}</div>;
+  if (!epigram) return <div>Epigram이 없는데요?!?!?!?</div>;
+
   return (
     <div className='bg-[length:100%_2.5em] bg-[linear-gradient(#eee_.1em,transparent_.1em)] w-full flex justify-center py-6'>
       <figure className='w-80 md:w-96 lg:w-[640px] flex flex-col lg: gap-8'>
         <div className='flex gap-2'>
-          <p className='text-gray-400 text-base lg:text-xl font-normal'>#꿈을 이루고싶을때</p>
-          <p className='text-gray-400 text-base lg:text-xl font-normal'>#나아가야할때</p>
+          {epigram.tags.map((tag) => (
+            <p key={tag.id} className='text-gray-400 text-base lg:text-xl font-normal'>
+              #{tag.name}
+            </p>
+          ))}
         </div>
         <blockquote className=''>
-          <p className='text-2xl lg:text-3xl font-normal'>오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.</p>
+          <p className='text-2xl lg:text-3xl font-normal'>{epigram.content}</p>
         </blockquote>
-        <figcaption className='text-gray-400 text-right text-base lg:text-2xl font-normal'>-앙드레 말로-</figcaption>
+        <figcaption className='text-gray-400 text-right text-base lg:text-2xl font-normal'>-{epigram.author}-</figcaption>
         <div className='flex justify-center gap-4'>
           <button type='button'>
             <div className='w-20 lg:w-28 h-9 lg:h-11 flex items-center justify-center  text-white rounded-full bg-black'>
               <Image src='/likeIcon.svg' alt='좋아요 아이콘' width={20} height={20} className='lg:w-9 lg:h-9' />
-              <p className='text-sm lg:text-xl'>123</p>
+              <p className='text-sm lg:text-xl'>{epigram.likeCount}</p>
             </div>
           </button>
-          <button type='button'>
-            <div className='w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
-              <p className='text-gray-300 text-sm lg:text-xl'>왕도로 가는길</p>
-              <Image src='/placeLink.svg' alt='지도링크' width={20} height={20} className='lg:w-9 lg:h-9' />
-            </div>
-          </button>
+          {epigram.referenceTitle && (
+            <button type='button'>
+              <div className='w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
+                <p className='text-gray-300 text-sm lg:text-xl'>{epigram.referenceTitle}</p>
+                <Image src='/placeLink.svg' alt='지도링크' width={20} height={20} className='lg:w-9 lg:h-9' />
+              </div>
+            </button>
+          )}
         </div>
       </figure>
     </div>
