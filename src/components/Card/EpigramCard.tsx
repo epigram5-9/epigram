@@ -29,12 +29,12 @@ function EpigramCard() {
         <div className='relative w-full z-10 flex flex-col justify-start items-start flex-1'>
           <div className='self-stretch flex-col justify-start items-start gap-2 flex'>
             <div
-              className={`self-stretch ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-neutral-700 font-normal font-['Iropke Batang OTF'] leading-[18px]`}
+              className={`self-stretch ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-neutral-700 font-normal font-iropkeBatang leading-normal`}
             >
-              오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.
+              오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.
             </div>
             <div
-              className={`self-stretch ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-right text-slate-400 font-normal font-['Iropke Batang OTF'] leading-[18px]`}
+              className={`self-stretch ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-right text-slate-400 font-normal font-iropkeBatang leading-normal`}
             >
               - 앙드레 말로 -
             </div>
@@ -43,12 +43,12 @@ function EpigramCard() {
       </div>
       <div className='justify-start items-start gap-2 inline-flex'>
         <div
-          className={`text-right ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-['Iropke Batang OTF'] leading-[18px]`}
+          className={`text-right ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-iropkeBatang leading-normal`}
         >
           #나아가야할때
         </div>
         <div
-          className={`text-right ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-['Iropke Batang OTF'] leading-[18px]`}
+          className={`text-right ${textSizeStyles.base} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-iropkeBatang leading-normal`}
         >
           #꿈을이루고싶을때
         </div>
