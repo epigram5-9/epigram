@@ -24,7 +24,7 @@ function MyPageLayout() {
         <div className='w-[640px] h-[648px] mt-[160px] border border-black'>
           <p>캘린더</p>
         </div>
-        {/* 감정 차트 - 추후 chart UI로 분리 예정*/}
+        {/* 감정 차트 */}
         <div className='w-[640px] mt-[160px] flex flex-col gap-6'>
           <p className='text-black-600 font-semibold text-2xl'>감정 차트</p>
           <div className='w-[640px] h-[264px] py-6 px-28 flex justify-between'>
