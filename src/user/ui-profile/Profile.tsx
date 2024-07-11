@@ -1,22 +1,33 @@
 import Image from 'next/image';
 import { UserProfileProps } from '@/types/user';
 import { ChangeEvent, useRef } from 'react';
+import { useCreatePresignedUrl } from '@/hooks/userQueryHooks';
 import { MAX_FILE_SIZE, sampleImage } from '../util/constants';
 
 export default function Profile({ profileImage, nickname }: UserProfileProps) {
+  const { mutate: createPresignedUrl } = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // TODO: 여러개의 샘플 이미지 랜덤하게 뜨도록 추가 할 예정
   const image = profileImage || sampleImage[1];
 
   // 이미지 업로드
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (file) {
       // [이미지 파일, 최대 용량은 5MB입니다.]
       if (file.size > MAX_FILE_SIZE) {
-        // TODO: CI 테스트용 console.log
+        // NOTE: CI 테스트용 alert, toast로 변경 예정
         // eslint-disable-next-line no-alert
         alert('파일 크기가 5MB를 초과합니다.');
+      }
+
+      try {
+        const presignedUrl = await createPresignedUrl({ image: file.name });
+        console.log(presignedUrl); // eslint-disable-line no-console
+      } catch (error) {
+        console.error('file upload error:', error); // eslint-disable-line no-console
       }
     }
   };
