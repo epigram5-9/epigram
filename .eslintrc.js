@@ -28,6 +28,8 @@ module.exports = {
     'react/prop-types': 'off',
     'no-console': 'error',
     'react/jsx-props-no-spreading': 'off',
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['off'],
     'react/self-closing-comp': 'off',
   },
   settings: {
