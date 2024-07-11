@@ -1,4 +1,4 @@
-import MyPageLayout from '@/pageLayout/MypageLayout';
+import MyPageLayout from '@/pageLayout/MypageLayout/MyPageLayout';
 
 export default function mypage() {
   return <MyPageLayout />;
