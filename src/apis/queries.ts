@@ -15,6 +15,7 @@ const quries = createQueryKeyStore({
       queryFn: () => getUser(request),
     }),
   },
+  // NOTE: Epigram 관련 query함수
   epigram: {
     getEpigram: (request: GetEpigramRequestType) => ({
       queryKey: ['epigram', request],

@@ -5,6 +5,8 @@ const BASE_URL = 'https://fe-project-epigram-api.vercel.app/5-9';
 
 const getEpigram = async (request: GetEpigramRequestType): Promise<GetEpigramResponseType> => {
   const { id } = request;
+
+  // NOTE : 임시로 테스트계정의 토큰을 변수로 선언해서 사용
   const TOKEN =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzIwNzUzNjYwLCJleHAiOjE3MjA3NTU0NjAsImlzcyI6InNwLWVwaWdyYW0ifQ.HqHWi_Uoj37aZzC_43d2lh5-VR2b4mXZWO--905fCQQ';
 

@@ -9,6 +9,7 @@ function DetailPage() {
   const { id } = router.query;
   const { data: epigram, isLoading, error } = useEpigramQuery({ id: id as string });
 
+  // TODO: Spinner, 404페이지 추가해도 좋을거 같음
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div> 에러 발생!! {(error as Error).message}</div>;
   if (!epigram) return <div>Epigram이 없는데요.</div>;
