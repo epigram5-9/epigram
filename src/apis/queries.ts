@@ -4,7 +4,7 @@ import { GetEpigramRequestType } from '@/schema/epigram';
 import { getMe, getUser } from './user';
 import getEpigram from './epigram';
 
-const quries = createQueryKeyStore({
+const queries = createQueryKeyStore({
   user: {
     getMe: () => ({
       queryKey: ['getMe'],
@@ -24,4 +24,4 @@ const quries = createQueryKeyStore({
   },
 });
 
-export default quries;
+export default queries;
