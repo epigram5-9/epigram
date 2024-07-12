@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <div className='w-full h-[5864px] relative bg-slate-100'>
       {/* Header */}
-      <div className='absolute top-[300px] w-full bg-stripes'>
-        <div className='absolute left-1/2 transform -translate-x-1/2 flex-col justify-start items-center gap-12 inline-flex'>
+      <div className='absolute w-full h-[1040px] left-0  bg-stripes'>
+        <div className='absolute left-1/2 transform -translate-x-1/2 top-[300px] flex-col justify-start items-center gap-12 inline-flex'>
           <div className='flex-col justify-start items-center gap-10 flex'>
             <div className='text-center text-zinc-700 text-[40px] font-normal font-iropkeBatang leading-[64px]'>
               나만 갖고 있기엔
@@ -19,7 +19,7 @@ export default function Home() {
             <div className='text-white text-xl font-semibold font-Pretendard leading-loose'>시작하기</div>
           </div>
         </div>
-        <div className='w-full h-[74px] absolute left-1/2 transform -translate-x-1/2 top-[480px] flex-col justify-between items-center inline-flex'>
+        <div className='w-full h-[74px] absolute left-1/2 transform -translate-x-1/2 top-[742px] flex-col justify-between items-center inline-flex'>
           <div className="text-center text-slate-400 text-base font-semibold font-['Pretendard'] leading-relaxed">더 알아보기</div>
           <div className='w-6 h-6 relative'>
             <Image src='ArrowDownIcon.svg' alt='Arrow Down Icon' layout='fill' />
@@ -77,7 +77,7 @@ export default function Home() {
       </div>
       <Image className='w-[640px] h-[786.23px] left-1/2 transform -translate-x-1/2 top-[3893px] absolute' src='/AboutEpigram4.png' alt='placeholder' width={640} height={786} />
 
-      <div className='w-full h-[1040px] left-0 top-[4824px] absolute bg-white flex-col justify-start items-start gap-6 inline-flex'>
+      <div className='w-full h-[1040px] left-0 top-[4824px] absolute bg-stripes flex-col justify-start items-start gap-6 inline-flex'>
         <div className='absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col justify-start items-center gap-12 inline-flex'>
           <div className='w-[184px] h-[105px] relative self-closing-comp'>
             <Image src='Logo/LogoXL.svg' alt='Epigram Logo' layout='fill' />
