@@ -8,7 +8,7 @@ const getEpigram = async (request: GetEpigramRequestType): Promise<GetEpigramRes
 
   // NOTE : 임시로 테스트계정의 토큰을 변수로 선언해서 사용
   const TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzIwNzU2MTIyLCJleHAiOjE3MjA3NTc5MjIsImlzcyI6InNwLWVwaWdyYW0ifQ.YMEoP8j3rW_dPrrxBCL9Xjg46oH52BVMHQew85vJ12c';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzIwNzg2NjkxLCJleHAiOjE3MjA3ODg0OTEsImlzcyI6InNwLWVwaWdyYW0ifQ.ZguwmfvKbEkah5HgtKrhMYsDwK_EgEJWtfAddHe6cMM';
 
   try {
     const response = await axios.get(`${BASE_URL}/epigrams/${id}`, {

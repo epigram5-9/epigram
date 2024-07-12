@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 function DetailPage() {
   const router = useRouter();
   const { id } = router.query;
-  const { data: epigram, isLoading, error } = useEpigramQuery({ id: id as string });
+  const { data: epigram, isLoading, error } = useEpigramQuery({ id: id as string }, !!id);
 
   // TODO: Spinner, 404페이지 추가해도 좋을거 같음
   if (isLoading) return <div>로딩 중...</div>;
