@@ -36,12 +36,12 @@ function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareI
   const { toast } = useToast();
 
   // 페이지 이동 함수
-  const navigateTo = (path: string) => {
+  const handleNavigateTo = (path: string) => {
     router.push(path);
   };
 
   // 현재 링크 복사 함수
-  const copyToClipboard = async () => {
+  const handleCopyToClipboard = async () => {
     try {
       // 현재 URL 가져오기
       const currentURL = window.location.href;
@@ -65,19 +65,19 @@ function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareI
       <div className='container flex justify-between items-center'>
         <div className='flex items-center space-x-4'>
           {icon === 'back' && (
-            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={() => navigateTo(routerPage)} aria-label='뒤로가기 버튼'>
+            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={() => handleNavigateTo(routerPage)} aria-label='뒤로가기 버튼'>
               <Image src={ARROW_LEFT_ICON} alt='뒤로가기 버튼 이미지' />
             </button>
           )}
           {icon === 'search' && (
-            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={() => navigateTo('/search')} aria-label='검색 버튼'>
+            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={() => handleNavigateTo('/search')} aria-label='검색 버튼'>
               <Image src={SEARCH_ICON} alt='검색 버튼 이미지' />
             </button>
           )}
         </div>
         <div className='flex-grow flex justify-center'>
           {isLogo ? (
-            <button className='flex items-center gap-2' type='button' onClick={() => navigateTo('/')} aria-label='홈으로 이동'>
+            <button className='flex items-center gap-2' type='button' onClick={() => handleNavigateTo('/')} aria-label='홈으로 이동'>
               <Image className='w-5 h-5 lg:w-9 lg:h-9' src={LOGO_ICON} alt='logo' />
               <span className='text-black-700 text-6 lg:text-[26px] leading-6 font-bold'>Epigram</span>
             </button>
@@ -87,12 +87,12 @@ function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareI
         </div>
         <div className='flex items-center space-x-4'>
           {isProfileIcon && (
-            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={() => navigateTo('/mypage')} aria-label='프로필 페이지로 이동'>
+            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={() => handleNavigateTo('/mypage')} aria-label='프로필 페이지로 이동'>
               <Image src={PROFILE_ICON} alt='프로필 이미지' />
             </button>
           )}
           {isShareIcon && (
-            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={copyToClipboard} aria-label='링크 복사'>
+            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={handleCopyToClipboard} aria-label='링크 복사'>
               <Image src={SHARE_ICON} alt='프로필 이미지' />
             </button>
           )}
