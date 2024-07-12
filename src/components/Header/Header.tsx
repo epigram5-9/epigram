@@ -11,8 +11,8 @@ import SHARE_ICON from '../../../public/icon/share-icon.svg';
 // TODO 네비게이션 바를 나타내는 컴포넌트 입니다.
 // TODO 상위 컴포넌트에서 Props를 받아 원하는 스타일을 보여줍니다.
 // TODO 사용 예시
-// TODO <Header icon='back' routerPage='원하는 페이지 주소' isLogo={false} insteadOfLogo='센터 텍스트' isProfileIcon={false} isButton textInButton='버튼 텍스트' disabled={false} onClick={동작할 함수} />
-// TODO <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isButton={false} textInButton='' disabled={false} onClick={() => {}} />;
+// TODO <Header icon='back' routerPage='원하는 페이지 주소' isLogo={false} insteadOfLogo='센터 텍스트' isProfileIcon={false} isShareIcon={false} isButton textInButton='버튼 텍스트' disabled={false} onClick={동작할 함수} />
+// TODO <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />;
 // TODO icon: 'back'을 사용할 경우 routerPage의 값을 무조건 지정해줘야 합니다.
 // TODO isLogo={false}일 경우 insteadOfLogo의 값을 무조건 지정해줘야 합니다.
 // TODO isButton 일 경우 textInButton의 값을 무조건 지정해줘야 합니다.
