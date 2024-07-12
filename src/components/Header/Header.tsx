@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useToast } from '../ui/use-toast';
+import { HeaderProps } from '@/types/Header';
 import LOGO_ICON from '../../../public/epigram-icon.png';
 import ARROW_LEFT_ICON from '../../../public/icon/arrow-left-icon.svg';
 import PROFILE_ICON from '../../../public/icon/profile-icon.svg';
@@ -17,19 +18,6 @@ import SHARE_ICON from '../../../public/icon/share-icon.svg';
 // TODO isLogo={false}일 경우 insteadOfLogo의 값을 무조건 지정해줘야 합니다.
 // TODO isButton 일 경우 textInButton의 값을 무조건 지정해줘야 합니다.
 // TODO SHARE_ICON 추가 시 토스트 기능도 사용하려면 해당 컴포넌트 아래 <Toaster /> 를 추가해주세요.
-
-interface HeaderProps {
-  icon: 'back' | 'search' | '';
-  routerPage: string;
-  isLogo: boolean;
-  insteadOfLogo: string;
-  isProfileIcon: boolean;
-  isShareIcon: boolean;
-  isButton: boolean;
-  textInButton: string;
-  disabled: boolean;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
 
 function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareIcon, textInButton, routerPage, disabled, onClick }: HeaderProps) {
   const router = useRouter();
