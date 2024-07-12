@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { HeaderProps } from '../../types/Header';
 import { useToast } from '../ui/use-toast';
-import { HeaderProps } from '@/types/Header';
 import LOGO_ICON from '../../../public/epigram-icon.png';
 import ARROW_LEFT_ICON from '../../../public/icon/arrow-left-icon.svg';
 import PROFILE_ICON from '../../../public/icon/profile-icon.svg';
