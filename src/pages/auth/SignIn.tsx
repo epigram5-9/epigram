@@ -5,19 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-
-// 스키마 정의
-const formSchema = z.object({
-  email: z.string().min(1, { message: '이메일은 필수 입력입니다.' }).email({ message: '올바른 이메일 주소가 아닙니다.' }),
-  password: z.string().min(1, { message: '비밀번호는 필수 입력입니다.' }),
-});
+import { PostSigninRequest, PostSigninRequestType } from '@/schema/auth';
 
 export default function SignIn() {
   // 폼 정의
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<PostSigninRequestType>({
+    resolver: zodResolver(PostSigninRequest),
     mode: 'onBlur',
     defaultValues: {
       email: '',
@@ -25,7 +19,7 @@ export default function SignIn() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: PostSigninRequestType) {
     // NOTE : 테스트를 위해서 콘솔 넣음
     /* eslint-disable no-console */
     console.log(values);
