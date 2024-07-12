@@ -3,8 +3,34 @@ import Link from 'next/link';
 import AuthLayout from '@/pageLayout/AuthLayout/AuthLayout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+
+// 스키마 정의
+const formSchema = z.object({
+  email: z.string().min(1, { message: '이메일은 필수 입력입니다.' }).email({ message: '올바른 이메일 주소가 아닙니다.' }),
+  password: z.string().min(1, { message: '비밀번호는 필수 입력입니다.' }),
+});
 
 export default function SignIn() {
+  // 폼 정의
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // NOTE : 테스트를 위해서 콘솔 넣음
+    /* eslint-disable no-console */
+    console.log(values);
+  }
+
   return (
     <AuthLayout>
       <header className='mb-[50px] md:mb-[60px]'>
@@ -13,17 +39,39 @@ export default function SignIn() {
         </Link>
       </header>
 
-      <form className='flex flex-col items-center w-full px-6'>
-        <Input type='text' placeholder='이메일' className='lg:max-w-[640px] md:max-w-[384px] lg:h-16 px-4 lg:mb-4 mb-[10px] lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200' />
-        <Input
-          type='password'
-          placeholder='비밀번호'
-          className='lg:max-w-[640px] md:max-w-[384px] lg:h-16 px-4 lg:mb-6 mb-[20px] lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200'
-        />
-        <Button type='submit' className='w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 bg-black-500 text-white lg:text-xl md:text-base rounded-xl md:mb-[10px] mb-[11px]'>
-          로그인
-        </Button>
-      </form>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6 bg-pink-200'>
+          <div className='flex flex-col items-center lg:gap-4 gap-[10px] w-full lg:max-w-[640px] md:max-w-[384px] bg-cyan-800'>
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem className='w-full space-y-0'>
+                  <FormControl>
+                    <Input type='text' placeholder='이메일' className='lg:h-16 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200' {...field} />
+                  </FormControl>
+                  <FormMessage className='flex justify-end text-[13px] text-state-error' />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='password'
+              render={({ field }) => (
+                <FormItem className='w-full space-y-0'>
+                  <FormControl>
+                    <Input type='password' placeholder='비밀번호' className='lg:h-16 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200' {...field} />
+                  </FormControl>
+                  <FormMessage className='flex justify-end font-pretendard text-[13px] text-state-error' />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button type='submit' className='w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 bg-black-500 text-white lg:text-xl md:text-base rounded-xl md:mb-[10px] mb-[11px]'>
+            로그인
+          </Button>
+        </form>
+      </Form>
 
       <div className=' flex justify-end items-center gap-2 w-full lg:max-w-[640px] md:max-w-[384px] md:px-0 px-6 md:mb-[60px] mb-[50px]'>
         <h2 className=' text-blue-400 lg:text-xl md:text-base sm:text-sm'>회원이 아니신가요?</h2>
