@@ -70,12 +70,12 @@ export default function Home() {
       </div>
 
       <div className='w-full h-[2063px] left-0 top-[3423px] absolute bg-gradient-to-b from-slate-100 to-slate-200' />
-      <div className="w-[230px] left-[44%] top-[3693px] absolute text-center text-zinc-950 text-[32px] font-bold font-['Pretendard'] leading-[46px]">
+      <div className="w-[230px] left-1/2 transform -translate-x-1/2 top-[3693px] absolute text-center text-zinc-950 text-[32px] font-bold font-['Pretendard'] leading-[46px]">
         사용자들이 직접
         <br />
         인용한 에피그램들
       </div>
-      <Image className='w-[640px] h-[786.23px] left-[33.44%] top-[3893px] absolute' src='/AboutEpigram4.png' alt='placeholder' width={640} height={786} />
+      <Image className='w-[640px] h-[786.23px] left-1/2 transform -translate-x-1/2 top-[3893px] absolute' src='/AboutEpigram4.png' alt='placeholder' width={640} height={786} />
 
       <div className='w-full h-[1040px] left-0 top-[4824px] absolute bg-white flex-col justify-start items-start gap-6 inline-flex'>
         <div className='absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col justify-start items-center gap-12 inline-flex'>
