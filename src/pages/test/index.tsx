@@ -9,7 +9,7 @@ function test() {
 
   return (
     <>
-      <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon={false} isShareIcon isButton={false} textInButton='테스트' disabled={false} onClick={testOnclick} />;
+      <Header icon='back' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='테스트' disabled={false} onClick={testOnclick} />;
       <Toaster />
     </>
   );
