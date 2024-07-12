@@ -6,7 +6,7 @@ function test() {
     alert('테스트');
   };
 
-  return <Header icon='back' routerPage='/search' isLogo={false} insteadOfLogo='프로필 수정' isProfileIcon={false} isButton={true} textInButton='완료' onClick={testOnclick} />;
+  return <Header icon='back' routerPage='/search' isLogo={false} insteadOfLogo='프로필 수정' isProfileIcon={false} isButton textInButton='완료' onClick={testOnclick} />;
 }
 
 export default test;

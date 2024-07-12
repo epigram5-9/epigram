@@ -8,6 +8,9 @@ import SEARCH_ICON from '../../../public/icon/search-icon.svg';
 
 //TODO 네비게이션 바를 나타내는 컴포넌트 입니다.
 //TODO 상위 컴포넌트에서 Props를 받아 원하는 스타일을 보여줍니다.
+//TODO 사용 예시
+//TODO <Header icon='back' routerPage='원하는 페이지 주소' isLogo={false} insteadOfLogo='프로필 수정' isProfileIcon={false} isButton textInButton='저장' onClick={동작할 함수} />
+//TODO <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isButton={false} textInButton='' onClick={() => {}} />;
 
 interface HeaderProps {
   icon: 'back' | 'search' | '';
