@@ -1,17 +1,7 @@
-import useEpigramQuery from '@/hooks/epigramQueryHook';
+import { GetEpigramResponseType } from '@/schema/epigram';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
-function EpigramFigure() {
-  const router = useRouter();
-  const { id } = router.query;
-
-  const { data: epigram, isLoading, error } = useEpigramQuery({ id: id as string });
-
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div> 에러 발생!! {(error as Error).message}</div>;
-  if (!epigram) return <div>Epigram이 없는데요?!?!?!?</div>;
-
+function EpigramFigure({ epigram }: { epigram: GetEpigramResponseType }) {
   return (
     <div className='bg-[length:100%_2.5em] bg-[linear-gradient(#eee_.1em,transparent_.1em)] w-full flex justify-center py-6'>
       <figure className='w-80 md:w-96 lg:w-[640px] flex flex-col lg: gap-8'>
