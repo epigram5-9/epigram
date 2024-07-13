@@ -1,7 +1,7 @@
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 
-function CommentSection() {
+function EpigramComment() {
   return (
     <div className='bg-background-100 flex justify-center h-[500px]'>
       <div className='w-80 md:w-96 lg:w-[640px] pt-6 lg:pt-12 pb-36'>
@@ -22,4 +22,4 @@ function CommentSection() {
   );
 }
 
-export default CommentSection;
+export default EpigramComment;

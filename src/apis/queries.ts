@@ -1,8 +1,10 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
 import { GetUserRequestType } from '@/schema/user';
+import { GetEpigramRequestType } from '@/schema/epigram';
 import { getMe, getUser } from './user';
+import getEpigram from './epigram';
 
-const quries = createQueryKeyStore({
+const queries = createQueryKeyStore({
   user: {
     getMe: () => ({
       queryKey: ['getMe'],
@@ -13,6 +15,19 @@ const quries = createQueryKeyStore({
       queryFn: () => getUser(request),
     }),
   },
+  // NOTE: Epigram 관련 query함수
+  epigram: {
+    getEpigram: (request: GetEpigramRequestType) => ({
+      queryKey: ['epigram', request.id, request],
+      queryFn: () => {
+        if (request.id === undefined) {
+          throw new Error('Epigram ID가 제공되지 않았습니다.');
+        }
+        return getEpigram(request);
+      },
+      enabled: request.id !== undefined,
+    }),
+  },
 });
 
-export default quries;
+export default queries;
