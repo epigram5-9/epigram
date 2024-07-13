@@ -1,3 +1,4 @@
+import { GetEpigramRequestSchema } from '@/schema/epigram';
 import useEpigramQuery from '@/hooks/epigramQueryHook';
 import CommentSection from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
@@ -7,12 +8,15 @@ import { useRouter } from 'next/router';
 function DetailPage() {
   const router = useRouter();
   const { id } = router.query;
-  const { data: epigram, isLoading, error } = useEpigramQuery({ id: id as string }, !!id);
 
-  // TODO: Spinner, 404페이지 추가해도 좋을거 같음
+  const parsedId = GetEpigramRequestSchema.safeParse({ id });
+
+  const { data: epigram, isLoading, error } = useEpigramQuery(parsedId.success ? parsedId.data : undefined, parsedId.success);
+
   if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div> 에러 발생!! {(error as Error).message}</div>;
-  if (!epigram) return <div>Epigram이 없는데요.</div>;
+  if (!parsedId.success) return <div>잘못된 Epigram ID입니다.</div>;
+  if (error) return <div>에러 발생!! {(error as Error).message}</div>;
+  if (!epigram) return <div>Epigram을 찾을 수 없습니다.</div>;
 
   return (
     <div className='flex flex-col '>
