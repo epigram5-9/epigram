@@ -52,6 +52,7 @@ module.exports = {
       },
       boxShadow: {
         '3xl': '0px 0px 36px 0px rgba(0, 0, 0, 0.05)',
+      },
       screens: {
         sm: '640px',
         md: '768px',
