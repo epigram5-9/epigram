@@ -1,6 +1,7 @@
 import { useUserQuery } from '@/hooks/userQueryHooks';
 import { UserInfo } from '@/types/user';
 import Profile from '@/user/ui-profile/Profile';
+import Header from '@/components/Header/Header';
 
 export default function MyPageLayout() {
   // NOTE: test를 위한 코드. 임의로 id 3번 사용, 추후에 로컬스토리지나 캐시에서 가져오는 것으로 변경
@@ -21,6 +22,7 @@ export default function MyPageLayout() {
 
   return (
     <div className='bg-background-100 w-full relative h-dvh'>
+      <Header icon='back' routerPage='/mypage' isLogo={false} insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <div className='bg-background-100 w-full h-[200px]'></div>
       <div className='w-full h-[1900px] flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
         {/* 프로필 영역 */}
