@@ -9,7 +9,7 @@ export const GetUserRequest = z.object({
   id: z.number(),
 });
 
-export const GetUserReponse = z.object({
+export const GetUserResponse = z.object({
   image: z.string(),
   updatedAt: z.coerce.date(),
   createdAt: z.coerce.date(),
@@ -18,6 +18,6 @@ export const GetUserReponse = z.object({
   id: z.number(),
 });
 
-export type GetUserReponseType = z.infer<typeof GetUserReponse>;
+export type GetUserResponseType = z.infer<typeof GetUserResponse>;
 export type GetUserRequestType = z.infer<typeof GetUserRequest>;
 export type PatchMeRequestType = z.infer<typeof PatchMeRequest>;
