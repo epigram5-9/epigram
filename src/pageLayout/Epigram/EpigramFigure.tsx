@@ -1,7 +1,8 @@
-import { GetEpigramResponseType } from '@/schema/epigram';
+import { EpigramFigureProps } from '@/types/epigram.types';
 import Image from 'next/image';
 
-function EpigramFigure({ epigram }: { epigram: GetEpigramResponseType }) {
+function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
+  const isAuthor = currentUserId === epigram.writerId;
   return (
     <div className='bg-[length:100%_2.5em] bg-[linear-gradient(#eee_.1em,transparent_.1em)] w-full flex justify-center py-6'>
       <figure className='w-80 md:w-96 lg:w-[640px] flex flex-col lg: gap-8'>
@@ -11,6 +12,7 @@ function EpigramFigure({ epigram }: { epigram: GetEpigramResponseType }) {
               #{tag.name}
             </p>
           ))}
+          {isAuthor && <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} />}
         </div>
         <blockquote className=''>
           <p className='text-2xl lg:text-3xl font-normal'>{epigram.content}</p>

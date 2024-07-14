@@ -4,6 +4,7 @@ import CommentSection from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useMeQuery } from '@/hooks/userQueryHooks';
 
 function DetailPage() {
   const router = useRouter();
@@ -12,6 +13,7 @@ function DetailPage() {
   const parsedId = GetEpigramRequestSchema.safeParse({ id });
 
   const { data: epigram, isLoading, error } = useEpigramQuery(parsedId.success ? parsedId.data : undefined, parsedId.success);
+  const { data: userData } = useMeQuery();
 
   if (isLoading) return <div>로딩 중...</div>;
   if (!parsedId.success) return <div>잘못된 Epigram ID입니다.</div>;
@@ -25,8 +27,7 @@ function DetailPage() {
         <Image src='/logo.svg' alt='Epigram 로고' width={172} height={48} />
         <Image src='/share.svg' alt='공유 버튼' width={36} height={36} />
       </nav>
-      <EpigramFigure epigram={epigram} />
-      <CommentSection />
+      <EpigramFigure epigram={epigram} currentUserId={userData?.id} /> <CommentSection />
     </div>
   );
 }
