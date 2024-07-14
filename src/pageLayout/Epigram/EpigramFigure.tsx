@@ -7,12 +7,14 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
   return (
     <div className='bg-[length:100%_2.5em] bg-[linear-gradient(#eee_.1em,transparent_.1em)] w-full flex justify-center py-6'>
       <figure className='w-80 md:w-96 lg:w-[640px] flex flex-col lg: gap-8'>
-        <div className='flex gap-2'>
-          {epigram.tags.map((tag) => (
-            <p key={tag.id} className='text-gray-400 text-base lg:text-xl font-normal'>
-              #{tag.name}
-            </p>
-          ))}
+        <div className='flex justify-between'>
+          <div className='flex gap-2'>
+            {epigram.tags.map((tag) => (
+              <p key={tag.id} className='text-gray-400 text-base lg:text-xl font-normal'>
+                #{tag.name}
+              </p>
+            ))}
+          </div>
           {isAuthor && <MoreOptionsMenu />}
         </div>
         <blockquote className=''>
