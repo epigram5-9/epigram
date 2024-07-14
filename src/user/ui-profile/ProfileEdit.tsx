@@ -7,6 +7,8 @@ import X_ICON from '../../../public/icon/x-icon_md.svg';
 export default function ProfileEdit({ profileImage, nickname, onModalClose }: UserProfileEditProps) {
   // 미리보기 이미지
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  // 닉네임
+  const [editNickname, setEditNickname] = useState<string>(nickname);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -30,6 +32,11 @@ export default function ProfileEdit({ profileImage, nickname, onModalClose }: Us
     }
   }
 
+  // nickname 변경
+  function handleNicknameChange(e) {
+    setEditNickname(e.target.value);
+  }
+
   return (
     <div className='w-full h-full fixed top-0 flex flex-col justify-center items-center bg-background-100'>
       <div className='w-[1200px] relative rounded-sm bg-white'>
@@ -42,13 +49,13 @@ export default function ProfileEdit({ profileImage, nickname, onModalClose }: Us
               프로필 사진 변경
             </button>
             <Input type='file' accept='image/*' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
-            <Input type='text' value={nickname} className='text-lg p-3' readOnly />
+            <Input type='text' value={editNickname} className='text-lg p-3' onChange={(e) => handleNicknameChange(e)} />
           </div>
           <div className='w-[500px] flex flex-col gap-8 justify-center items-center border border-blue-300 rounded-lg bg-background-100'>
             <div className='w-[200px] h-[200px] rounded-full overflow-hidden cursor-pointer'>
               <Image src={previewImage || profileImage} alt='유저 프로필' className='w-full h-full object-cover' width={120} height={120} priority />
             </div>
-            <p className='text-3xl'>{nickname}</p>
+            <p className='text-3xl'>{editNickname}</p>
             <button type='button' className='rounded-xl bg-black-600 text-white shadow-sm text-lg p-3 w-[100px]'>
               저장
             </button>
