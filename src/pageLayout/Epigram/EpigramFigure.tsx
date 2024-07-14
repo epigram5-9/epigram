@@ -1,5 +1,6 @@
-import { EpigramFigureProps } from '@/types/epigram.types';
 import Image from 'next/image';
+import MoreOptionsMenu from '@/components/epigram/MoreOptionMenu';
+import { EpigramFigureProps } from '@/types/epigram.types';
 
 function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
   const isAuthor = currentUserId === epigram.writerId;
@@ -12,7 +13,7 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
               #{tag.name}
             </p>
           ))}
-          {isAuthor && <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} />}
+          {isAuthor && <MoreOptionsMenu />}
         </div>
         <blockquote className=''>
           <p className='text-2xl lg:text-3xl font-normal'>{epigram.content}</p>
