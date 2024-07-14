@@ -35,7 +35,7 @@ export default function Profile({ profileImage, nickname }: UserProfileProps) {
         </div>
       </div>
 
-      {isModalOpen && <ProfileEdit profileImage={image} nickname={nickname} onModalClose={handleProfileEditClose} />}
+      {isModalOpen && <ProfileEdit initialValues={{ profileImage: image, nickname }} onModalClose={handleProfileEditClose} />}
     </>
   );
 }

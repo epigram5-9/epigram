@@ -13,7 +13,9 @@ export interface UserProfileProps {
 }
 
 export interface UserProfileEditProps {
-  profileImage: string;
-  nickname: string;
+  initialValues: {
+    profileImage: string;
+    nickname: string;
+  };
   onModalClose: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
