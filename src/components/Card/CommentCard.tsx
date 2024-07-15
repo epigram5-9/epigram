@@ -1,7 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
-import { CommentCardProps } from '@/types/CommentCardTypes';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
+
+export interface CommentCardProps {
+  status: 'edit' | 'complete';
+}
 
 function CommentCard({ status }: CommentCardProps) {
   return (
