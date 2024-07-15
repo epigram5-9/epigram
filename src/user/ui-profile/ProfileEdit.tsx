@@ -3,7 +3,7 @@ import { UserProfileEditProps, UserProfileProps } from '@/types/user';
 import { Input } from '@/components/ui/input';
 import { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
-import { useCreatePresignedUrl } from '@/hooks/userQueryHooks';
+import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
 import * as Yup from 'yup';
 import X_ICON from '../../../public/icon/x-icon_md.svg';
 import fileNameChange from '../util/fileNameChange';
@@ -16,22 +16,41 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
   const createPresignedUrl = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const { mutate: updateMe } = useUpdateMe({
+    onSuccess: () => {
+      // 업데이트 성공 시 추가 작업 수행
+      onModalClose();
+    },
+  });
+
   const formik = useFormik<UserProfileProps>({
     initialValues: {
-      profileImage: '',
+      image: '',
       nickname: '',
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
         // 프로필 업데이트
+        await updateProfile(values);
+        setSubmitting(false);
       } catch (error) {
         // 에러 처리
+        // console.error('update error:', error);
       } finally {
         setSubmitting(false);
       }
     },
   });
+
+  const updateProfile = async (values: UserProfileProps) => {
+    try {
+      await updateMe(values);
+    } catch (error) {
+      // error
+      // console.error('update error:', error);
+    }
+  };
 
   // 프로필 사진 변경 클릭
   const handleImageEditClick = () => {
@@ -51,7 +70,7 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
         const newFileName = fileNameChange();
         const newFile = new File([file], `${newFileName}.${file.name.split('.').pop()}`, { type: file.type });
         const { url } = await createPresignedUrl.mutateAsync({ image: newFile });
-        formik.setFieldValue('profileImage', url);
+        formik.setFieldValue('image', url);
 
         // 3. 프로필 수정
       } catch (error) {
@@ -76,12 +95,12 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
               <button type='button' className='rounded-xl bg-blue-400 text-white shadow-sm text-lg p-3' onClick={handleImageEditClick} onKeyDown={handleImageEditClick}>
                 프로필 사진 변경
               </button>
-              <Input type='file' accept='image/*' name='profileImage' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
+              <Input type='file' accept='image/*' name='image' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
               <Input type='text' name='nickname' value={formik.values.nickname} className='text-lg p-3' onChange={formik.handleChange} />
             </div>
             <div className='w-[500px] flex flex-col gap-8 justify-center items-center border border-blue-300 rounded-lg bg-background-100'>
               <div className='w-[200px] h-[200px] rounded-full overflow-hidden cursor-pointer'>
-                <Image src={formik.values.profileImage || initialValues.profileImage} alt='유저 프로필' className='w-full h-full object-cover' width={200} height={200} priority />
+                <Image src={formik.values.image || initialValues.image} alt='유저 프로필' className='w-full h-full object-cover' width={200} height={200} priority />
               </div>
               <p className='text-3xl'>{formik.values.nickname}</p>
               <button type='submit' disabled={!formik.isValid || formik.isSubmitting} className='rounded-xl bg-black-600 text-white shadow-sm text-lg p-3 w-[100px]'>

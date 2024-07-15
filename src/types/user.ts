@@ -8,20 +8,20 @@ export interface UserInfo {
 }
 
 export interface UserProfileProps {
-  profileImage: string;
+  image: string;
   nickname: string;
 }
 
 export interface UserProfileEditProps {
   initialValues: {
-    profileImage: string;
+    image: string;
     nickname: string;
   };
-  onModalClose: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onModalClose: () => void;
 }
 
 export interface UserFormikValues {
-  profileImage: string;
+  image: string;
   nickname: string;
   file: File | null;
 }

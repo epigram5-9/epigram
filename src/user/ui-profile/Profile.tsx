@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { sampleImage } from '../util/constants';
 import ProfileEdit from './ProfileEdit';
 
-export default function Profile({ profileImage, nickname }: UserProfileProps) {
+export default function Profile({ image, nickname }: UserProfileProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // TODO: 여러개의 샘플 이미지 랜덤하게 뜨도록 추가 할 예정
-  const image = profileImage || sampleImage[1];
+  const profileImage = image || sampleImage[1];
 
   const handleProfileEditOpen = () => {
     setIsModalOpen(true);
@@ -24,7 +24,7 @@ export default function Profile({ profileImage, nickname }: UserProfileProps) {
       <div className='w-[130px] h-[240px] flex flex-col justify-center items-center absolute top-[-50px]'>
         <div>
           <div role='button' tabIndex={0} className='w-[120px] h-[120px] rounded-full overflow-hidden cursor-pointer'>
-            <Image src={image} alt='유저 프로필' className='w-full h-full object-cover' width={120} height={120} priority />
+            <Image src={profileImage} alt='유저 프로필' className='w-full h-full object-cover' width={120} height={120} priority />
           </div>
         </div>
         <p className='mt-4 mb-6'>{nickname}</p>
@@ -35,7 +35,7 @@ export default function Profile({ profileImage, nickname }: UserProfileProps) {
         </div>
       </div>
 
-      {isModalOpen && <ProfileEdit initialValues={{ profileImage: image, nickname }} onModalClose={handleProfileEditClose} />}
+      {isModalOpen && <ProfileEdit initialValues={{ image: profileImage, nickname }} onModalClose={handleProfileEditClose} />}
     </>
   );
 }

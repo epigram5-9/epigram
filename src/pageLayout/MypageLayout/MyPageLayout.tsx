@@ -1,11 +1,11 @@
-import { useUserQuery } from '@/hooks/userQueryHooks';
+import { useMeQuery } from '@/hooks/userQueryHooks';
 import { UserInfo } from '@/types/user';
 import Profile from '@/user/ui-profile/Profile';
 import Header from '@/components/Header/Header';
 
 export default function MyPageLayout() {
   // NOTE: test를 위한 코드. 임의로 id 3번 사용, 추후에 로컬스토리지나 캐시에서 가져오는 것으로 변경
-  const { data, isLoading, isError }: { data: UserInfo | undefined; isLoading: boolean; isError: boolean } = useUserQuery({ id: 3 });
+  const { data, isLoading, isError }: { data: UserInfo | undefined; isLoading: boolean; isError: boolean } = useMeQuery();
 
   if (isError) {
     return <div>error</div>;
@@ -26,7 +26,7 @@ export default function MyPageLayout() {
       <div className='bg-background-100 w-full h-[200px]'></div>
       <div className='w-full h-[1900px] flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
         {/* 프로필 영역 */}
-        <Profile profileImage={data.image} nickname={data.nickname} />
+        <Profile image={data.image} nickname={data.nickname} />
         {/* 오늘으 ㅣ감정 */}
         <div className='w-[640px] h-[216px] mt-[300px] border border-black'>
           <p>오늘의 감정</p>
