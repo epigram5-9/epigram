@@ -1,5 +1,10 @@
+/*
+  여러 개의 EmotionIconCard를 관리합니다.
+  사용자 인터페이스에 필요한 상호 작용 로직을 포함합니다.
+ */
+
 import React, { useState } from 'react';
-import EmotionIconCard from '@/components/Emotion/card/EmotionIconCard';
+import EmotionIconCard from '@/components/Emotion/EmotionCard';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { EmotionType, EmotionState } from '@/types/EmotionTypes';
 
