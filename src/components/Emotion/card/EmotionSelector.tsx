@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InteractiveEmotionIconCard from '@/components/Emotion/card/InteractiveEmotionIconCard';
+import EmotionIconCard from '@/components/Emotion/card/EmotionIconCard';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { EmotionType, EmotionState } from '@/types/EmotionTypes';
 
@@ -52,7 +52,7 @@ function EmotionSelector() {
   return (
     <div className={`justify-start items-start inline-flex ${containerClass}`}>
       {(['감동', '기쁨', '고민', '슬픔', '분노'] as const).map((iconType) => (
-        <InteractiveEmotionIconCard key={iconType} iconType={iconType} size={cardSize} state={states[iconType]} onClick={() => handleCardClick(iconType)} />
+        <EmotionIconCard key={iconType} iconType={iconType} size={cardSize} state={states[iconType]} onClick={() => handleCardClick(iconType)} />
       ))}
     </div>
   );
