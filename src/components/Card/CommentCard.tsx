@@ -17,8 +17,14 @@ function CommentCard({ status }: CommentCardProps) {
         <div className={`flex-col justify-start items-start ${gapStyles.sm} ${gapStyles.md} ${gapStyles.lg} inline-flex ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}>
           <div className='justify-between items-center w-full inline-flex'>
             <div className='justify-start items-start gap-2 flex'>
-              <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>지킬과 하이드</div>
-              <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>1시간 전</div>
+              <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>
+                {/* 테스트 텍스트입니다. */}
+                지킬과 하이드
+              </div>
+              <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>
+                {/* 테스트 텍스트입니다. */}
+                1시간 전
+              </div>
             </div>
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
@@ -30,6 +36,7 @@ function CommentCard({ status }: CommentCardProps) {
           <div
             className={`w-full text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
           >
+            {/* 테스트 텍스트입니다. */}
             오늘 하루 우울했었는데 덕분에 많은 힘 얻고 갑니다. 연금술사 책 다시 사서 오랜만에 읽어봐야겠어요!
           </div>
         </div>

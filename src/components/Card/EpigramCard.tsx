@@ -31,12 +31,13 @@ function EpigramCard() {
             <div
               className={`self-stretch ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-neutral-700 font-normal font-iropkeBatang leading-normal`}
             >
+              {/* 테스트 텍스트입니다. */}
               오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.
             </div>
             <div
               className={`self-stretch ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-right text-slate-400 font-normal font-iropkeBatang leading-normal`}
             >
-              - 앙드레 말로 -
+              {/* 테스트 텍스트입니다. */}- 앙드레 말로 -
             </div>
           </div>
         </div>
@@ -45,11 +46,13 @@ function EpigramCard() {
         <div
           className={`text-right ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-iropkeBatang leading-normal`}
         >
+          {/* 테스트 텍스트입니다. */}
           #나아가야할때
         </div>
         <div
           className={`text-right ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-iropkeBatang leading-normal`}
         >
+          {/* 테스트 텍스트입니다. */}
           #꿈을이루고싶을때
         </div>
       </div>
