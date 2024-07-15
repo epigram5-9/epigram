@@ -1,33 +1,30 @@
 import Image from 'next/image';
-import { UserProfileEditProps, UserFormikValues } from '@/types/user';
+import { UserProfileEditProps, UserProfileProps } from '@/types/user';
 import { Input } from '@/components/ui/input';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { useCreatePresignedUrl } from '@/hooks/userQueryHooks';
+import * as Yup from 'yup';
 import X_ICON from '../../../public/icon/x-icon_md.svg';
-import imageUploadS3 from '../util/imageUploadS3';
+import fileNameChange from '../util/fileNameChange';
+
+const validationSchema = Yup.object().shape({
+  nickname: Yup.string().min(1, '닉네임은 1자 이상 30자 이하여야 합니다.').max(30, '닉네임은 1자 이상 30자 이하여야 합니다.').required('닉네임은 필수 항목입니다.'),
+});
 
 export default function ProfileEdit({ initialValues, onModalClose }: UserProfileEditProps) {
   const createPresignedUrl = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const formik = useFormik<UserFormikValues>({
+  const formik = useFormik<UserProfileProps>({
     initialValues: {
-      profileImage: initialValues.profileImage,
-      nickname: initialValues.nickname,
-      file: null,
+      profileImage: '',
+      nickname: '',
     },
+    validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        if (values.file) {
-          // 1. presigned URL 생성
-          const { url } = await createPresignedUrl.mutateAsync({ image: values.file });
-          // 2. s3 이미지 업로드
-          await imageUploadS3(url, values.file); // S3로 이미지 업로드
-        }
-        // 2. s3 업로드
-
-        // 3. 프로필 수정
+        // 프로필 업데이트
       } catch (error) {
         // 에러 처리
       } finally {
@@ -43,22 +40,29 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
     }
   };
 
-  // input onChange될 경우, 이미지 인코딩한 뒤 state에 담기
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>): void {
+  // 이미지 변경 시
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>): Promise<void> {
     const { files } = e.currentTarget;
     if (files && files.length > 0) {
       const file = files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        formik.setValues({
-          profileImage: reader.result as string,
-          nickname: formik.values.nickname,
-          file,
-        });
-      };
+
+      try {
+        // 1. presigned URL 생성
+        const newFileName = fileNameChange();
+        const newFile = new File([file], `${newFileName}.${file.name.split('.').pop()}`, { type: file.type });
+        const { url } = await createPresignedUrl.mutateAsync({ image: newFile });
+        formik.setFieldValue('profileImage', url);
+
+        // 3. 프로필 수정
+      } catch (error) {
+        // 에러 처리
+      }
     }
   }
+
+  useEffect(() => {
+    formik.setValues(initialValues);
+  }, [initialValues]);
 
   return (
     <div className='w-full h-full fixed top-0 flex flex-col justify-center items-center bg-background-100'>
@@ -72,15 +76,15 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
               <button type='button' className='rounded-xl bg-blue-400 text-white shadow-sm text-lg p-3' onClick={handleImageEditClick} onKeyDown={handleImageEditClick}>
                 프로필 사진 변경
               </button>
-              <Input type='file' accept='image/*' name='image' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
-              <Input type='text' value={formik.values.nickname} className='text-lg p-3' onChange={formik.handleChange} />
+              <Input type='file' accept='image/*' name='profileImage' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
+              <Input type='text' name='nickname' value={formik.values.nickname} className='text-lg p-3' onChange={formik.handleChange} />
             </div>
             <div className='w-[500px] flex flex-col gap-8 justify-center items-center border border-blue-300 rounded-lg bg-background-100'>
               <div className='w-[200px] h-[200px] rounded-full overflow-hidden cursor-pointer'>
-                <Image src={formik.values.profileImage} alt='유저 프로필' className='w-full h-full object-cover' width={120} height={120} priority />
+                <Image src={formik.values.profileImage || initialValues.profileImage} alt='유저 프로필' className='w-full h-full object-cover' width={200} height={200} priority />
               </div>
               <p className='text-3xl'>{formik.values.nickname}</p>
-              <button type='submit' disabled={formik.isSubmitting} className='rounded-xl bg-black-600 text-white shadow-sm text-lg p-3 w-[100px]'>
+              <button type='submit' disabled={!formik.isValid || formik.isSubmitting} className='rounded-xl bg-black-600 text-white shadow-sm text-lg p-3 w-[100px]'>
                 저장
               </button>
             </div>
