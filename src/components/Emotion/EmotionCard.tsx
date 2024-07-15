@@ -110,11 +110,4 @@ function EmotionIconCard({ iconType = '감동', state = 'Default', size = 'sm', 
   );
 }
 
-EmotionIconCard.displayName = 'EmotionIconCard';
-
-// 기본 props 설정
-EmotionIconCard.defaultProps = {
-  onClick: () => {},
-};
-
 export default EmotionIconCard;
