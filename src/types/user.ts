@@ -19,3 +19,9 @@ export interface UserProfileEditProps {
   };
   onModalClose: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
+
+export interface UserFormikValues {
+  profileImage: string;
+  nickname: string;
+  file: File | null;
+}

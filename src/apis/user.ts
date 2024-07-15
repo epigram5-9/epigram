@@ -19,6 +19,8 @@ export const updateMe = async (request: PatchMeRequestType): Promise<GetUserRepo
 };
 
 export const createPresignedUrl = async (request: PostImageRequestType): Promise<PostImageResponseType> => {
-  const response = await httpClient.post('/images/upload', { ...request });
+  const formData = new FormData();
+  formData.append('image', request.image);
+  const response = await httpClient.post('/images/upload', formData);
   return response.data;
 };

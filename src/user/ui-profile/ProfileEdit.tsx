@@ -1,25 +1,42 @@
 import Image from 'next/image';
-import { UserProfileEditProps } from '@/types/user';
+import { UserProfileEditProps, UserFormikValues } from '@/types/user';
 import { Input } from '@/components/ui/input';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useFormik } from 'formik';
+import { useCreatePresignedUrl } from '@/hooks/userQueryHooks';
 import X_ICON from '../../../public/icon/x-icon_md.svg';
 
 export default function ProfileEdit({ initialValues, onModalClose }: UserProfileEditProps) {
+  const createPresignedUrl = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const formik = useFormik({
+  const [imageUrl, setImageURl] = useState<string | null>(null);
+
+  const formik = useFormik<UserFormikValues>({
     initialValues: {
       profileImage: initialValues.profileImage,
       nickname: initialValues.nickname,
-      fileName: '',
+      file: null,
     },
-    onSubmit: (values, { setSubmitting }) => {
-      setSubmitting(false);
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        if (values.file) {
+          // 1. presigned URL 생성
+          const { url } = await createPresignedUrl.mutateAsync({ image: values.file });
+          setImageURl(url);
+        }
+        // 2. s3 업로드
+
+        // 3. 프로필 수정
+      } catch (error) {
+        // 에러 처리
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
-  // 프로필 사진 클릭
+  // 프로필 사진 변경 클릭
   const handleImageEditClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -34,8 +51,11 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        formik.setFieldValue('profileImage', reader.result as string);
-        formik.setFieldValue('fileName', file.name);
+        formik.setValues({
+          profileImage: reader.result as string,
+          nickname: formik.values.nickname,
+          file,
+        });
       };
     }
   }
@@ -52,7 +72,7 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
               <button type='button' className='rounded-xl bg-blue-400 text-white shadow-sm text-lg p-3' onClick={handleImageEditClick} onKeyDown={handleImageEditClick}>
                 프로필 사진 변경
               </button>
-              <Input type='file' accept='image/*' name='nickname' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
+              <Input type='file' accept='image/*' name='image' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
               <Input type='text' value={formik.values.nickname} className='text-lg p-3' onChange={formik.handleChange} />
             </div>
             <div className='w-[500px] flex flex-col gap-8 justify-center items-center border border-blue-300 rounded-lg bg-background-100'>
@@ -60,6 +80,7 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
                 <Image src={formik.values.profileImage} alt='유저 프로필' className='w-full h-full object-cover' width={120} height={120} priority />
               </div>
               <p className='text-3xl'>{formik.values.nickname}</p>
+              <p>{imageUrl}</p>
               <button type='submit' disabled={formik.isSubmitting} className='rounded-xl bg-black-600 text-white shadow-sm text-lg p-3 w-[100px]'>
                 저장
               </button>
