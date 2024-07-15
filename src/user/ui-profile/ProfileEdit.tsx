@@ -1,16 +1,15 @@
 import Image from 'next/image';
 import { UserProfileEditProps, UserFormikValues } from '@/types/user';
 import { Input } from '@/components/ui/input';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useFormik } from 'formik';
 import { useCreatePresignedUrl } from '@/hooks/userQueryHooks';
 import X_ICON from '../../../public/icon/x-icon_md.svg';
+import imageUploadS3 from '../util/imageUploadS3';
 
 export default function ProfileEdit({ initialValues, onModalClose }: UserProfileEditProps) {
   const createPresignedUrl = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [imageUrl, setImageURl] = useState<string | null>(null);
 
   const formik = useFormik<UserFormikValues>({
     initialValues: {
@@ -23,7 +22,8 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
         if (values.file) {
           // 1. presigned URL 생성
           const { url } = await createPresignedUrl.mutateAsync({ image: values.file });
-          setImageURl(url);
+          // 2. s3 이미지 업로드
+          await imageUploadS3(url, values.file); // S3로 이미지 업로드
         }
         // 2. s3 업로드
 
@@ -80,7 +80,6 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
                 <Image src={formik.values.profileImage} alt='유저 프로필' className='w-full h-full object-cover' width={120} height={120} priority />
               </div>
               <p className='text-3xl'>{formik.values.nickname}</p>
-              <p>{imageUrl}</p>
               <button type='submit' disabled={formik.isSubmitting} className='rounded-xl bg-black-600 text-white shadow-sm text-lg p-3 w-[100px]'>
                 저장
               </button>

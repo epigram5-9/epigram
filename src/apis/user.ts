@@ -1,4 +1,4 @@
-import type { GetUserReponseType, GetUserRequestType, PatchMeRequestType, PostImageRequestType, PostImageResponseType } from '@/schema/user';
+import type { GetUserReponseType, GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
 
 import httpClient from '.';
 
@@ -18,7 +18,7 @@ export const updateMe = async (request: PatchMeRequestType): Promise<GetUserRepo
   return response.data;
 };
 
-export const createPresignedUrl = async (request: PostImageRequestType): Promise<PostImageResponseType> => {
+export const createPresignedUrl = async (request: PostPresignedUrlRequestType): Promise<PostPresignedUrlResponseType> => {
   const formData = new FormData();
   formData.append('image', request.image);
   const response = await httpClient.post('/images/upload', formData);
