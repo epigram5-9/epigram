@@ -1,7 +1,6 @@
 import * as z from 'zod';
 
 export const GetEpigramsParams = z.object({
-  teamId: z.string(),
   limit: z.number().optional(),
   cursor: z.number().optional(),
   keyword: z.string().optional(),
