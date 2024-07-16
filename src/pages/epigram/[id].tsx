@@ -28,7 +28,7 @@ function DetailPage() {
         <Image src='/share.svg' alt='공유 버튼' width={36} height={36} />
       </nav>
       <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
-      <EpigramComment epigramId={epigram.id} />
+      <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} />
     </div>
   );
 }

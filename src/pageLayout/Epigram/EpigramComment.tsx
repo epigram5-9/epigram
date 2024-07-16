@@ -4,7 +4,7 @@ import { paddingStyles } from '@/styles/CommentCardStyles';
 import { EpigramCommentProps } from '@/types/epigram.types';
 import Image from 'next/image';
 
-function EpigramComment({ epigramId }: EpigramCommentProps) {
+function EpigramComment({ epigramId, currentUserId }: EpigramCommentProps) {
   return (
     <div className='bg-background-100 flex justify-center '>
       <div className='w-80 md:w-96 lg:w-[640px] pt-6 lg:pt-12'>
@@ -20,7 +20,7 @@ function EpigramComment({ epigramId }: EpigramCommentProps) {
             />
           </div>
         </div>
-        <CommentList epigramId={epigramId} />
+        <CommentList epigramId={epigramId} currentUserId={currentUserId} />
       </div>
     </div>
   );
