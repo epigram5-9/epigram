@@ -2,10 +2,12 @@ import { useMeQuery } from '@/hooks/userQueryHooks';
 import { UserInfo } from '@/types/user';
 import Profile from '@/user/ui-profile/Profile';
 import Header from '@/components/Header/Header';
+import { useRouter } from 'next/navigation';
 
 export default function MyPageLayout() {
-  // NOTE: test를 위한 코드. 임의로 id 3번 사용, 추후에 로컬스토리지나 캐시에서 가져오는 것으로 변경
   const { data, isLoading, isError }: { data: UserInfo | undefined; isLoading: boolean; isError: boolean } = useMeQuery();
+
+  const router = useRouter();
 
   if (isError) {
     return <div>error</div>;
@@ -17,7 +19,8 @@ export default function MyPageLayout() {
 
   // NOTE: 회원정보과 확인되지 않는다면 로그인 페이지로 redirect 시킬 예정
   if (!data) {
-    return <div>return</div>;
+    router.push('/login');
+    return false;
   }
 
   return (

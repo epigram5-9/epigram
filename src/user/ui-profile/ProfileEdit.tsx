@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { UserProfileEditProps, UserProfileProps } from '@/types/user';
+import { UserProfileProps } from '@/types/user';
 import { Input } from '@/components/ui/input';
 import { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
@@ -7,6 +7,14 @@ import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
 import * as Yup from 'yup';
 import X_ICON from '../../../public/icon/x-icon_md.svg';
 import fileNameChange from '../util/fileNameChange';
+
+interface UserProfileEditProps {
+  initialValues: {
+    image: string;
+    nickname: string;
+  };
+  onModalClose: () => void;
+}
 
 const validationSchema = Yup.object().shape({
   nickname: Yup.string().min(1, '닉네임은 1자 이상 30자 이하여야 합니다.').max(30, '닉네임은 1자 이상 30자 이하여야 합니다.').required('닉네임은 필수 항목입니다.'),
@@ -18,7 +26,7 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
 
   const { mutate: updateMe } = useUpdateMe({
     onSuccess: () => {
-      // 업데이트 성공 시 추가 작업 수행
+      // 모달창닫기
       onModalClose();
     },
   });
@@ -36,7 +44,6 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
         setSubmitting(false);
       } catch (error) {
         // 에러 처리
-        // console.error('update error:', error);
       } finally {
         setSubmitting(false);
       }
@@ -47,8 +54,7 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
     try {
       await updateMe(values);
     } catch (error) {
-      // error
-      // console.error('update error:', error);
+      // 에러 처리
     }
   };
 
@@ -66,13 +72,12 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
       const file = files[0];
 
       try {
-        // 1. presigned URL 생성
+        // 중복된 파일명 및 한글파일이 저장되지 않도록 파일이름 포멧 변경
         const newFileName = fileNameChange();
         const newFile = new File([file], `${newFileName}.${file.name.split('.').pop()}`, { type: file.type });
+        // presignedUrl 구하는 함수 (s3 업로드까지 같이)
         const { url } = await createPresignedUrl.mutateAsync({ image: newFile });
         formik.setFieldValue('image', url);
-
-        // 3. 프로필 수정
       } catch (error) {
         // 에러 처리
       }
