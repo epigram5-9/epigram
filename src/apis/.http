@@ -1,0 +1,2 @@
+GET http://localhost:3000/api/5-9/epigrams?limit=10&cursor=1&keyword=example&writerId=42
+Content-Type: application/json
