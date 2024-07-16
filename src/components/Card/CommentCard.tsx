@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
-import { getCustomRelativeTime } from '@/lib/dateUtils';
+import getCustomRelativeTime from '@/lib/dateUtils';
 
 interface CommentCardProps {
   comment: CommentType;
