@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import { UserProfileProps } from '@/types/user';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import Label from '@/components/ui/label';
+import { DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useEffect, useRef } from 'react';
-import { useFormik } from 'formik';
+import { Form, Formik, useFormik } from 'formik';
 import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
 import * as Yup from 'yup';
-import X_ICON from '../../../public/icon/x-icon_md.svg';
 import fileNameChange from '../util/fileNameChange';
 
 interface UserProfileEditProps {
@@ -24,9 +26,12 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
   const createPresignedUrl = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const handleSubmit = async () => {
+    await formik.submitForm(); // Formik의 submitForm 함수 호출
+  };
+
   const { mutate: updateMe } = useUpdateMe({
     onSuccess: () => {
-      // 모달창닫기
       onModalClose();
     },
   });
@@ -89,32 +94,29 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
   }, [initialValues]);
 
   return (
-    <div className='w-full h-full fixed top-0 flex flex-col justify-center items-center bg-background-100'>
-      <form onSubmit={formik.handleSubmit}>
-        <div className='w-[1200px] relative rounded-sm bg-white'>
-          <button className='absolute top-4 right-4 w-5 h-5 lg:w-9 lg:h-9' type='button' aria-label='닫기 버튼' onClick={onModalClose}>
-            <Image src={X_ICON} alt='뒤로가기 버튼 이미지' />
-          </button>
-          <div className='w-full h-[700px] py-[60px] px-[100px] flex justify-center gap-[60px] shadow-3xl'>
-            <div className='w-[400px] flex flex-col gap-8 justify-center items-start'>
-              <button type='button' className='rounded-xl bg-blue-400 text-white shadow-sm text-lg p-3' onClick={handleImageEditClick} onKeyDown={handleImageEditClick}>
-                프로필 사진 변경
-              </button>
-              <Input type='file' accept='image/*' name='image' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
-              <Input type='text' name='nickname' value={formik.values.nickname} className='text-lg p-3' onChange={formik.handleChange} />
-            </div>
-            <div className='w-[500px] flex flex-col gap-8 justify-center items-center border border-blue-300 rounded-lg bg-background-100'>
-              <div className='w-[200px] h-[200px] rounded-full overflow-hidden cursor-pointer'>
-                <Image src={formik.values.image || initialValues.image} alt='유저 프로필' className='w-full h-full object-cover' width={200} height={200} priority />
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      {({ isSubmitting }) => (
+        <Form>
+          <DialogHeader>
+            <DialogTitle>프로필 수정</DialogTitle>
+            <div className='flex flex-col justify-center items-center pt-8'>
+              <div className='w-[200px] h-[200px] rounded-full overflow-hidden cursor-pointer border border-gray-300 shadow-sm'>
+                <Image src={formik.values.image || initialValues.image} alt='유저 프로필' className='w-full h-full object-cover' width={200} height={200} priority onClick={handleImageEditClick} />
+                <Input type='file' accept='image/*' name='image' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
               </div>
-              <p className='text-3xl'>{formik.values.nickname}</p>
-              <button type='submit' disabled={!formik.isValid || formik.isSubmitting} className='rounded-xl bg-black-600 text-white shadow-sm text-lg p-3 w-[100px]'>
-                저장
-              </button>
+              <div className='mt-10 flex flex-col items-start gap-4'>
+                <Label htmlFor='name'>닉네임</Label>
+                <Input type='text' name='nickname' value={formik.values.nickname} className='text-lg p-3' onChange={formik.handleChange} />
+              </div>
             </div>
-          </div>
-        </div>
-      </form>
-    </div>
+            <DialogFooter>
+              <Button type='submit' className='bg-slate-600 text-white' disabled={!formik.isValid || isSubmitting}>
+                수정하기
+              </Button>
+            </DialogFooter>
+          </DialogHeader>
+        </Form>
+      )}
+    </Formik>
   );
 }
