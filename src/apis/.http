@@ -1,2 +1,0 @@
-GET https://fe-project-epigram-api.vercel.app/5-9/epigrams?limit=10&cursor=1&keyword=example&writerId=42
-Content-Type: application/json
