@@ -1,11 +1,13 @@
+import CommentCard from '@/components/Card/CommentCard';
 import { Textarea } from '@/components/ui/textarea';
+import { paddingStyles } from '@/styles/CommentCardStyles';
 import Image from 'next/image';
 
 function EpigramComment() {
   return (
     <div className='bg-background-100 flex justify-center h-[500px]'>
-      <div className='w-80 md:w-96 lg:w-[640px] pt-6 lg:pt-12 pb-36'>
-        <div className='flex flex-col gap-4 lg:gap-6'>
+      <div className='w-80 md:w-96 lg:w-[640px] pt-6 lg:pt-12'>
+        <div className={`flex flex-col gap-4 lg:gap-6 ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}>
           <h3 className='text-base lg:text-xl font-semibold'>댓글(3)</h3>
           <div className='flex gap-4 lg:gap-6'>
             <div className='w-12 h-12'>
@@ -17,6 +19,9 @@ function EpigramComment() {
             />
           </div>
         </div>
+        <CommentCard status='complete' />
+        <CommentCard status='complete' />
+        <CommentCard status='complete' />
       </div>
     </div>
   );
