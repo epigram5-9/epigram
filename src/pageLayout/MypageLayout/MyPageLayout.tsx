@@ -1,16 +1,35 @@
-function MyPageLayout() {
+import { useMeQuery } from '@/hooks/userQueryHooks';
+import { UserInfo } from '@/types/user';
+import Profile from '@/user/ui-profile/Profile';
+import Header from '@/components/Header/Header';
+import { useRouter } from 'next/navigation';
+
+export default function MyPageLayout() {
+  const { data, isLoading, isError }: { data: UserInfo | undefined; isLoading: boolean; isError: boolean } = useMeQuery();
+
+  const router = useRouter();
+
+  if (isError) {
+    return <div>error</div>;
+  }
+
+  if (isLoading) {
+    return <div>loading</div>;
+  }
+
+  // NOTE: 회원정보과 확인되지 않는다면 로그인 페이지로 redirect 시킬 예정
+  if (!data) {
+    router.push('/login');
+    return false;
+  }
+
   return (
     <div className='bg-background-100 w-full relative h-dvh'>
+      <Header icon='back' routerPage='/mypage' isLogo={false} insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <div className='bg-background-100 w-full h-[200px]'></div>
       <div className='w-full h-[1900px] flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
         {/* 프로필 영역 */}
-        <div className='w-[130px] h-[240px] flex flex-col justify-center items-center absolute top-[-50px]'>
-          <div className='w-[120px] h-[120px] rounded-full bg-state-error'></div>
-          <p className='mt-4 mb-6'>선글라스 고양이</p>
-          <div className='w-[100px] h-12 pl-4 pr-3.5 py-1.5 bg-zinc-100 rounded-[100px] justify-start items-center gap-1.5 inline-flex'>
-            <div className="text-neutral-400 text-xl font-medium font-['Pretendard'] leading-loose">로그아웃</div>
-          </div>
-        </div>
+        <Profile image={data.image} nickname={data.nickname} />
         {/* 오늘으 ㅣ감정 */}
         <div className='w-[640px] h-[216px] mt-[300px] border border-black'>
           <p>오늘의 감정</p>
@@ -68,5 +87,3 @@ function MyPageLayout() {
     </div>
   );
 }
-
-export default MyPageLayout;
