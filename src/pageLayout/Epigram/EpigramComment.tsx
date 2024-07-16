@@ -1,14 +1,15 @@
-import CommentCard from '@/components/Card/CommentCard';
+import CommentList from '@/components/epigram/Comment/CommentList';
 import { Textarea } from '@/components/ui/textarea';
 import { paddingStyles } from '@/styles/CommentCardStyles';
+import { EpigramCommentProps } from '@/types/epigram.types';
 import Image from 'next/image';
 
-function EpigramComment() {
+function EpigramComment({ epigramId }: EpigramCommentProps) {
   return (
-    <div className='bg-background-100 flex justify-center h-[500px]'>
+    <div className='bg-background-100 flex justify-center '>
       <div className='w-80 md:w-96 lg:w-[640px] pt-6 lg:pt-12'>
         <div className={`flex flex-col gap-4 lg:gap-6 ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}>
-          <h3 className='text-base lg:text-xl font-semibold'>댓글(3)</h3>
+          <h3 className='text-base lg:text-xl font-semibold'>내 댓글 작성</h3>
           <div className='flex gap-4 lg:gap-6'>
             <div className='w-12 h-12'>
               <Image src='/profile.svg' alt='프로필 사진' width={48} height={48} />
@@ -19,9 +20,7 @@ function EpigramComment() {
             />
           </div>
         </div>
-        <CommentCard status='complete' />
-        <CommentCard status='complete' />
-        <CommentCard status='complete' />
+        <CommentList epigramId={epigramId} />
       </div>
     </div>
   );
