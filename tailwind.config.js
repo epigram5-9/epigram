@@ -50,6 +50,16 @@ module.exports = {
         'sub-gray_2': '#E3E9F1',
         'sub-gray_3': '#EFF3F8',
       },
+      screens: {
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
+        '2xl': '1536px',
+      },
+      backgroundImage: {
+        stripes: 'repeating-linear-gradient(to bottom, #ffffff, #ffffff 23px, #e5e7eb 23px, #e5e7eb 24px)',
+      },
     },
   },
   plugins: [],
