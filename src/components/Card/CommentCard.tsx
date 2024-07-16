@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
+import { getCustomRelativeTime } from '@/lib/dateUtils';
 
 interface CommentCardProps {
   comment: CommentType;
@@ -24,7 +25,7 @@ function CommentCard({ comment, status }: CommentCardProps) {
             <div className='justify-start items-start gap-2 flex'>
               <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>{comment.writer.nickname}</div>
               <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>
-                {new Date(comment.createdAt).toLocaleString()}
+                {getCustomRelativeTime(comment.createdAt)}
               </div>
             </div>
             {status === 'edit' && (
