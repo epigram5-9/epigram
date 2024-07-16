@@ -9,6 +9,7 @@ import { Form, Formik, useFormik } from 'formik';
 import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
 import * as Yup from 'yup';
 import fileNameChange from '../util/fileNameChange';
+import { useToast } from '@/components/ui/use-toast';
 
 interface UserProfileEditProps {
   initialValues: {
@@ -26,6 +27,8 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
   const createPresignedUrl = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const { toast } = useToast();
+
   const handleSubmit = async () => {
     await formik.submitForm(); // Formik의 submitForm 함수 호출
   };
@@ -33,6 +36,9 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
   const { mutate: updateMe } = useUpdateMe({
     onSuccess: () => {
       onModalClose();
+      toast({
+        description: '프로필 수정이 완료되었습니다.',
+      });
     },
   });
 
