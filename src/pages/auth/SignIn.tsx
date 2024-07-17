@@ -7,8 +7,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { PostSigninRequest, PostSigninRequestType } from '@/schema/auth';
+import { useSignin } from '@/hooks/userQueryHooks';
 
 export default function SignIn() {
+  const mutationSignin = useSignin();
   // 폼 정의
   const form = useForm<PostSigninRequestType>({
     resolver: zodResolver(PostSigninRequest),
@@ -20,9 +22,7 @@ export default function SignIn() {
   });
 
   function onSubmit(values: PostSigninRequestType) {
-    // NOTE : 테스트를 위해서 콘솔 넣음
-    /* eslint-disable no-console */
-    console.log(values);
+    mutationSignin.mutate(values);
   }
 
   // TODO: 나중에 컴포넌트 분리하기
