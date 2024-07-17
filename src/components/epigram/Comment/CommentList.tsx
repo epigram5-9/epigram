@@ -1,6 +1,6 @@
-import CommentCard from '@/components/Card/CommentCard';
 import { useEpigramCommentsQuery } from '@/hooks/useEpigramQueryHook';
 import { EpigramCommentProps } from '@/types/epigram.types';
+import CommentItem from './CommentItem';
 
 function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
   const {
@@ -18,7 +18,7 @@ function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
   return (
     <div>
       <h3 className='text-base lg:text-xl font-semibold'>댓글({comments?.list.length || 0})</h3>
-      {comments?.list.map((comment) => <CommentCard key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'complete'} />)}
+      {comments?.list.map((comment) => <CommentItem key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'complete'} />)}
     </div>
   );
 }
