@@ -1,4 +1,4 @@
-import { useEpigramCommentsQuery } from '@/hooks/useEpigramQueryHook';
+import useEpigramCommentsQuery from '@/hooks/useEpigramCommentHook';
 import { EpigramCommentProps } from '@/types/epigram.types';
 import CommentItem from './CommentItem';
 import NoComment from './NoComment';

@@ -1,5 +1,5 @@
 import { GetEpigramRequestSchema } from '@/schema/epigram';
-import { useEpigramQuery } from '@/hooks/useEpigramQueryHook';
+import useEpigramQuery from '@/hooks/useEpigramQueryHook';
 import EpigramComment from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
 import Image from 'next/image';
