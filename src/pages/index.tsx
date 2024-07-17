@@ -2,8 +2,21 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import ReactPixel from 'react-facebook-pixel';
+import { event } from 'nextjs-google-analytics';
 
 export default function Home() {
+  const handleCTAClick = () => {
+    // Google Analytics 이벤트 트래킹
+    event('cta_click', {
+      category: 'Button',
+      label: 'Start Now',
+    });
+
+    // Facebook Pixel 이벤트 트래킹
+    ReactPixel.track('Lead', { action: 'cta_click' });
+  };
+
   return (
     <div className='w-full h-[5864px] relative bg-slate-100'>
       {/* Header */}
@@ -18,7 +31,7 @@ export default function Home() {
             <div className='text-center text-zinc-600 text-xl font-normal font-iropkeBatang leading-7'>다른 사람들과 감정을 공유해 보세요.</div>
           </div>
           <Link href='/auth/SignIn'>
-            <Button type='button' className='w-[286px] h-16 px-4 bg-zinc-700 rounded-xl justify-center items-center gap-2 inline-flex'>
+            <Button type='button' className='w-[286px] h-16 px-4 bg-zinc-700 rounded-xl justify-center items-center gap-2 inline-flex' onClick={handleCTAClick}>
               <div className='text-white text-xl font-semibold font-pretendard leading-loose'>시작하기</div>
             </Button>
           </Link>
@@ -87,7 +100,7 @@ export default function Home() {
             <Image src='/AboutPage/Logo/LogoXL.svg' alt='Epigram Logo' layout='fill' />
           </div>
           <Link href='/auth/SignIn'>
-            <Button type='button' className='w-[286px] h-16 px-4 bg-zinc-700 rounded-xl justify-center items-center gap-2 inline-flex'>
+            <Button type='button' className='w-[286px] h-16 px-4 bg-zinc-700 rounded-xl justify-center items-center gap-2 inline-flex' onClick={handleCTAClick}>
               <div className='text-white text-xl font-semibold font-pretendard leading-loose'>시작하기</div>
             </Button>
           </Link>
