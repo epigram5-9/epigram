@@ -12,9 +12,11 @@ export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
 
   useEffect(() => {
-    // Facebook Pixel 초기화 및 페이지 뷰 트래킹
-    ReactPixel.init(FB_PIXEL_ID);
-    ReactPixel.pageView();
+    if (typeof window !== 'undefined') {
+      // Facebook Pixel 초기화 및 페이지 뷰 트래킹
+      ReactPixel.init(FB_PIXEL_ID);
+      ReactPixel.pageView();
+    }
   }, []);
 
   return (
