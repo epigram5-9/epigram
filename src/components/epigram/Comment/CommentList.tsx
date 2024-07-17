@@ -19,7 +19,7 @@ function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
 
   return (
     <div className='flex flex-col gap-4'>
-      <h3 className='text-base lg:text-xl font-semibold'>댓글({comments?.list.length || 0})</h3>
+      <h3 className='text-base lg:text-xl font-semibold'>댓글({comments?.totalCount})</h3>
       {commentCount > 0 ? comments?.list.map((comment) => <CommentItem key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'complete'} />) : <NoComment />}
     </div>
   );
