@@ -102,3 +102,6 @@ out
 .pnp.*
 
 .DS_Store
+
+# Local environment variables
+.env.local
