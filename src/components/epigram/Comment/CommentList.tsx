@@ -10,6 +10,7 @@ function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastCommentRef = useRef<HTMLDivElement | null>(null);
 
+  // NOTE: Observer 콜백: 마지막 요소가 화면에 보이면 다음 페이지(댓글 최대3개를 묶어 1페이지 취급) 로드
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [target] = entries;
@@ -34,6 +35,7 @@ function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
     }
 
     return () => {
+      // NOTE: effect가 실행되기전에 호출해서 메모리 누수를 방지해준다고 함
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
