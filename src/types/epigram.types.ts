@@ -5,3 +5,8 @@ export interface EpigramFigureProps {
   epigram: GetEpigramResponseType;
   currentUserId: GetUserResponseType['id'] | undefined;
 }
+
+export interface EpigramCommentProps {
+  epigramId: number;
+  currentUserId: GetUserResponseType['id'] | undefined;
+}

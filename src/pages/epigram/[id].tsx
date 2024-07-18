@@ -1,6 +1,6 @@
 import { GetEpigramRequestSchema } from '@/schema/epigram';
-import useEpigramQuery from '@/hooks/epigramQueryHook';
-import CommentSection from '@/pageLayout/Epigram/EpigramComment';
+import useEpigramQuery from '@/hooks/useEpigramQueryHook';
+import EpigramComment from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -27,7 +27,8 @@ function DetailPage() {
         <Image src='/logo.svg' alt='Epigram 로고' width={172} height={48} />
         <Image src='/share.svg' alt='공유 버튼' width={36} height={36} />
       </nav>
-      <EpigramFigure epigram={epigram} currentUserId={userData?.id} /> <CommentSection />
+      <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
+      <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} />
     </div>
   );
 }

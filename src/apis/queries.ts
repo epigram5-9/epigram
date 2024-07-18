@@ -1,8 +1,10 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
 import { GetUserRequestType } from '@/schema/user';
 import { GetEpigramRequestType } from '@/schema/epigram';
+import { CommentRequestType } from '@/schema/comment';
 import { getMe, getUser } from './user';
 import getEpigram from './epigram';
+import getEpigramComments from './epigramComment';
 
 const queries = createQueryKeyStore({
   user: {
@@ -26,6 +28,12 @@ const queries = createQueryKeyStore({
         return getEpigram(request);
       },
       enabled: request.id !== undefined,
+    }),
+  },
+  epigramComment: {
+    getComments: (request: CommentRequestType) => ({
+      queryKey: ['epigramComments', request],
+      queryFn: () => getEpigramComments(request),
     }),
   },
 });
