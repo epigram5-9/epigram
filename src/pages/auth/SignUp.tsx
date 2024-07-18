@@ -1,27 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import AuthLayout from '@/pageLayout/AuthLayout/AuthLayout';
-import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PostSignUpRequest, PostSignUpRequestType } from '@/schema/auth';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 export default function SignUp() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<PostSignUpRequestType>({
+    resolver: zodResolver(PostSignUpRequest),
+    mode: 'onBlur',
     defaultValues: {
       email: '',
       password: '',
       passwordConfirmation: '',
       nickname: '',
     },
-  });
-
-  const formSchema = z.object({
-    email: z.string(),
-    password: z.string(),
-    passwordConfirmation: z.string(),
-    nickname: z.string(),
   });
 
   return (
