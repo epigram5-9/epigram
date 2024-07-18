@@ -1,28 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/search/SearchBar';
 import RecentSearches from '@/components/search/RecentSearches';
 import SearchResults from '@/components/search/SearchResults';
 
 function SearchLayout() {
+  const [searches, setSearches] = useState<string[]>([]);
+
+  useEffect(() => {
+    const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+    setSearches(storedSearches);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('recentSearches', JSON.stringify(searches));
+  }, [searches]);
+
   const handleSearch = (search: string) => {
     if (search.trim() === '') return;
 
-    // 로컬 스토리지 저장
-    const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-    const updatedSearches = [search, ...storedSearches.filter((item: string) => item !== search)].slice(0, 10);
-    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    const updatedSearches = [search, ...searches.filter((item) => item !== search)].slice(0, 10);
+    setSearches(updatedSearches);
+  };
+
+  const handleClearAll = () => {
+    setSearches([]);
   };
 
   return (
     <>
       <header />
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
-        <SearchBar />
-        <RecentSearches onSearch={handleSearch} />
-        <SearchResults />
-        <SearchResults />
-        <SearchResults />
-        <SearchResults />
+        <SearchBar onSearch={handleSearch} />
+        <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />
         <SearchResults />
       </div>
     </>

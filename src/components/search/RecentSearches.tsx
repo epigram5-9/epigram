@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface RecentSearchesProps {
+  searches: string[];
   onSearch: (search: string) => void;
+  onClear: () => void;
 }
 
-function RecentSearches({ onSearch }: RecentSearchesProps) {
-  const [searches, setSearches] = useState<string[]>([]);
-
-  useEffect(() => {
-    const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-    setSearches(storedSearches);
-  }, []);
-
+function RecentSearches({ searches, onSearch, onClear }: RecentSearchesProps) {
   const handleSearchClick = (search: string) => {
     onSearch(search);
   };
 
   const handleClearAll = () => {
     localStorage.removeItem('recentSearches');
-    setSearches([]);
+    onClear();
   };
 
   return (
