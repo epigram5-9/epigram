@@ -84,7 +84,11 @@ export default function SignUp() {
               )}
             />
           </div>
-          <Button type='submit' className='w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 h-11 bg-black-500 font-pretendard text-white lg:text-xl md:text-base rounded-xl'>
+          <Button
+            disabled={!form.formState.isValid}
+            type='submit'
+            className={`w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 h-11 bg-black-500 font-pretendard text-white lg:text-xl md:text-base rounded-xl ${!form.formState.isValid ? 'bg-blue-300' : 'bg-black-500'}`}
+          >
             가입하기
           </Button>
         </form>
