@@ -33,9 +33,9 @@ export default function SignUp() {
             <FormField
               control={form.control}
               name='email'
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className='flex flex-col md:gap-5 gap-4 w-full space-y-0'>
-                  <FormLabel className='font-pretendard text-blue-900 lg:text-xl md:text-base sm:text-sm'>이메일</FormLabel>
+                  <FormLabel className={`font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>이메일</FormLabel>
                   <FormControl>
                     <Input type='text' placeholder='이메일' className='lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard' {...field} />
                   </FormControl>
@@ -47,9 +47,9 @@ export default function SignUp() {
               <FormField
                 control={form.control}
                 name='password'
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className='flex flex-col md:gap-5 gap-4 w-full space-y-0'>
-                    <FormLabel className='font-pretendard text-blue-900 lg:text-xl md:text-base sm:text-sm'>비밀번호</FormLabel>
+                    <FormLabel className={`font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>비밀번호</FormLabel>
                     <FormControl>
                       <Input type='password' placeholder='비밀번호' className='lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard' {...field} />
                     </FormControl>
@@ -73,9 +73,9 @@ export default function SignUp() {
             <FormField
               control={form.control}
               name='nickname'
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className='flex flex-col md:gap-5 gap-4 w-full space-y-0'>
-                  <FormLabel className='font-pretendard text-blue-900 lg:text-xl md:text-base sm:text-sm'>닉네임</FormLabel>
+                  <FormLabel className={`font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>닉네임</FormLabel>
                   <FormControl>
                     <Input type='text' placeholder='닉네임' className='lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard' {...field} />
                   </FormControl>
