@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import _ from 'lodash';
 import SEARCH_ICON from '../../../public/md.svg';
@@ -16,6 +16,14 @@ function SearchBar({ onSearch }: SearchBarProps) {
       onSearch(query);
     }, 100), // 디바운스 시간 설정
     [onSearch],
+  );
+
+  // 컴포넌트가 언마운트 될 때 cancel 메서드로 함수 취소
+  useEffect(
+    () => () => {
+      debouncedSearch.cancel();
+    },
+    [debouncedSearch],
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
