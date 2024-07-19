@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import _ from 'lodash';
 import SEARCH_ICON from '../../../public/md.svg';
 
 interface SearchBarProps {
@@ -9,25 +8,17 @@ interface SearchBarProps {
 
 function SearchBar({ onSearch }: SearchBarProps) {
   const [searchInput, setSearchInput] = useState<string>('');
-  const debouncedSearchRef = useRef(_.debounce((query: string) => onSearch(query), 100));
-
-  // 컴포넌트가 언마운트 될 때 cancel 메서드로 함수 취소
-  useEffect(() => {
-    const debouncedSearch = debouncedSearchRef.current;
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchInput(query);
-    debouncedSearchRef.current(query);
+    setSearchInput(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    debouncedSearchRef.current.flush(); // Lodash debounce의 flush 메서드를 사용하여 즉시 실행
+    if (searchInput.trim()) {
+      onSearch(searchInput);
+      setSearchInput('');
+    }
   };
 
   return (

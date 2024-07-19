@@ -6,6 +6,18 @@ import SearchResults from '@/components/search/SearchResults';
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
 
+  const handleSearch = (search: string) => {
+    setSearches((prevSearches) => {
+      const updatedSearches = [search, ...prevSearches.filter((item) => item !== search)].slice(0, 10);
+      return updatedSearches;
+    });
+  };
+
+  const handleClearAll = () => {
+    setSearches([]);
+    localStorage.removeItem('recentSearches');
+  };
+
   useEffect(() => {
     const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
     setSearches(storedSearches);
@@ -14,18 +26,6 @@ function SearchLayout() {
   useEffect(() => {
     localStorage.setItem('recentSearches', JSON.stringify(searches));
   }, [searches]);
-
-  const handleSearch = (search: string) => {
-    if (search.trim() === '') return;
-
-    const updatedSearches = [search, ...searches.filter((item) => item !== search)].slice(0, 10);
-    setSearches(updatedSearches);
-  };
-
-  const handleClearAll = () => {
-    setSearches([]);
-    localStorage.removeItem('recentSearches');
-  };
 
   return (
     <>
