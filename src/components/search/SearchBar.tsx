@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import SEARCH_ICON from '../../../public/md.svg';
+import _ from 'lodash';
 
 interface SearchBarProps {
   onSearch: (search: string) => void;
