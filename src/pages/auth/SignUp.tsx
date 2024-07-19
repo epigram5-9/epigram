@@ -1,27 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import AuthLayout from '@/pageLayout/AuthLayout/AuthLayout';
-import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PostSignUpRequest, PostSignUpRequestType } from '@/schema/auth';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 export default function SignUp() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<PostSignUpRequestType>({
+    resolver: zodResolver(PostSignUpRequest),
+    mode: 'onBlur',
     defaultValues: {
       email: '',
       password: '',
       passwordConfirmation: '',
       nickname: '',
     },
-  });
-
-  const formSchema = z.object({
-    email: z.string(),
-    password: z.string(),
-    passwordConfirmation: z.string(),
-    nickname: z.string(),
   });
 
   return (
@@ -37,11 +33,16 @@ export default function SignUp() {
             <FormField
               control={form.control}
               name='email'
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className='flex flex-col md:gap-5 gap-4 w-full space-y-0'>
-                  <FormLabel className='font-pretendard text-blue-900 lg:text-xl md:text-base sm:text-sm'>이메일</FormLabel>
+                  <FormLabel className={`font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>이메일</FormLabel>
                   <FormControl>
-                    <Input type='text' placeholder='이메일' className='lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard' {...field} />
+                    <Input
+                      type='text'
+                      placeholder='이메일'
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className='flex justify-end text-[13px] text-state-error' />
                 </FormItem>
@@ -51,11 +52,16 @@ export default function SignUp() {
               <FormField
                 control={form.control}
                 name='password'
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className='flex flex-col md:gap-5 gap-4 w-full space-y-0'>
-                    <FormLabel className='font-pretendard text-blue-900 lg:text-xl md:text-base sm:text-sm'>비밀번호</FormLabel>
+                    <FormLabel className={`font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>비밀번호</FormLabel>
                     <FormControl>
-                      <Input type='password' placeholder='비밀번호' className='lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard' {...field} />
+                      <Input
+                        type='password'
+                        placeholder='비밀번호'
+                        className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className='flex justify-end text-[13px] text-state-error' />
                   </FormItem>
@@ -64,10 +70,15 @@ export default function SignUp() {
               <FormField
                 control={form.control}
                 name='passwordConfirmation'
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem className='flex flex-col md:gap-5 gap-4 w-full space-y-0'>
                     <FormControl>
-                      <Input type='password' placeholder='비밀번호 확인' className='lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard' {...field} />
+                      <Input
+                        type='password'
+                        placeholder='비밀번호 확인'
+                        className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className='flex justify-end text-[13px] text-state-error' />
                   </FormItem>
@@ -77,18 +88,27 @@ export default function SignUp() {
             <FormField
               control={form.control}
               name='nickname'
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className='flex flex-col md:gap-5 gap-4 w-full space-y-0'>
-                  <FormLabel className='font-pretendard text-blue-900 lg:text-xl md:text-base sm:text-sm'>닉네임</FormLabel>
+                  <FormLabel className={`font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>닉네임</FormLabel>
                   <FormControl>
-                    <Input type='text' placeholder='닉네임' className='lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard' {...field} />
+                    <Input
+                      type='text'
+                      placeholder='닉네임'
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className='flex justify-end text-[13px] text-state-error' />
                 </FormItem>
               )}
             />
           </div>
-          <Button type='submit' className='w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 h-11 bg-black-500 font-pretendard text-white lg:text-xl md:text-base rounded-xl'>
+          <Button
+            disabled={!form.formState.isValid}
+            type='submit'
+            className={`w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 h-11 bg-black-500 font-pretendard text-white lg:text-xl md:text-base rounded-xl ${!form.formState.isValid ? 'bg-blue-300' : 'bg-black-500'}`}
+          >
             가입하기
           </Button>
         </form>
