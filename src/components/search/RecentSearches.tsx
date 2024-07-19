@@ -12,7 +12,6 @@ function RecentSearches({ searches, onSearch, onClear }: RecentSearchesProps) {
   };
 
   const handleClearAll = () => {
-    localStorage.removeItem('recentSearches');
     onClear();
   };
 

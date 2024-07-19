@@ -24,6 +24,7 @@ function SearchLayout() {
 
   const handleClearAll = () => {
     setSearches([]);
+    localStorage.removeItem('recentSearches');
   };
 
   return (
