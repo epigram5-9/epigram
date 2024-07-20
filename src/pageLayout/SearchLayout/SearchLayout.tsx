@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/search/SearchBar';
 import RecentSearches from '@/components/search/RecentSearches';
 import SearchResults from '@/components/search/SearchResults';
 
 // TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
-// NOTE useEffect 훅이 두 번 실행 되는 문제를 해결하기 위해 isInitialMount 선언하여 관리
+// TODO api, SearchResults 컴포넌트와 연결
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);

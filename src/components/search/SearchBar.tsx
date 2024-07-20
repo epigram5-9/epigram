@@ -31,6 +31,7 @@ function SearchBar({ onSearch, currentSearch }: SearchBarProps) {
     }
   };
 
+  // 최근 검색어 클릭 시 setSearchInput 상태 업데이트
   useEffect(() => {
     setSearchInput(currentSearch);
   }, [currentSearch]);
