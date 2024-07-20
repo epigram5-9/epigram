@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import SEARCH_ICON from '../../../public/md.svg';
 
 interface SearchBarProps {
   onSearch: (search: string) => void;
+  currentSearch: string;
 }
 
-function SearchBar({ onSearch }: SearchBarProps) {
+function SearchBar({ onSearch, currentSearch }: SearchBarProps) {
   const [searchInput, setSearchInput] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -29,6 +30,10 @@ function SearchBar({ onSearch }: SearchBarProps) {
       setSearchInput('');
     }
   };
+
+  useEffect(() => {
+    setSearchInput(currentSearch);
+  }, [currentSearch]);
 
   return (
     <form onSubmit={handleSubmit} className='flex justify-between items-center h-[52px] md:h-15 lg:h-20 mt-6 mx-6 py-4 md:py-[19px] lg:py-[26px] gap-[10px] border-b-[4px] border-blue-800'>

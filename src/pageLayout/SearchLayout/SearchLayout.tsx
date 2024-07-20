@@ -8,15 +8,17 @@ import SearchResults from '@/components/search/SearchResults';
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
-  const isInitialMount = useRef(true);
+  const [currentSearch, setCurrentSearch] = useState<string>('');
 
   // 검색어가 제출될 때 작동
   const handleSearch = (search: string) => {
     setSearches((prevSearches) => {
       // 중복되지 않는 검색어를 최근 검색어에 추가하고 최대 10개로 제한
       const updatedSearches = [search, ...prevSearches.filter((item) => item !== search)].slice(0, 10);
+      localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
       return updatedSearches;
     });
+    setCurrentSearch(search);
   };
 
   // 모두지우기 클릭 시 저장된 최근 검색어 삭제
@@ -31,20 +33,11 @@ function SearchLayout() {
     setSearches(storedSearches);
   }, []);
 
-  // 검색어 상태(searches)가 변경될 때 로컬 스토리지 업데이트
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      localStorage.setItem('recentSearches', JSON.stringify(searches));
-    }
-  }, [searches]);
-
   return (
     <>
       <header />
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} currentSearch={currentSearch} />
         <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />
         <SearchResults />
       </div>
