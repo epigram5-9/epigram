@@ -8,10 +8,12 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
+import { useToast } from '@/components/ui/use-toast';
+import useAddEpigram from '@/hooks/epigramQueryHook';
 
 function AddEpigram() {
-  const [tags, setTags] = useState<string[]>([]);
   const [currentTag, setCurrentTag] = useState('');
+  const { toast } = useToast();
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
@@ -24,24 +26,43 @@ function AddEpigram() {
     },
   });
 
-  // NOTE: 태그 저장 버튼
+  const addEpigramMutation = useAddEpigram({
+    onSuccess: () => {
+      toast({
+        title: '에피그램 추가 성공',
+        description: '새로운 에피그램이 성공적으로 추가되었습니다.',
+      });
+      form.reset();
+    },
+    onError: (error) => {
+      toast({
+        title: '에피그램 추가 실패',
+        description: '에피그램 추가 중 오류가 발생했습니다. 다시 시도해 주세요.',
+        variant: 'destructive',
+      });
+      /* eslint-disable no-console */
+      console.error('에피그램 추가 오류:', error);
+    },
+  });
+
   const handleAddTag = () => {
-    if (currentTag && currentTag.length <= 10 && tags.length < 3) {
-      const newTags = [...tags, currentTag];
-      setTags(newTags);
-      form.setValue('tags', newTags); // 폼 상태 업데이트
-      setCurrentTag('');
+    if (currentTag && currentTag.length <= 10) {
+      const currentTags = form.getValues('tags') || [];
+      if (currentTags.length < 3) {
+        form.setValue('tags', [...currentTags, currentTag]);
+        setCurrentTag('');
+      }
     }
   };
 
-  // NOTE: 태그 삭제 버튼
   const handleRemoveTag = (tagToRemove: string) => {
-    const newTags = tags.filter((tag) => tag !== tagToRemove);
-    setTags(newTags);
-    form.setValue('tags', newTags); // 폼 상태 업데이트
+    const currentTags = form.getValues('tags') || [];
+    form.setValue(
+      'tags',
+      currentTags.filter((tag) => tag !== tagToRemove),
+    );
   };
 
-  // NOTE: 태그를 저장할려고 enter를 눌렀을때 폼 제출 방지
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -50,8 +71,7 @@ function AddEpigram() {
   };
 
   const handleSubmit = (data: AddEpigramFormType) => {
-    /* eslint-disable no-console */
-    console.log(data);
+    addEpigramMutation.mutate(data);
   };
 
   return (
@@ -177,46 +197,29 @@ function AddEpigram() {
                   </FormLabel>
                   <div className='relative'>
                     <Input
-                      {...field}
                       className='h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2 pr-20'
                       id='tags'
                       type='text'
                       placeholder='입력하여 태그 추가(최대10자)'
                       value={currentTag}
-                      onChange={(e) => {
-                        setCurrentTag(e.target.value);
-                        // NOTE: 현재 태그 배열을 form상태에 반영
-                        field.onChange(tags);
-                      }}
+                      onChange={(e) => setCurrentTag(e.target.value)}
                       onKeyDown={handleKeyDown}
                       maxLength={10}
                     />
                     <Button
                       type='button'
                       className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3 bg-blue-500 text-white rounded'
-                      onClick={() => {
-                        handleAddTag();
-                        // NOTE: 새 태그를 추가하고 form 상태 업데이트
-                        field.onChange([...tags, currentTag]);
-                      }}
-                      disabled={tags.length >= 3 || currentTag.length === 0}
+                      onClick={handleAddTag}
+                      disabled={field.value.length >= 3 || currentTag.length === 0}
                     >
                       저장
                     </Button>
                   </div>
                   <div className='flex flex-wrap gap-2 mt-2'>
-                    {tags.map((tag) => (
+                    {field.value.map((tag) => (
                       <div key={tag} className='bg-blue-100 px-2 py-1 rounded-full flex items-center'>
                         <span>{tag}</span>
-                        <button
-                          type='button'
-                          className='ml-2 text-red-500'
-                          onClick={() => {
-                            handleRemoveTag(tag);
-                            // NOTE: 태그 제거 후 form 상태 업데이트
-                            field.onChange(tags.filter((t) => t !== tag));
-                          }}
-                        >
+                        <button type='button' className='ml-2 text-red-500' onClick={() => handleRemoveTag(tag)}>
                           ×
                         </button>
                       </div>
@@ -226,7 +229,6 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-
             <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl bg-blue-300 text-white' type='submit'>
               작성 완료
             </Button>
