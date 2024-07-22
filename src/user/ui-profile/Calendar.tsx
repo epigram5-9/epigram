@@ -1,29 +1,35 @@
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { subMonths } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
 import ARROW_BOTTOM_ICON from '../../../public/icon/arrow-bottom-icon.svg';
 import ARROW_RIGHT_ICON from '../../../public/icon/arrow-right-icon.svg';
 import ARROW_LEFT_ICON from '../../../public/icon/arrow-left-icon.svg';
+import useCalendar from '../../hooks/useCalendar';
+import { DAY_LIST, DATE_MONTH_FIXER, DEFAULT_TRASH_VALUE } from '../utill/constants';
 
 export default function Calendar() {
-  const [position, setPosition] = useState('bottom');
+  const [position, setPosition] = useState<string>('bottom');
+  const { weekCalendarList, currentDate, setCurrentDate } = useCalendar();
 
-  const calendarArray1 = [0, 1, 2, 3, 4, 5];
-  const calendarArray2 = [0, 1, 2, 3, 4, 5, 6];
+  // 이전 달 클릭
+  const handlePrevMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, DATE_MONTH_FIXER));
+  // 다음 달 클릭
+  const handleNextMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, -DATE_MONTH_FIXER));
 
   return (
     <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 gap-[48px]'>
-      {/* NOTE: 캘린더 header */}
-      <div className='w-full justify-between items-center inline-flex'>
-        <div className='w-full h-[52px] justify-between items-center flex'>
-          <div className="text-neutral-700 text-2xl font-semibold font-['Pretendard'] leading-loose">2024년 5월</div>
+      {/* 캘린더 헤더 */}
+      <div className='w-full flex justify-between items-center'>
+        <div className='flex w-full h-[52px] justify-between items-center'>
+          <div className='text-neutral-700 text-2xl font-semibold leading-loose'>{`${currentDate.getFullYear()}년 ${currentDate.getMonth() + 1}월`}</div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='outline' className='justify-start items-center gap-1 flex bg-slate-100 rounded-[14px] ext-center text-stone-300 text-xl'>
+              <Button variant='outline' className='flex items-center gap-1 bg-slate-100 rounded-[14px] text-center text-stone-300 text-xl'>
                 필터: 감동
                 <div className='w-9 h-9 relative'>
-                  <Image src={ARROW_BOTTOM_ICON} alt='이전' width={36} height={36} />
+                  <Image src={ARROW_BOTTOM_ICON} alt='필터 선택' width={36} height={36} />
                 </div>
               </Button>
             </DropdownMenuTrigger>
@@ -35,25 +41,31 @@ export default function Calendar() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className='justify-start items-start gap-6 flex'>
-          <div className='w-9 h-9 relative'>
+        <div className='flex gap-6'>
+          <Button variant='default' className='p-0' onClick={handlePrevMonth}>
             <Image src={ARROW_LEFT_ICON} alt='이전' width={36} height={36} />
-          </div>
-          <div className='w-9 h-9 relative'>
-            <Image src={ARROW_RIGHT_ICON} alt='이전' width={36} height={36} />
-          </div>
+          </Button>
+          <Button variant='default' className='p-0' onClick={handleNextMonth}>
+            <Image src={ARROW_RIGHT_ICON} alt='다음' width={36} height={36} />
+          </Button>
         </div>
       </div>
-      {/* NOTE: 캘린더 */}
+      {/* 캘린더 */}
       <div>
-        {calendarArray1.map((row, rowIndex) => (
+        <div className='flex'>
+          {DAY_LIST.map((day) => (
+            <div key={day} className='w-[91px] h-[91px] px-[15px] py-[9px] border-b border-gray-100 text-stone-300 font-semibold flex items-center justify-center'>
+              {day}
+            </div>
+          ))}
+        </div>
+        {weekCalendarList.map((week, weekIndex) => (
           // eslint-disable-next-line react/no-array-index-key
-          <div key={`row-${rowIndex}`} className='flex'>
-            {calendarArray2.map((col, colIndex) => (
+          <div key={weekIndex} className='flex'>
+            {week.map((day, dayIndex) => (
               // eslint-disable-next-line react/no-array-index-key
-              <div key={`row-${rowIndex}-col-${colIndex}`} className='w-[91px] h-[91px] px-[15px] py-[9px] border-b border-gray-100 text-stone-300 font-semibold flex items-center justify-center'>
-                {/* 여기에 원하는 내용을 추가할 수 있습니다. */}
-                {`Row ${rowIndex + 1}, Col ${colIndex + 1}`}
+              <div key={dayIndex} className='w-[91px] h-[91px] px-[15px] py-[9px] border-b border-gray-100 text-stone-300 font-semibold flex items-center justify-center'>
+                {day === DEFAULT_TRASH_VALUE ? '' : day}
               </div>
             ))}
           </div>
