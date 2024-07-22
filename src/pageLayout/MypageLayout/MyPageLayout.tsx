@@ -1,6 +1,7 @@
 import Header from '@/components/Header/Header';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 import UserInfo from '@/types/user';
+import Profile from '@/user/ui-profile/Profile';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -26,13 +27,9 @@ export default function MyPageLayout() {
   return (
     <div className='bg-background-100 w-full relative h-dvh'>
       <Header icon='back' routerPage='/mypage' isLogo={false} insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <div className='bg-background-100 w-full h-[200px]'></div>
       <div className='w-full flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
-        <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>
-          <p>닉네임 : {data.nickname}</p>
-          <p>
-            프로필사진 : <Image src={data.image} alt='프로필사진' width={36} height={36} className='h-auto' />
-          </p>
-        </div>
+        <Profile image={data.image} nickname={data.nickname} />
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>오늘의 감정</div>
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>캘린더</div>
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>감정차트</div>

@@ -6,3 +6,8 @@ export default interface UserInfo {
   createdAt: Date;
   teamId: string;
 }
+
+export interface UserProfileProps {
+  image: string;
+  nickname: string;
+}

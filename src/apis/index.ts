@@ -20,6 +20,12 @@ httpClient.interceptors.request.use(
       newConfig.headers.Authorization = `Bearer ${token}`;
     }
 
+    if (newConfig.data instanceof FormData) {
+      newConfig.headers['Content-Type'] = 'multipart/form-data';
+    } else {
+      newConfig.headers['Content-Type'] = 'application/json';
+    }
+
     return newConfig;
   },
   (error) => Promise.reject(error),
