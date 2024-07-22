@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import AuthLayout from '@/pageLayout/AuthLayout/AuthLayout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
@@ -27,7 +26,7 @@ export default function SignIn() {
 
   // TODO: 나중에 컴포넌트 분리하기
   return (
-    <AuthLayout>
+    <div className='flex flex-col justify-center items-center bg-background-100 w-full h-screen'>
       <header className='mb-[50px] md:mb-[60px]'>
         <Link href='/'>
           <Image src='/lg.svg' alt='logo' width={172} height={48} />
@@ -100,6 +99,6 @@ export default function SignIn() {
           <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
         </Button>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
