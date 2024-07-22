@@ -1,9 +1,8 @@
 import axios from 'axios';
 import qs from 'qs';
 
-// NOTE: 유민님 interceptor 사용!
 const getToken = () =>
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzIxNTQxOTE4LCJleHAiOjE3MjE1NDM3MTgsImlzcyI6InNwLWVwaWdyYW0ifQ.123nAK0TPaZxBtPBfYz2w9o4OZYfPFYWAzX90tlDjzg';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzIxNjA2Mjg3LCJleHAiOjE3MjE2MDgwODcsImlzcyI6InNwLWVwaWdyYW0ifQ.AZSZl4cWJuTIL6Wf9AiKXTQooGMcwd9mCRSLV4smSh0';
 
 const httpClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -11,6 +10,7 @@ const httpClient = axios.create({
   paramsSerializer: (parameters) => qs.stringify(parameters, { arrayFormat: 'repeat', encode: false }),
 });
 
+// NOTE: 유민님 interceptor 사용!
 httpClient.interceptors.request.use(
   (config) => {
     const newConfig = { ...config };

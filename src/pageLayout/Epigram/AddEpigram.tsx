@@ -10,10 +10,12 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
 import { useToast } from '@/components/ui/use-toast';
 import useAddEpigram from '@/hooks/epigramQueryHook';
+import { useRouter } from 'next/router';
 
 function AddEpigram() {
   const [currentTag, setCurrentTag] = useState('');
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
@@ -27,21 +29,20 @@ function AddEpigram() {
   });
 
   const addEpigramMutation = useAddEpigram({
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
         title: '에피그램 추가 성공',
         description: '새로운 에피그램이 성공적으로 추가되었습니다.',
       });
       form.reset();
+      router.push(`/epigram/${data.id}`);
     },
     onError: (error) => {
       toast({
         title: '에피그램 추가 실패',
-        description: '에피그램 추가 중 오류가 발생했습니다. 다시 시도해 주세요.',
+        description: error.message || '에피그램 추가 중 오류가 발생했습니다. 다시 시도해 주세요.',
         variant: 'destructive',
       });
-      /* eslint-disable no-console */
-      console.error('에피그램 추가 오류:', error);
     },
   });
 
