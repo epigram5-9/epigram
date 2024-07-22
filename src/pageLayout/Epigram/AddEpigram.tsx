@@ -45,6 +45,7 @@ function AddEpigram() {
       setIsAlertOpen(true);
       form.reset();
     },
+    // TODO : 유효성검사 브랜치만들어서 alert창에 유효성검사 틀린부분을 보이게 할 예정
     onError: () => {
       setAlertContent({
         title: '등록 실패',
@@ -226,6 +227,8 @@ function AddEpigram() {
                       저장
                     </Button>
                   </div>
+                  {/* TODO: 태그 key값 수정 예정 */}
+                  {/* NOTE: 지금은 똑같은 태그를 입력했을때 하나를 지우면 다 지워짐 */}
                   <div className='flex flex-wrap gap-2 mt-2'>
                     {field.value.map((tag) => (
                       <div key={tag} className='bg-blue-100 px-2 py-1 rounded-full flex items-center'>
