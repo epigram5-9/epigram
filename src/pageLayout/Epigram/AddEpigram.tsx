@@ -46,6 +46,7 @@ function AddEpigram() {
     },
   });
 
+  // TODO : 태그 관리 로직 분리 예정
   const handleAddTag = () => {
     if (currentTag && currentTag.length <= 10) {
       const currentTags = form.getValues('tags') || [];
@@ -103,6 +104,7 @@ function AddEpigram() {
                 저자
                 <span className='text-state-error'>*</span>
               </FormLabel>
+              {/* TODO: 라디오그룹 로직 수정 예정 */}
               <RadioGroup
                 onValueChange={(value) => {
                   if (value === 'unknown') form.setValue('author', '알 수 없음');
@@ -230,8 +232,8 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl bg-blue-300 text-white' type='submit'>
-              작성 완료
+            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl bg-blue-300 text-white' type='submit' disabled={addEpigramMutation.isPending}>
+              {addEpigramMutation.isPending ? '제출 중...' : '작성 완료'}
             </Button>
           </form>
         </Form>
