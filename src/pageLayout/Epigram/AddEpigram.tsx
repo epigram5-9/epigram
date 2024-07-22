@@ -8,13 +8,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
-import { useToast } from '@/components/ui/use-toast';
 import useAddEpigram from '@/hooks/epigramQueryHook';
 import { useRouter } from 'next/router';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 function AddEpigram() {
   const [currentTag, setCurrentTag] = useState('');
-  const { toast } = useToast();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const router = useRouter();
 
   const form = useForm<AddEpigramFormType>({
@@ -28,21 +29,28 @@ function AddEpigram() {
     },
   });
 
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    if (alertContent.title === '등록 완료') {
+      router.push(`/epigram/${addEpigramMutation.data?.id}`);
+    }
+  };
+
   const addEpigramMutation = useAddEpigram({
-    onSuccess: (data) => {
-      toast({
-        title: '에피그램 추가 성공',
-        description: '새로운 에피그램이 성공적으로 추가되었습니다.',
+    onSuccess: () => {
+      setAlertContent({
+        title: '등록 완료',
+        description: '등록이 완료되었습니다.',
       });
+      setIsAlertOpen(true);
       form.reset();
-      router.push(`/epigram/${data.id}`);
     },
-    onError: (error) => {
-      toast({
-        title: '에피그램 추가 실패',
-        description: error.message || '에피그램 추가 중 오류가 발생했습니다. 다시 시도해 주세요.',
-        variant: 'destructive',
+    onError: () => {
+      setAlertContent({
+        title: '등록 실패',
+        description: '다시 확인해주세요.',
       });
+      setIsAlertOpen(true);
     },
   });
 
@@ -238,6 +246,18 @@ function AddEpigram() {
           </form>
         </Form>
       </div>
+
+      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent className='bg-white'>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{alertContent.title}</AlertDialogTitle>
+            <AlertDialogDescription>{alertContent.description}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={handleAlertClose}>확인</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
