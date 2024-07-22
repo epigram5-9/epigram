@@ -1,4 +1,5 @@
 import postSignin from '@/apis/auth';
+import { toast } from '@/components/ui/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 
@@ -12,10 +13,8 @@ const useSigninMutation = () => {
       localStorage.setItem('refreshToken', data.refreshToken);
       router.push('/');
     },
-    onError: (error) => {
-      // NOTE: 임시 테스트용 콘솔, 토스트 추가 예정
-      /* eslint-disable no-console */
-      console.error(error);
+    onError: () => {
+      toast({ description: '이메일 혹은 비밀번호를 확인해주세요.', className: 'border-state-error text-state-error font-semibold' });
     },
   });
 };
