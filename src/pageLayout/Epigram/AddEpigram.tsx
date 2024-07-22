@@ -12,11 +12,14 @@ import useAddEpigram from '@/hooks/epigramQueryHook';
 import { useRouter } from 'next/router';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import useTagManagement from '@/hooks/useTagManagementHook';
+import { useMeQuery } from '@/hooks/userQueryHooks';
 
 function AddEpigram() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const router = useRouter();
+  const { data: userData } = useMeQuery();
+  const [selectedAuthorOption, setSelectedAuthorOption] = useState('directly'); // 기본값을 'directly'로 설정
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
@@ -29,12 +32,7 @@ function AddEpigram() {
     },
   });
 
-  const handleAlertClose = () => {
-    setIsAlertOpen(false);
-    if (alertContent.title === '등록 완료') {
-      router.push(`/epigram/${addEpigramMutation.data?.id}`);
-    }
-  };
+  const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues);
 
   const addEpigramMutation = useAddEpigram({
     onSuccess: () => {
@@ -55,8 +53,35 @@ function AddEpigram() {
     },
   });
 
-  // TODO : 태그 관리 로직 분리 예정
-  const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues);
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    if (alertContent.title === '등록 완료') {
+      router.push(`/epigram/${addEpigramMutation.data?.id}`);
+    }
+  };
+
+  const authorOptions = [
+    { value: 'directly', label: '직접 입력' },
+    { value: 'unknown', label: '알 수 없음' },
+    { value: 'me', label: '본인' },
+  ];
+
+  // NOTE: defautl를 직접 입력으로 설정
+  // NOTE: 본인을 선택 시 유저의 nickname이 들어감
+  const handleAuthorChange = async (value: string) => {
+    setSelectedAuthorOption(value);
+    let authorValue = '';
+    if (value === 'unknown') {
+      authorValue = '알 수 없음';
+    } else if (value === 'me') {
+      if (userData?.nickname) {
+        authorValue = userData.nickname;
+      } else {
+        authorValue = '본인 (닉네임 없음)';
+      }
+    }
+    form.setValue('author', authorValue);
+  };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -97,44 +122,34 @@ function AddEpigram() {
                 저자
                 <span className='text-state-error'>*</span>
               </FormLabel>
-              {/* TODO: 라디오그룹 로직 수정 예정 */}
-              <RadioGroup
-                onValueChange={(value) => {
-                  if (value === 'unknown') form.setValue('author', '알 수 없음');
-                  else if (value === 'me') form.setValue('author', '본인');
-                  else form.setValue('author', '');
-                }}
-              >
+              <RadioGroup onValueChange={handleAuthorChange} value={selectedAuthorOption}>
                 <div className='flex gap-2'>
-                  <div className='flex items-center space-x-2 text-xl'>
-                    <RadioGroupItem value='directly' id='directly' />
-                    <FormLabel htmlFor='directly' className='font-medium lg:text-xl'>
-                      직접 입력
-                    </FormLabel>
-                  </div>
-                  <div className='flex items-center space-x-2'>
-                    <RadioGroupItem value='unknown' id='unknown' />
-                    <FormLabel htmlFor='unknown' className='font-medium lg:text-xl'>
-                      알 수 없음
-                    </FormLabel>
-                  </div>
-                  <div className='flex items-center space-x-2 text-xl'>
-                    <RadioGroupItem value='me' id='me' />
-                    <FormLabel htmlFor='me' className='font-medium lg:text-xl'>
-                      본인
-                    </FormLabel>
-                  </div>
+                  {authorOptions.map((option) => (
+                    <div key={option.value} className='flex items-center space-x-2 text-xl'>
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <FormLabel htmlFor={option.value} className='font-medium lg:text-xl'>
+                        {option.label}
+                      </FormLabel>
+                    </div>
+                  ))}
                 </div>
               </RadioGroup>
             </div>
-
             <FormField
               control={form.control}
               name='author'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2' id='author' type='text' placeholder='저자 이름 입력' {...field} />
+                    {/* NOTE: 직접 입력 radio버튼을 선택하지않으면 수정 불가 */}
+                    <Input
+                      className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2'
+                      id='author'
+                      type='text'
+                      placeholder='저자 이름 입력'
+                      {...field}
+                      disabled={selectedAuthorOption !== 'directly'}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -215,9 +230,9 @@ function AddEpigram() {
                     {field.value.map((tag) => (
                       <div key={tag} className='bg-background-100 px-2 py-1 rounded-full flex items-center'>
                         <span className='text-sm md:text-lg lg:text-2xl'>{tag}</span>
-                        <button type='button' className='ml-2 text-red-500 text-sm md:text-lg lg:text-2xl' onClick={() => handleRemoveTag(tag)}>
+                        <Button type='button' className='ml-2 text-red-500 text-sm md:text-lg lg:text-2xl' onClick={() => handleRemoveTag(tag)}>
                           ×
-                        </button>
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -225,7 +240,7 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl bg-blue-300 text-white' type='submit' disabled={addEpigramMutation.isPending}>
+            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl bg-black-500 text-white' type='submit' disabled={addEpigramMutation.isPending}>
               {addEpigramMutation.isPending ? '제출 중...' : '작성 완료'}
             </Button>
           </form>
