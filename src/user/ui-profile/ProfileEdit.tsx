@@ -9,6 +9,7 @@ import { useEffect, useRef } from 'react';
 import { Form, Formik, useFormik } from 'formik';
 import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
 import * as Yup from 'yup';
+import { AxiosError } from 'axios';
 import fileNameChange from '../utill/fileNameChange';
 
 interface UserProfileEditProps {
@@ -40,6 +41,11 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
         description: '프로필 수정이 완료되었습니다.',
       });
     },
+    onError: () => {
+      toast({
+        description: '프로필 수정 실패',
+      });
+    },
   });
 
   const formik = useFormik<UserProfileProps>({
@@ -62,11 +68,7 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
   });
 
   const updateProfile = (values: UserProfileProps) => {
-    try {
-      updateMe(values);
-    } catch (error) {
-      // 에러 처리
-    }
+    updateMe(values);
   };
 
   // 프로필 사진 변경 클릭
@@ -86,11 +88,21 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
         // 중복된 파일명 및 한글파일이 저장되지 않도록 파일이름 포멧 변경
         const newFileName = fileNameChange();
         const newFile = new File([file], `${newFileName}.${file.name.split('.').pop()}`, { type: file.type });
+
         // presignedUrl 구하는 함수 (s3 업로드까지 같이)
         const { url } = await createPresignedUrl.mutateAsync({ image: newFile });
         formik.setFieldValue('image', url);
       } catch (error) {
-        // 에러 처리
+        // 에러 처리: 실패 시 토스트 메시지
+        const axiosError = error as AxiosError;
+
+        onModalClose();
+        const errorMessage = `(error: ${axiosError.response?.status}) 잘못 된 요청입니다. 관리자에게 문의해주세요`;
+
+        toast({
+          description: errorMessage,
+          className: 'bg-red-400 text-white',
+        });
       }
     }
   }

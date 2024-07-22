@@ -1,6 +1,6 @@
 import quries from '@/apis/queries';
-import { updateMe, createdPresignedUrl } from '@/apis/user';
-import { GetUserRequestType, PatchMeRequestType, PostPresignedURlRequestType, PostPresignedURlResponseType } from '@/schema/user';
+import { updateMe, createPresignedUrl } from '@/apis/user';
+import { GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
 import { MutationOptions } from '@/types/query';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -23,11 +23,11 @@ export const useUpdateMe = (options: MutationOptions<PatchMeRequestType>) => {
 };
 
 // presignedUrl 생성
-export const useCreatePresignedUrl = () =>
+export const useCreatePresignedUrl = (options?: MutationOptions<PostPresignedUrlRequestType>) =>
   useMutation({
-    mutationFn: (request: PostPresignedURlRequestType) => createdPresignedUrl(request),
-    onSuccess: (data: PostPresignedURlResponseType) => data.url,
-    onError: (error) => {
-      error;
-    },
+    mutationFn: (request: PostPresignedUrlRequestType) => createPresignedUrl(request),
+    ...options,
+    onSuccess: (data: PostPresignedUrlResponseType) =>
+      // 이미지 URL 반환
+      data.url,
   });

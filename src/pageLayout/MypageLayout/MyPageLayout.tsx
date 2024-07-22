@@ -2,7 +2,6 @@ import Header from '@/components/Header/Header';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 import UserInfo from '@/types/user';
 import Profile from '@/user/ui-profile/Profile';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function MyPageLayout() {
