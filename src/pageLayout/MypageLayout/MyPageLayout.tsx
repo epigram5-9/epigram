@@ -1,11 +1,38 @@
 import Header from '@/components/Header/Header';
+import { useMeQuery } from '@/hooks/userQueryHooks';
+import UserInfo from '@/types/user';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function MyPageLayout() {
+  const { data, isLoading, isError }: { data: UserInfo | undefined; isLoading: boolean; isError: boolean } = useMeQuery();
+
+  const router = useRouter();
+
+  if (isError) {
+    return <div>error</div>;
+  }
+
+  if (isLoading) {
+    return <div>loading</div>;
+  }
+
+  // NOTE: 회원정보가 확인되지 않는다면 로그인 페이지로 이동
+  if (!data) {
+    router.push('/login');
+    return false;
+  }
+
   return (
     <div className='bg-background-100 w-full relative h-dvh'>
       <Header icon='back' routerPage='/mypage' isLogo={false} insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <div className='w-full flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
-        <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>프로필</div>
+        <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>
+          <p>닉네임 : {data.nickname}</p>
+          <p>
+            프로필사진 : <Image src={data.image} alt='프로필사진' width={36} height={36} className='h-auto' />
+          </p>
+        </div>
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>오늘의 감정</div>
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>캘린더</div>
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>감정차트</div>
