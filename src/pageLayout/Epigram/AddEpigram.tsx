@@ -11,9 +11,9 @@ import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
 import useAddEpigram from '@/hooks/epigramQueryHook';
 import { useRouter } from 'next/router';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import useTagManagement from '@/hooks/useTagManagementHook';
 
 function AddEpigram() {
-  const [currentTag, setCurrentTag] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const router = useRouter();
@@ -56,23 +56,7 @@ function AddEpigram() {
   });
 
   // TODO : 태그 관리 로직 분리 예정
-  const handleAddTag = () => {
-    if (currentTag && currentTag.length <= 10) {
-      const currentTags = form.getValues('tags') || [];
-      if (currentTags.length < 3) {
-        form.setValue('tags', [...currentTags, currentTag]);
-        setCurrentTag('');
-      }
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    const currentTags = form.getValues('tags') || [];
-    form.setValue(
-      'tags',
-      currentTags.filter((tag) => tag !== tagToRemove),
-    );
-  };
+  const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -156,7 +140,6 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-
             <fieldset className='flex flex-col gap-2 lg:gap-4'>
               <legend className='text-semibold lg:text-2xl text-black-600'>출처</legend>
               <FormField
@@ -198,7 +181,6 @@ function AddEpigram() {
                 )}
               />
             </fieldset>
-
             <FormField
               control={form.control}
               name='tags'
@@ -231,9 +213,9 @@ function AddEpigram() {
                   {/* NOTE: 지금은 똑같은 태그를 입력했을때 하나를 지우면 다 지워짐 */}
                   <div className='flex flex-wrap gap-2 mt-2'>
                     {field.value.map((tag) => (
-                      <div key={tag} className='bg-blue-100 px-2 py-1 rounded-full flex items-center'>
-                        <span>{tag}</span>
-                        <button type='button' className='ml-2 text-red-500' onClick={() => handleRemoveTag(tag)}>
+                      <div key={tag} className='bg-background-100 px-2 py-1 rounded-full flex items-center'>
+                        <span className='text-sm md:text-lg lg:text-2xl'>{tag}</span>
+                        <button type='button' className='ml-2 text-red-500 text-sm md:text-lg lg:text-2xl' onClick={() => handleRemoveTag(tag)}>
                           ×
                         </button>
                       </div>
