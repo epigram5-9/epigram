@@ -27,23 +27,26 @@ httpClient.interceptors.response.use(
 
       if (!refreshToken) {
         window.location.href = '/auth/SignIn';
-      } else {
-        httpClient
-          .post('/auth/refresh-token', null, {
-            headers: { Authorization: `Bearer ${refreshToken}` },
-          })
-          .then((response) => {
-            const { accessToken } = response.data;
-            const { refreshToken: newRefreshToken } = response.data;
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', newRefreshToken);
-          })
-          .catch(() => {
-            window.location.href = '/auth/SignIn';
-          });
+        return Promise.reject(error);
       }
-    } else {
-      throw new Error(error.response.status);
+
+      return httpClient
+        .post('/auth/refresh-token', null, {
+          headers: { Authorization: `Bearer ${refreshToken}` },
+        })
+        .then((response) => {
+          const { accessToken, refreshToken: newRefreshToken } = response.data;
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', newRefreshToken);
+
+          const originalRequest = error.config;
+          return httpClient(originalRequest);
+        })
+        .catch(() => {
+          window.location.href = '/auth/SignIn';
+          return Promise.reject(error);
+        });
     }
+    return Promise.reject(error);
   },
 );

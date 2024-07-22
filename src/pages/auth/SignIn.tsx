@@ -1,16 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import AuthLayout from '@/pageLayout/AuthLayout/AuthLayout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { PostSigninRequest, PostSigninRequestType } from '@/schema/auth';
-import { useSignin } from '@/hooks/userQueryHooks';
+import useSigninMutation from '@/hooks/useSignInMutation';
 
 export default function SignIn() {
-  const mutationSignin = useSignin();
+  const mutationSignin = useSigninMutation();
   // 폼 정의
   const form = useForm<PostSigninRequestType>({
     resolver: zodResolver(PostSigninRequest),
@@ -21,13 +20,9 @@ export default function SignIn() {
     },
   });
 
-  function onSubmit(values: PostSigninRequestType) {
-    mutationSignin.mutate(values);
-  }
-
   // TODO: 나중에 컴포넌트 분리하기
   return (
-    <AuthLayout>
+    <div className='flex flex-col justify-center items-center bg-background-100 w-full h-screen'>
       <header className='mb-[50px] md:mb-[60px]'>
         <Link href='/'>
           <Image src='/lg.svg' alt='logo' width={172} height={48} />
@@ -35,7 +30,7 @@ export default function SignIn() {
       </header>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
+        <form onSubmit={form.handleSubmit((values: PostSigninRequestType) => mutationSignin.mutate(values))} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
           <div className='flex flex-col items-center lg:gap-4 gap-[10px] w-full lg:max-w-[640px] md:max-w-[384px]'>
             <FormField
               control={form.control}
@@ -100,6 +95,6 @@ export default function SignIn() {
           <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
         </Button>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
