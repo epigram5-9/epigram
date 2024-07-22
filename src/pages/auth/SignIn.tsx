@@ -20,10 +20,6 @@ export default function SignIn() {
     },
   });
 
-  function onSubmit(values: PostSigninRequestType) {
-    mutationSignin.mutate(values);
-  }
-
   // TODO: 나중에 컴포넌트 분리하기
   return (
     <div className='flex flex-col justify-center items-center bg-background-100 w-full h-screen'>
@@ -34,7 +30,7 @@ export default function SignIn() {
       </header>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
+        <form onSubmit={form.handleSubmit((values: PostSigninRequestType) => mutationSignin.mutate(values))} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
           <div className='flex flex-col items-center lg:gap-4 gap-[10px] w-full lg:max-w-[640px] md:max-w-[384px]'>
             <FormField
               control={form.control}
