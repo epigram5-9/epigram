@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { PostSigninRequest, PostSigninRequestType } from '@/schema/auth';
-import { useSignin } from '@/hooks/userQueryHooks';
+import useSigninMutation from '@/hooks/useSignInMutation';
 
 export default function SignIn() {
-  const mutationSignin = useSignin();
+  const mutationSignin = useSigninMutation();
   // 폼 정의
   const form = useForm<PostSigninRequestType>({
     resolver: zodResolver(PostSigninRequest),
