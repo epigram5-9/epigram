@@ -23,6 +23,7 @@ function AddEpigram() {
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
+    mode: 'onChange',
     defaultValues: {
       content: '',
       author: '',
@@ -43,7 +44,6 @@ function AddEpigram() {
       setIsAlertOpen(true);
       form.reset();
     },
-    // TODO : 유효성검사 브랜치만들어서 alert창에 유효성검사 틀린부분을 보이게 할 예정
     onError: () => {
       setAlertContent({
         title: '등록 실패',
@@ -66,7 +66,7 @@ function AddEpigram() {
     { value: 'me', label: '본인' },
   ];
 
-  // NOTE: defautl를 직접 입력으로 설정
+  // NOTE: default를 직접 입력으로 설정
   // NOTE: 본인을 선택 시 유저의 nickname이 들어감
   const handleAuthorChange = async (value: string) => {
     setSelectedAuthorOption(value);
@@ -83,6 +83,7 @@ function AddEpigram() {
     form.setValue('author', authorValue);
   };
 
+  // NOTE: 태그를 저장할려고할때 enter키를 누르면 폼제출이 되는걸 방지
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -99,7 +100,7 @@ function AddEpigram() {
       <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
             <FormField
               control={form.control}
               name='content'
@@ -112,7 +113,7 @@ function AddEpigram() {
                   <FormControl>
                     <Textarea className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2' id='content' placeholder='500자 이내로 입력해주세요.' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className='text-state-error text-right' />
                 </FormItem>
               )}
             />
@@ -151,12 +152,12 @@ function AddEpigram() {
                       disabled={selectedAuthorOption !== 'directly'}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className='text-state-error text-right' />
                 </FormItem>
               )}
             />
             <fieldset className='flex flex-col gap-2 lg:gap-4'>
-              <legend className='text-semibold lg:text-2xl text-black-600'>출처</legend>
+              <legend className='text-semibold lg:text-2xl text-black-600 mb-1'>출처</legend>
               <FormField
                 control={form.control}
                 name='referenceTitle'
@@ -172,7 +173,7 @@ function AddEpigram() {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className='text-state-error text-right' />
                   </FormItem>
                 )}
               />
@@ -191,7 +192,7 @@ function AddEpigram() {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className='text-state-error text-right' />
                   </FormItem>
                 )}
               />
@@ -203,6 +204,7 @@ function AddEpigram() {
                 <FormItem className='flex flex-col gap-2 lg:gap-4'>
                   <FormLabel htmlFor='tags' className='text-semibold lg:text-2xl text-black-600'>
                     태그
+                    <span className='text-state-error'>*</span>
                   </FormLabel>
                   <div className='relative'>
                     <Input
@@ -224,6 +226,7 @@ function AddEpigram() {
                       저장
                     </Button>
                   </div>
+                  <FormMessage className='text-state-error text-right' />
                   {/* TODO: 태그 key값 수정 예정 */}
                   {/* NOTE: 지금은 똑같은 태그를 입력했을때 하나를 지우면 다 지워짐 */}
                   <div className='flex flex-wrap gap-2 mt-2'>
@@ -236,7 +239,6 @@ function AddEpigram() {
                       </div>
                     ))}
                   </div>
-                  <FormMessage />
                 </FormItem>
               )}
             />
