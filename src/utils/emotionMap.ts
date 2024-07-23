@@ -1,4 +1,4 @@
-import { EmotionType } from '@/types/EmotionTypes';
+import { EmotionType } from '@/types/emotion';
 
 const emotionMap: Record<EmotionType, 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER'> = {
   감동: 'MOVED',

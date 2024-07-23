@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { EmotionType } from '@/types/EmotionTypes';
+import { EmotionType } from '@/types/emotion';
 import type { PostEmotionRequestType, PostEmotionResponseType } from '@/schema/emotion';
 import { translateEmotionToEnglish } from '@/utils/emotionMap';
 import httpClient from '.';

@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import EmotionIconCard from '@/components/Emotion/EmotionCard';
-import { EmotionType, EmotionState } from '@/types/EmotionTypes';
+import { EmotionType, EmotionState } from '@/types/emotion';
 import postEmotion from '@/apis/postEmotion';
 import getEmotion from '@/apis/getEmotion';
 import EmotionSaveToast from './EmotionSaveToast';
