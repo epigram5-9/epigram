@@ -102,7 +102,7 @@ export default function Calendar({ userId }: CalendarProps) {
       <div>
         <div className='flex'>
           {DAY_LIST.map((day) => (
-            <div key={day} className='w-[91px] h-[91px] border-b border-gray-100 text-stone-300 font-semibold flex items-center justify-center'>
+            <div key={day} className='w-[91px] h-[91px] border-t border-b border-gray-100 text-stone-300 font-semibold text-2xl flex items-center justify-center'>
               {day}
             </div>
           ))}
