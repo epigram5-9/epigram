@@ -1,6 +1,7 @@
-import z from 'zod';
+import * as z from 'zod';
 
 const PWD_VALIDATION_REGEX = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
 export const PostSignUpRequest = z
   .object({
     email: z.string().min(1, { message: '이메일은 필수 입력입니다.' }).email({ message: '이메일 형식으로 작성해 주세요.' }),
@@ -17,4 +18,22 @@ export const PostSignUpRequest = z
     path: ['passwordConfirmation'],
   });
 
+const User = z.object({
+  id: z.number(),
+  email: z.string().email(),
+  nickname: z.string(),
+  teamId: z.string(),
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
+  image: z.string(),
+});
+
+// TODO: 나중에 signin, signup의 response가 같아 같은 이름으로 통일 할 예정
+export const PostAuthResponse = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  user: User,
+});
+
 export type PostSignUpRequestType = z.infer<typeof PostSignUpRequest>;
+export type PostAuthResponseType = z.infer<typeof PostAuthResponse>;
