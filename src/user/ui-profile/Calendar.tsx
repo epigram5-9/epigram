@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { subMonths } from 'date-fns';
 import useMonthlyEmotionLogs from '@/hooks/useGetEmotion';
-import { Emotion } from '@/types/emotion';
+import { Emotion, EmotionType } from '@/types/emotion';
 import useCalendar from '../../hooks/useCalendar';
 import { DAY_LIST, DATE_MONTH_FIXER, iconPaths } from '../utill/constants';
 import CalendarHeader from './CalendarHeader';
@@ -11,12 +11,11 @@ interface CalendarProps {
   userId: number;
 }
 
-// 감정 로그 타입 지정
-type EmotionType = 'MOVED' | 'HAPPY' | 'WORRIED' | 'SAD' | 'ANGRY';
-
 export default function Calendar({ userId }: CalendarProps) {
   // 캘린더 함수 호출
   const { weekCalendarList, currentDate, setCurrentDate } = useCalendar();
+  // 감정 필터
+  const [selectedEmotion, setSelectedEmotion] = useState<EmotionType | null>(null);
 
   // 감정 달력 객체 상태 추가
   const [emotionRequest, setEmotionRequest] = useState<Emotion>({
@@ -52,10 +51,23 @@ export default function Calendar({ userId }: CalendarProps) {
   // 다음 달 클릭
   const handleNextMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, -DATE_MONTH_FIXER));
 
+  // 감정 필터
+  const handleEmotionSelect = (emotion: EmotionType) => {
+    // 현재 선택된 감정과 같으면 초기화
+    if (selectedEmotion === emotion) {
+      setSelectedEmotion(null);
+    } else {
+      setSelectedEmotion(emotion);
+    }
+  };
+
+  // 필터링된 감정 맵 생성
+  const filteredEmotionMap = selectedEmotion ? Object.fromEntries(Object.entries(emotionMap).filter(([, value]) => value === selectedEmotion)) : emotionMap;
+
   return (
     <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 gap-[48px]'>
       {/* 캘린더 헤더 */}
-      <CalendarHeader currentDate={currentDate} onPrevMonth={handlePrevMonth} onNextMonth={handleNextMonth} />
+      <CalendarHeader currentDate={currentDate} onPrevMonth={handlePrevMonth} onNextMonth={handleNextMonth} onEmotionSelect={handleEmotionSelect} selectEmotion={selectedEmotion} />
       {/* 캘린더 */}
       <div>
         <div className='flex'>
@@ -73,7 +85,7 @@ export default function Calendar({ userId }: CalendarProps) {
               // 현재 날짜와 비교
               const isToday = day === currentDate.getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
               const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-              const emotion: EmotionType = emotionMap[dateString]; // 날짜에 해당하는 감정 가져오기
+              const emotion: EmotionType = filteredEmotionMap[dateString]; // 날짜에 해당하는 감정 가져오기
               const iconPath = iconPaths[emotion]; // 해당 감정 아이콘 출력
 
               return (

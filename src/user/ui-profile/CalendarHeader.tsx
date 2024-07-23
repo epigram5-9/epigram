@@ -1,6 +1,7 @@
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuGroup, DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { EmotionType } from '@/types/emotion';
 import ARROW_BOTTOM_ICON from '../../../public/icon/arrow-bottom-icon.svg';
 import ARROW_RIGHT_ICON from '../../../public/icon/arrow-right-icon.svg';
 import ARROW_LEFT_ICON from '../../../public/icon/arrow-left-icon.svg';
@@ -10,9 +11,11 @@ interface CalendarHeaderProps {
   currentDate: Date;
   onPrevMonth: () => void;
   onNextMonth: () => void;
+  onEmotionSelect: (emotion: EmotionType) => void;
+  selectEmotion: EmotionType | null;
 }
 
-export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth }: CalendarHeaderProps) {
+export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth, onEmotionSelect, selectEmotion }: CalendarHeaderProps) {
   return (
     <div className='w-full flex justify-between items-center'>
       <div className='flex w-full h-[52px] justify-between items-center'>
@@ -28,31 +31,16 @@ export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth }
           </DropdownMenuTrigger>
           <DropdownMenuContent className='bg-white'>
             <DropdownMenuGroup className='flex flex-row'>
-              <DropdownMenuItem>
-                <Button className='p-0 w-14 h-14 bg-slate-400 bg-opacity-20 rounded-2xl flex justify-center'>
-                  <Image src={iconPaths.MOVED} alt='감정' width={36} height={36} />
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button className='p-0 w-14 h-14 bg-slate-400 bg-opacity-20 rounded-2xl flex justify-center'>
-                  <Image src={iconPaths.HAPPY} alt='감정' width={36} height={36} />
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button className='p-0 w-14 h-14 bg-slate-400 bg-opacity-20 rounded-2xl flex justify-center'>
-                  <Image src={iconPaths.WORRIED} alt='감정' width={36} height={36} />
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button className='p-0 w-14 h-14 bg-slate-400 bg-opacity-20 rounded-2xl flex justify-center'>
-                  <Image src={iconPaths.SAD} alt='감정' width={36} height={36} />
-                </Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button className='p-0 w-14 h-14 bg-slate-400 bg-opacity-20 rounded-2xl flex justify-center'>
-                  <Image src={iconPaths.ANGRY} alt='감정' width={36} height={36} />
-                </Button>
-              </DropdownMenuItem>
+              {Object.entries(iconPaths).map(([emotionKey, iconPath]) => (
+                <DropdownMenuItem key={emotionKey}>
+                  <Button
+                    className={`p-0 w-14 h-14 bg-slate-400 bg-opacity-20 rounded-2xl flex justify-center ${selectEmotion === emotionKey ? `border-4 border-illust-yellow` : ''}`}
+                    onClick={() => onEmotionSelect(emotionKey as EmotionType)}
+                  >
+                    <Image src={iconPath} alt='감정' width={36} height={36} />
+                  </Button>
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
