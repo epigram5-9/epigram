@@ -1,14 +1,19 @@
-import type { PostEmotionRequestType, PostEmotionResponseType } from '@/schema/emotion';
 import { AxiosError } from 'axios';
+import { EmotionType } from '@/types/EmotionTypes';
+import type { PostEmotionRequestType, PostEmotionResponseType } from '@/schema/emotion';
+import { translateEmotionToEnglish } from '@/utils/emotionMap';
 import httpClient from '.';
 import { getMe } from './user';
 
-const postEmotion = async (request: PostEmotionRequestType): Promise<PostEmotionResponseType> => {
+const postEmotion = async (emotion: EmotionType): Promise<PostEmotionResponseType> => {
   try {
     const user = await getMe();
     if (!user) {
       throw new Error('로그인이 필요합니다.');
     }
+
+    const englishEmotion = translateEmotionToEnglish(emotion);
+    const request: PostEmotionRequestType = { emotion: englishEmotion };
 
     const response = await httpClient.post<PostEmotionResponseType>('/emotionLogs/today', {
       ...request,

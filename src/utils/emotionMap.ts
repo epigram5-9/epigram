@@ -8,6 +8,16 @@ const emotionMap: Record<EmotionType, 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'A
   분노: 'ANGER',
 };
 
-const translateEmotion = (emotion: EmotionType): 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER' => emotionMap[emotion];
+const reverseEmotionMap: Record<'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER', EmotionType> = {
+  MOVED: '감동',
+  JOY: '기쁨',
+  WORRY: '고민',
+  SADNESS: '슬픔',
+  ANGER: '분노',
+};
 
-export default translateEmotion;
+const translateEmotionToEnglish = (emotion: EmotionType): 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER' => emotionMap[emotion];
+
+const translateEmotionToKorean = (emotion: 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER'): EmotionType => reverseEmotionMap[emotion];
+
+export { translateEmotionToEnglish, translateEmotionToKorean };
