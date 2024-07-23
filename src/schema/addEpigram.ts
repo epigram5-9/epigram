@@ -26,10 +26,10 @@ export const AddEpigramResponseSchema = z.object({
   id: z.number().int().positive(),
 });
 
-// 폼 입력값을 위한 스키마 (API 요청 전 사용)
+// 폼 입력값을 위한 스키마
 export const AddEpigramFormSchema = z.object({
   tags: z.array(z.string().min(1).max(10)).min(1, { message: '최소 1개의 태그를 추가해주세요.' }).max(3),
-  referenceUrl: z.string().url().regex(urlRegex, { message: '올바른 URL 형식이 아닙니다.' }).optional(),
+  referenceUrl: z.union([z.string().url().regex(urlRegex), z.string().max(0)]).optional(),
   referenceTitle: z.string().max(100).optional(),
   author: z.string().min(1, { message: '저자의 이름을 입력해주세요' }).max(30),
   content: z.string().min(1, { message: '내용을 입력해주세요.' }).max(500, { message: '500자 이내로 입력해주세요.' }),

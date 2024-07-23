@@ -101,7 +101,17 @@ function AddEpigram() {
   };
 
   const handleSubmit = (data: AddEpigramFormType) => {
-    addEpigramMutation.mutate(data);
+    const submitData = { ...data };
+
+    if (!submitData.referenceUrl) {
+      delete submitData.referenceUrl;
+    }
+
+    if (!submitData.referenceTitle) {
+      delete submitData.referenceTitle;
+    }
+
+    addEpigramMutation.mutate(submitData);
   };
 
   return (
@@ -126,7 +136,6 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-
             <div className='flex flex-col gap-2 lg:gap-4'>
               <FormLabel className='text-semibold lg:text-2xl text-black-600'>
                 저자
@@ -258,7 +267,7 @@ function AddEpigram() {
             <Button
               className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 '
               type='submit'
-              disabled={addEpigramMutation.isPending || !form.formState.isValid}
+              // disabled={addEpigramMutation.isPending || !form.formState.isValid}
             >
               {addEpigramMutation.isPending ? '제출 중...' : '작성 완료'}
             </Button>
