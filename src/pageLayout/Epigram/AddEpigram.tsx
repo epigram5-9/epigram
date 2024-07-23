@@ -18,12 +18,11 @@ function AddEpigram() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const router = useRouter();
-  const { data: userData } = useMeQuery();
+  const { data: userData, isPending, isError } = useMeQuery();
   const [selectedAuthorOption, setSelectedAuthorOption] = useState('directly'); // 기본값을 'directly'로 설정
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
-    mode: 'onChange',
     defaultValues: {
       content: '',
       author: '',
@@ -47,7 +46,7 @@ function AddEpigram() {
     onError: () => {
       setAlertContent({
         title: '등록 실패',
-        description: '다시 확인해주세요.',
+        description: '다시 시도해주세요.',
       });
       setIsAlertOpen(true);
     },
@@ -74,14 +73,24 @@ function AddEpigram() {
     if (value === 'unknown') {
       authorValue = '알 수 없음';
     } else if (value === 'me') {
-      if (userData?.nickname) {
+      if (isPending) {
+        authorValue = '로딩 중...';
+      } else if (userData) {
         authorValue = userData.nickname;
       } else {
-        authorValue = '본인 (닉네임 없음)';
+        authorValue = '본인 (정보 없음)';
       }
     }
     form.setValue('author', authorValue);
   };
+
+  if (isPending) {
+    return <div>사용자 정보를 불러오는 중...</div>;
+  }
+
+  if (isError) {
+    return <div>사용자 정보를 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.</div>;
+  }
 
   // NOTE: 태그를 저장할려고할때 enter키를 누르면 폼제출이 되는걸 방지
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -242,7 +251,12 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl bg-black-500 text-white' type='submit' disabled={addEpigramMutation.isPending}>
+            {/* NOTE: disabled 상태일 때의 스타일 */}
+            <Button
+              className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 '
+              type='submit'
+              disabled={addEpigramMutation.isPending || !form.formState.isValid}
+            >
               {addEpigramMutation.isPending ? '제출 중...' : '작성 완료'}
             </Button>
           </form>
