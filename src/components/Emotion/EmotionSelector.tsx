@@ -7,6 +7,9 @@ import React, { useState } from 'react';
 import EmotionIconCard from '@/components/Emotion/EmotionCard';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { EmotionType, EmotionState } from '@/types/EmotionTypes';
+import postEmotion from '@/apis/postEmotion';
+import translateEmotion from '@/utils/emotionMap';
+import type { PostEmotionRequestType } from '@/schema/emotion';
 
 // EmotionSelector 컴포넌트 함수 선언
 function EmotionSelector() {
@@ -23,7 +26,7 @@ function EmotionSelector() {
   });
 
   // 감정 카드 클릭 핸들러
-  const handleCardClick = (iconType: EmotionType) => {
+  const handleCardClick = async (iconType: EmotionType) => {
     setStates((prevStates) => {
       const newStates = { ...prevStates };
 
@@ -41,6 +44,19 @@ function EmotionSelector() {
 
       return newStates;
     });
+
+    const englishEmotion = translateEmotion(iconType);
+    const request: PostEmotionRequestType = { emotion: englishEmotion };
+
+    // postEmotion 함수 호출
+    try {
+      await postEmotion(request);
+    } catch (error) {
+      if (error instanceof Error) {
+        // eslint-disable-next-line
+        console.error(error.message);
+      }
+    }
   };
 
   let containerClass = 'w-[544px] h-[136px] gap-4';

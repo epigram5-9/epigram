@@ -3,14 +3,14 @@ import { AxiosError } from 'axios';
 import httpClient from '.';
 import { getMe } from './user';
 
-const postEmotion = async (request: Omit<PostEmotionRequestType, 'userId'>): Promise<PostEmotionResponseType> => {
+const postEmotion = async (request: PostEmotionRequestType): Promise<PostEmotionResponseType> => {
   try {
     const user = await getMe();
     if (!user) {
       throw new Error('로그인이 필요합니다.');
     }
 
-    const response = await httpClient.post('/emotionLogs/today', {
+    const response = await httpClient.post<PostEmotionResponseType>('/emotionLogs/today', {
       ...request,
       userId: user.id,
     });
