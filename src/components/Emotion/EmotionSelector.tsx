@@ -27,28 +27,20 @@ function EmotionSelector() {
   // 현재 선택된 감정을 관리하는 useState 훅
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionType | null>(null);
   // 오늘의 감정을 조회하기 위한 훅
-  const getEmotionMutation = useGetEmotion();
+  const { data: emotion, error: getError, isLoading: isGetLoading } = useGetEmotion();
   // 감정을 저장하기 위한 훅
   const postEmotionMutation = usePostEmotion();
 
   // 컴포넌트가 마운트될 때 한 번만 실행되는 useEffect 훅
   // 오늘의 감정을 조회하고 상태를 업데이트합니다.
   useEffect(() => {
-    getEmotionMutation.mutate(undefined, {
-      onSuccess: (emotion) => {
-        if (emotion) {
-          setStates((prevStates) => ({
-            ...prevStates,
-            [emotion]: 'Clicked',
-          }));
-        }
-      },
-      onError: (error: unknown) => {
-        // eslint-disable-next-line
-        console.error(error);
-      },
-    });
-  }, [getEmotionMutation]);
+    if (emotion) {
+      setStates((prevStates) => ({
+        ...prevStates,
+        [emotion]: 'Clicked',
+      }));
+    }
+  }, [emotion]);
 
   /**
    * 감정 카드 클릭 핸들러
@@ -99,6 +91,9 @@ function EmotionSelector() {
     containerClass = 'w-[312px] h-[84px] gap-2';
     cardSize = 'sm';
   }
+
+  if (isGetLoading) return <p>Loading...</p>;
+  if (getError) return <p>{getError.message}</p>;
 
   return (
     <>
