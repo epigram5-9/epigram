@@ -1,3 +1,8 @@
+import { WriterType } from '@/schema/recentcomment';
+
 export interface CommentCardProps {
-  status: 'edit' | 'complete';
+  writer: WriterType;
+  content: string;
+  createdAt: string;
+  status?: 'view' | 'edit';
 }
