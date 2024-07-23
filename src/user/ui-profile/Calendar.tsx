@@ -60,14 +60,24 @@ export default function Calendar() {
           ))}
         </div>
         {weekCalendarList.map((week, weekIndex) => (
+          // TODO: index 값 Lint error. 임시로 주석 사용. 추후 수정 예정
           // eslint-disable-next-line react/no-array-index-key
           <div key={weekIndex} className='flex'>
-            {week.map((day, dayIndex) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <div key={dayIndex} className='w-[91px] h-[91px] px-[15px] py-[9px] border-b border-gray-100 text-stone-300 font-semibold flex items-center justify-center'>
-                {day === DEFAULT_TRASH_VALUE ? '' : day}
-              </div>
-            ))}
+            {week.map((day, dayIndex) => {
+              // 현재 날짜와 비교
+              const isToday = day === currentDate.getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
+
+              return (
+                <div
+                  // TODO: index 값 Lint error. 임시로 주석 사용. 추후 수정 예정
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={dayIndex}
+                  className={`w-[91px] h-[91px] px-[15px] py-[9px] font-semibold flex items-center justify-center ${isToday ? 'border-4 border-red-400 text-red-400' : 'border-b border-gray-100 text-stone-300'}`}
+                >
+                  {day === DEFAULT_TRASH_VALUE ? '' : day}
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>
