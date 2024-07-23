@@ -3,6 +3,6 @@ import { WriterType } from '@/schema/recentcomment';
 export interface CommentCardProps {
   writer: WriterType;
   content: string;
-  createdAt: string;
+  createdAt: Date;
   status?: 'view' | 'edit';
 }

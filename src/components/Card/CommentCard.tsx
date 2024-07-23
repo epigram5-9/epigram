@@ -4,6 +4,8 @@ import { CommentCardProps } from '@/types/CommentCardTypes';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 
 function CommentCard({ writer, content, createdAt, status }: CommentCardProps) {
+  const formattedDate = createdAt.toLocaleString();
+
   return (
     <div
       className={`bg-slate-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
@@ -18,9 +20,7 @@ function CommentCard({ writer, content, createdAt, status }: CommentCardProps) {
           <div className='justify-between items-center w-full inline-flex'>
             <div className='justify-start items-start gap-2 flex'>
               <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>{writer.nickname}</div>
-              <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>
-                {new Date(createdAt).toLocaleString()}
-              </div>
+              <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>{formattedDate}</div>
             </div>
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
