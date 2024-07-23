@@ -114,6 +114,11 @@ function AddEpigram() {
     addEpigramMutation.mutate(submitData);
   };
 
+  const isRequiredFieldsValid = () => {
+    const { content, author, tags } = form.getValues();
+    return content.trim() !== '' && author.trim() !== '' && tags.length > 0;
+  };
+
   return (
     <>
       <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
@@ -254,7 +259,7 @@ function AddEpigram() {
                     {field.value.map((tag) => (
                       <div key={tag} className='bg-background-100 px-2 py-1 rounded-full flex items-center'>
                         <span className='text-sm md:text-lg lg:text-2xl'>{tag}</span>
-                        <Button type='button' className='ml-2 text-red-500 text-sm md:text-lg lg:text-2xl' onClick={() => handleRemoveTag(tag)}>
+                        <Button type='button' className='text-red-500 text-sm md:text-lg lg:text-2xl p-0 px-2' onClick={() => handleRemoveTag(tag)}>
                           ×
                         </Button>
                       </div>
@@ -267,7 +272,7 @@ function AddEpigram() {
             <Button
               className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 '
               type='submit'
-              // disabled={addEpigramMutation.isPending || !form.formState.isValid}
+              disabled={addEpigramMutation.isPending || !isRequiredFieldsValid()}
             >
               {addEpigramMutation.isPending ? '제출 중...' : '작성 완료'}
             </Button>
