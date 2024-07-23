@@ -8,8 +8,8 @@ import React, { useState, useEffect } from 'react';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import EmotionIconCard from '@/components/Emotion/EmotionCard';
 import { EmotionType, EmotionState } from '@/types/emotion';
-import postEmotion from '@/apis/postEmotion';
-import getEmotion from '@/apis/getEmotion';
+import usePostEmotion from '@/hooks/usePostEmotion';
+import useGetEmotion from '@/hooks/useGetEmotion';
 import EmotionSaveToast from './EmotionSaveToast';
 
 // EmotionSelector 컴포넌트 함수 선언
@@ -27,28 +27,26 @@ function EmotionSelector() {
   });
 
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionType | null>(null);
+  const getEmotionMutation = useGetEmotion();
+  const postEmotionMutation = usePostEmotion();
 
-  // getEmotion 함수로 오늘의 감정 조회
+  // 오늘의 감정 조회
   useEffect(() => {
-    const fetchEmotion = async () => {
-      try {
-        const emotion = await getEmotion();
+    getEmotionMutation.mutate(undefined, {
+      onSuccess: (emotion) => {
         if (emotion) {
           setStates((prevStates) => ({
             ...prevStates,
             [emotion]: 'Clicked',
           }));
         }
-      } catch (error) {
-        if (error instanceof Error) {
-          // eslint-disable-next-line
-          console.error(error.message);
-        }
-      }
-    };
-
-    fetchEmotion();
-  }, []);
+      },
+      onError: (error: unknown) => {
+        // eslint-disable-next-line
+        console.error(error);
+      },
+    });
+  }, [getEmotionMutation]);
 
   // 감정 카드 클릭 핸들러
   const handleCardClick = async (iconType: EmotionType) => {
@@ -70,16 +68,16 @@ function EmotionSelector() {
       return newStates;
     });
 
-    // postEmotion 함수로 오늘의 감정 저장
-    try {
-      await postEmotion(iconType);
-      setSelectedEmotion(iconType);
-    } catch (error) {
-      if (error instanceof Error) {
+    // 오늘의 감정 저장
+    postEmotionMutation.mutate(iconType, {
+      onSuccess: (_, clickedIconType) => {
+        setSelectedEmotion(clickedIconType);
+      },
+      onError: (error: unknown) => {
         // eslint-disable-next-line
-        console.error(error.message);
-      }
-    }
+        console.error(error);
+      },
+    });
   };
 
   let containerClass = 'w-[544px] h-[136px] gap-4';
