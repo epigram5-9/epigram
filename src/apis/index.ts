@@ -3,7 +3,7 @@ import qs from 'qs';
 
 // NOTE: 토큰 가져오는 함수
 const getToken = () =>
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoicmVmcmVzaCIsImlhdCI6MTcyMTYxNTYxNSwiZXhwIjoxNzIyMjIwNDE1LCJpc3MiOiJzcC1lcGlncmFtIn0.sCNFSgOQcYGbXWTxWablo9bOmbsw1EI6dTWt8n0xmDQ';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoicmVmcmVzaCIsImlhdCI6MTcyMTc0Mzk4NywiZXhwIjoxNzIyMzQ4Nzg3LCJpc3MiOiJzcC1lcGlncmFtIn0.0hJTFjOuZ9-MpTiVMNloMzIgXqM1SrgQ8YTA5pr2yms';
 
 // NOTE: axios 선언
 const httpClient = axios.create({

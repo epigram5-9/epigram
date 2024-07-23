@@ -1,17 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { subMonths } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import useMonthlyEmotionLogs from '@/hooks/useGetEmotion';
+import { Emotion } from '@/types/emotion';
 import ARROW_BOTTOM_ICON from '../../../public/icon/arrow-bottom-icon.svg';
 import ARROW_RIGHT_ICON from '../../../public/icon/arrow-right-icon.svg';
 import ARROW_LEFT_ICON from '../../../public/icon/arrow-left-icon.svg';
 import useCalendar from '../../hooks/useCalendar';
 import { DAY_LIST, DATE_MONTH_FIXER, DEFAULT_TRASH_VALUE } from '../utill/constants';
 
-export default function Calendar() {
+interface CalendarProps {
+  userId: number;
+}
+export default function Calendar({ userId }: CalendarProps) {
   const [position, setPosition] = useState<string>('bottom');
+  // 캘린더 함수 호출
   const { weekCalendarList, currentDate, setCurrentDate } = useCalendar();
+
+  // 감정 달력 객체 상태 추가
+  const [emotionRequest, setEmotionRequest] = useState<Emotion>({
+    userId,
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth() + 1,
+  });
+
+  // 월별 감정 로그 조회
+  const { data: monthlyEmotionLogs } = useMonthlyEmotionLogs(emotionRequest);
+
+  // '월'이 변경될 때마다 request 업데이트
+  useEffect(() => {
+    setEmotionRequest({
+      userId,
+      year: currentDate.getFullYear(),
+      month: currentDate.getMonth() + 1,
+    });
+  }, [currentDate]);
+
+  // 데이터 확인을 위한 useEffect
+  useEffect(() => {
+    if (monthlyEmotionLogs) {
+      // NOTE: 데이터 확인을 위한 console.log
+      // eslint-disable-next-line no-console
+      console.log(monthlyEmotionLogs);
+    }
+  }, [monthlyEmotionLogs]);
 
   // 이전 달 클릭
   const handlePrevMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, DATE_MONTH_FIXER));
