@@ -32,7 +32,7 @@ function AddEpigram() {
     },
   });
 
-  const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues);
+  const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues, form.setError);
 
   const addEpigramMutation = useAddEpigram({
     onSuccess: () => {
@@ -222,10 +222,14 @@ function AddEpigram() {
                       type='text'
                       placeholder='입력하여 태그 추가(최대10자)'
                       value={currentTag}
-                      onChange={(e) => setCurrentTag(e.target.value)}
+                      onChange={(e) => {
+                        setCurrentTag(e.target.value);
+                        form.clearErrors('tags');
+                      }}
                       onKeyDown={handleKeyDown}
                       maxLength={10}
                     />
+
                     <Button
                       type='button'
                       className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3 bg-blue-500 text-white rounded'
@@ -236,8 +240,7 @@ function AddEpigram() {
                     </Button>
                   </div>
                   <FormMessage className='text-state-error text-right' />
-                  {/* TODO: 태그 key값 수정 예정 */}
-                  {/* NOTE: 지금은 똑같은 태그를 입력했을때 하나를 지우면 다 지워짐 */}
+                  {/* NOTE: 태그의 키값을 변경하는 대신 중복된 태그를 저장 못하게 설정 */}
                   <div className='flex flex-wrap gap-2 mt-2'>
                     {field.value.map((tag) => (
                       <div key={tag} className='bg-background-100 px-2 py-1 rounded-full flex items-center'>
