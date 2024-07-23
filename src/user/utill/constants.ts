@@ -9,3 +9,12 @@ export const DATE_MONTH_FIXER = 1; // 날짜 조정 상수 (현재 사용되지 
 export const CALENDAR_LENGTH = 42; // 6주에 맞추어 캘린더의 총 길이를 42로 설정
 export const DAY_OF_WEEK = 7; // 한 주의 날 수 (일~토)
 export const DEFAULT_TRASH_VALUE = -1; // 기본값 설정 (필요에 따라 사용 가능)
+
+// 아이콘 파일 경로 매핑
+export const iconPaths = {
+  MOVED: '/icon/Color/HeartFaceColorIcon.svg',
+  HAPPY: '/icon/Color/SmileFaceColorIcon.svg',
+  WORRIED: '/icon/Color/ThinkFaceColorIcon.svg',
+  SAD: '/icon/Color/SadFaceColorIcon.svg',
+  ANGRY: '/icon/Color/AngryFaceColorIcon.svg',
+};
