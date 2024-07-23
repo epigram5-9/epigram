@@ -2,7 +2,7 @@ import { createQueryKeyStore } from '@lukemorales/query-key-factory';
 import { GetUserRequestType } from '@/schema/user';
 import { GetMonthlyEmotionLogsRequestType } from '@/schema/emotion';
 import { getMe, getUser } from './user';
-import { getMonthlyEmotionLogs } from './emotion';
+import getMonthlyEmotionLogs from './emotion';
 
 const quries = createQueryKeyStore({
   user: {
