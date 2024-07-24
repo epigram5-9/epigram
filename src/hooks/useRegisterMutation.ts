@@ -2,7 +2,7 @@ import postSignup from '@/apis/auth';
 import { toast } from '@/components/ui/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 
 const useRegisterMutation = () => {
   const router = useRouter();
@@ -14,8 +14,8 @@ const useRegisterMutation = () => {
       localStorage.setItem('refreshToken', data.refreshToken);
       router.push('/');
     },
-    onError: (error: AxiosError) => {
-      if (!error.response) {
+    onError: (error) => {
+      if (!isAxiosError(error)) {
         toast({
           description: '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.',
           className: 'border-state-error text-state-error font-semibold',
@@ -23,7 +23,7 @@ const useRegisterMutation = () => {
         return;
       }
 
-      const { status } = error.response;
+      const { status } = error.response || {};
 
       if (status === 400) {
         toast({
