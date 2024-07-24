@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useEffect, useState } from 'react';
+import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Header from '@/components/Header/Header';
@@ -33,19 +33,21 @@ function AddEpigram() {
     },
   });
 
-  // NOTE: 필수항목들에 값이 들어있는지 확인
-  const checkFormEmpty = () => {
+  // NOTE: 필수항목들에 값이 들어있는지 확인 함수
+  const checkFormEmpty = useCallback(() => {
     const { content, author, tags } = form.getValues();
     return content.trim() !== '' && author.trim() !== '' && tags.length > 0;
-  };
-
-  // NOTE: form의 변화를 감지
-  useEffect(() => {
-    const subscription = form.watch(() => {
-      setIsFormValid(checkFormEmpty());
-    });
-    return () => subscription.unsubscribe();
   }, [form]);
+
+  // NOTE: form값이 변경될때 필수항목들이 들어있는지 확인
+  const watchForm = useCallback(() => {
+    setIsFormValid(checkFormEmpty());
+  }, [checkFormEmpty]);
+
+  useEffect(() => {
+    const subscription = form.watch(watchForm);
+    return () => subscription.unsubscribe();
+  }, [form, watchForm]);
 
   const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues, form.setError);
 
