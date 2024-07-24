@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Header from '@/components/Header/Header';
@@ -15,11 +15,12 @@ import useTagManagement from '@/hooks/useTagManagementHook';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 
 function AddEpigram() {
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const router = useRouter();
   const { data: userData, isPending, isError } = useMeQuery();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const [selectedAuthorOption, setSelectedAuthorOption] = useState('directly'); // 기본값을 'directly'로 설정
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
@@ -31,6 +32,20 @@ function AddEpigram() {
       tags: [],
     },
   });
+
+  // NOTE: 필수항목들에 값이 들어있는지 확인
+  const checkFormEmpty = () => {
+    const { content, author, tags } = form.getValues();
+    return content.trim() !== '' && author.trim() !== '' && tags.length > 0;
+  };
+
+  // NOTE: form의 변화를 감지
+  useEffect(() => {
+    const subscription = form.watch(() => {
+      setIsFormValid(checkFormEmpty());
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues, form.setError);
 
@@ -92,7 +107,7 @@ function AddEpigram() {
     return <div>사용자 정보를 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.</div>;
   }
 
-  // NOTE: 태그를 저장할려고할때 enter키를 누르면 폼제출이 되는걸 방지
+  // NOTE: 태그를 저장하려고 할때 enter키를 누르면 폼제출이 되는걸 방지
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -100,6 +115,7 @@ function AddEpigram() {
     }
   };
 
+  // NOTE: url와title은 필수 항목이 아니라서 빈칸으로 제출할 때 항목에서 제외
   const handleSubmit = (data: AddEpigramFormType) => {
     const submitData = { ...data };
 
@@ -112,11 +128,6 @@ function AddEpigram() {
     }
 
     addEpigramMutation.mutate(submitData);
-  };
-
-  const isRequiredFieldsValid = () => {
-    const { content, author, tags } = form.getValues();
-    return content.trim() !== '' && author.trim() !== '' && tags.length > 0;
   };
 
   return (
@@ -268,12 +279,8 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-            {/* NOTE: disabled 상태일 때의 스타일 */}
-            <Button
-              className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 '
-              type='submit'
-              disabled={addEpigramMutation.isPending || !isRequiredFieldsValid()}
-            >
+            {/* NOTE: 필수항목들에 값이 채워져있으면 폼제출 버튼 활성화 */}
+            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 ' type='submit' disabled={addEpigramMutation.isPending || !isFormValid}>
               {addEpigramMutation.isPending ? '제출 중...' : '작성 완료'}
             </Button>
           </form>

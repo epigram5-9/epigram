@@ -26,7 +26,6 @@ export const AddEpigramResponseSchema = z.object({
   id: z.number().int().positive(),
 });
 
-// 폼 입력값을 위한 스키마
 export const AddEpigramFormSchema = z
   .object({
     tags: z.array(z.string().min(1).max(10)).min(1, { message: '최소 1개의 태그를 추가해주세요.' }).max(3),
@@ -36,7 +35,7 @@ export const AddEpigramFormSchema = z
     referenceTitle: z.union([z.string().max(100, { message: '100자 이내로 입력해주세요.' }), z.literal('')]).optional(),
   })
   .refine((data) => (data.referenceUrl === '' && data.referenceTitle === '') || (data.referenceUrl !== '' && data.referenceTitle !== ''), {
-    message: 'URL과 제목을 모두 입력하거나 모두 비워두세요.',
+    message: 'URL과 제목을 모두 입력하거나 모두 비워주세요.',
     path: ['referenceUrl', 'referenceTitle'],
   });
 
