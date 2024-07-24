@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import getRecentEpigrams from '@/apis/getRecentEpigrams';
 import { GetRecentEpigramsResponseType } from '@/schema/recentEpigram';
 
-const useGetRecentEpigrams = () =>
+const useGetRecentEpigrams = (limit: number) =>
   useQuery<GetRecentEpigramsResponseType, Error>({
-    queryKey: ['recentEpigrams', 3],
-    queryFn: getRecentEpigrams,
+    queryKey: ['recentEpigrams', limit],
+    queryFn: () => getRecentEpigrams(limit),
   });
 
 export default useGetRecentEpigrams;
