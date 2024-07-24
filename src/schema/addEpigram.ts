@@ -29,9 +29,9 @@ export const AddEpigramResponseSchema = z.object({
 export const AddEpigramFormSchema = z
   .object({
     tags: z.array(z.string().min(1).max(10)).min(1, { message: '최소 1개의 태그를 추가해주세요.' }).max(3),
-    author: z.string().min(1, { message: '저자의 이름을 입력해주세요' }).max(30),
+    author: z.string().min(1, { message: '저자의 이름을 입력해주세요' }).max(30, { message: '30자 이내로 입력해주세요.' }),
     content: z.string().min(1, { message: '내용을 입력해주세요.' }).max(500, { message: '500자 이내로 입력해주세요.' }),
-    referenceUrl: z.union([z.string().url().regex(urlRegex, { message: '올바른 URL 형식이 아닙니다.' }), z.literal('')]).optional(),
+    referenceUrl: z.union([z.string().regex(urlRegex, { message: '올바른 URL 형식이 아닙니다.' }), z.literal('')]).optional(),
     referenceTitle: z.union([z.string().max(100, { message: '100자 이내로 입력해주세요.' }), z.literal('')]).optional(),
   })
   .refine((data) => (data.referenceUrl === '' && data.referenceTitle === '') || (data.referenceUrl !== '' && data.referenceTitle !== ''), {

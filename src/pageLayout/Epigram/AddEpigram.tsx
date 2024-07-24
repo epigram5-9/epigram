@@ -222,7 +222,7 @@ function AddEpigram() {
                       <Input
                         className='h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2'
                         id='referenceUrl'
-                        type='url'
+                        type='text'
                         placeholder='URL (ex.http://www.website.com)'
                         aria-label='출처 URL'
                         {...field}
