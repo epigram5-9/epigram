@@ -31,7 +31,7 @@ export default function MyPageLayout() {
       <div className='w-full flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
         <Profile image={data.image} nickname={data.nickname} />
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>오늘의 감정</div>
-        <Calendar />
+        <Calendar userId={data.id} />
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>감정차트</div>
       </div>
       <div className='bg-background-100 flex flex-col items-center w-full py-[100px]'>
