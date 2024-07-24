@@ -7,15 +7,25 @@ import RecentComments from '@/components/main/RecentComment';
 
 function MainLayout() {
   return (
-    <div>
+    <>
       <Header icon='search' routerPage='/.' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
-      <main>
-        <TodayEpigram />
-        <EmotionSelector />
-        <RecentEpigrams />
-        <RecentComments />
+      <main className='w-full min-h-screen bg-background-100 flex flex-col items-center'>
+        <div className='flex flex-col items-center gap-6 mt-6'>
+          <section className='w-[360px] flex flex-col items-center'>
+            <TodayEpigram />
+          </section>
+          <section className='w-[360px] flex flex-col items-center'>
+            <EmotionSelector />
+          </section>
+          <section className='w-[360px] flex flex-col items-center'>
+            <RecentEpigrams />
+          </section>
+          <section className='w-[360px] flex flex-col items-center'>
+            <RecentComments />
+          </section>
+        </div>
       </main>
-    </div>
+    </>
   );
 }
 
