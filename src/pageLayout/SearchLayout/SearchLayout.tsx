@@ -4,13 +4,14 @@ import RecentSearches from '@/components/search/RecentSearches';
 import SearchResults from '@/components/search/SearchResults';
 import { GetEpigramsResponseType } from '@/schema/epigrams';
 import getEpigrams from '@/apis/getEpigrams';
+import testData from '@/components/search/test';
 
 // TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
   const [currentSearch, setCurrentSearch] = useState<string>('');
-  const [results, setResults] = useState<GetEpigramsResponseType | null>(null);
+  const [, setResults] = useState<GetEpigramsResponseType | null>(null);
 
   // 검색어가 제출될 때 작동
   const handleSearch = async (search: string) => {
@@ -49,7 +50,7 @@ function SearchLayout() {
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
         <SearchBar onSearch={handleSearch} currentSearch={currentSearch} />
         <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />
-        <SearchResults results={results} />
+        {currentSearch && <SearchResults results={testData} query={currentSearch} />}
       </div>
     </>
   );
