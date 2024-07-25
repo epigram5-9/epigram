@@ -18,6 +18,7 @@ function handleHighlightText(text: string, highlight: string) {
   // 검색어(highlight)기준으로 검색 결과를 배열로 나눔(g: 중복 O, i: 대소문자 구분 X)
   const highlightedSections = text.split(new RegExp(`(${highlight})`, 'gi'));
 
+  // 검색어와 비교해서 같으면 하이라이팅, 다르면 그냥 반환
   return (
     <>
       {highlightedSections.map((section, index) => {
@@ -39,7 +40,7 @@ function SearchResults({ results, query }: SearchResultsProps) {
     return <span>검색 결과를 불러오는 중 문제가 발생했습니다.</span>;
   }
 
-  // 태그와 내용 기준으로 정렬
+  // 태그와 내용 순서로 정렬
   const sortedResults = results.list.sort((a, b) => {
     const aHasTag = a.tags.some((tag) => tag.name.includes(query));
     const bHasTag = b.tags.some((tag) => tag.name.includes(query));
