@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios';
 import { GetEpigramResponseType, GetEpigramRequestType } from '@/schema/epigram';
-import TOKEN from '@/lib/constants';
 import httpClient from '.';
 
 const getEpigram = async (request: GetEpigramRequestType): Promise<GetEpigramResponseType> => {
@@ -10,15 +9,8 @@ const getEpigram = async (request: GetEpigramRequestType): Promise<GetEpigramRes
     throw new Error('Epigram ID가 제공되지 않았습니다.');
   }
 
-  // NOTE : 임시로 테스트계정의 토큰을 변수로 선언해서 사용
-
   try {
-    const response = await httpClient.get(`/epigrams/${id}`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await httpClient.get(`/epigrams/${id}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
