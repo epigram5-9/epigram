@@ -23,7 +23,7 @@ const testData = {
       writerId: 1002,
       referenceUrl: 'https://example.com/epigram/2',
       referenceTitle: 'Life Lessons',
-      author: '파우울로 코엘료',
+      author: '파우울로 코엘료 테스트',
       content: '이 세상에는 위대한 진실이 하나 있어. 무언가를 온 마음을 다해 원한다면, 반드시 그렇게 된다는거야.',
     },
     {
@@ -37,7 +37,7 @@ const testData = {
       referenceUrl: 'https://example.com/epigram/3',
       referenceTitle: 'Path to Success',
       author: '클라우스 랑에',
-      content: '우울증이란 우리를 내적인 나락으로 이끄는 유혹의 손길이다.',
+      content: '우울증이란 우리를 내적인 나락으로 이끄는 유혹의 손길이다. 테스트',
     },
     {
       id: 4,
@@ -49,14 +49,14 @@ const testData = {
       writerId: 1004,
       referenceUrl: 'https://example.com/epigram/4',
       referenceTitle: 'Overcoming Challenges',
-      author: '테스터',
+      author: '테스트터티',
       content: '우울한 기분은 신나는 기분을 더욱 더 신나게 만들어준다.',
     },
     {
       id: 5,
       likeCount: 8,
       tags: [
-        { name: 'focus', id: 501 },
+        { name: '테스트', id: 501 },
         { name: 'discipline', id: 502 },
       ],
       writerId: 1005,

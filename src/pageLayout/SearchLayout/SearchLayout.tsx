@@ -7,6 +7,8 @@ import getEpigrams from '@/apis/getEpigrams';
 import testData from '@/components/search/test';
 
 // TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
+// TODO 실제 api와 연동
+// TODO 검색 결과를 URL 에 저장, 새로고침시 데이터 분실에 대응
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
