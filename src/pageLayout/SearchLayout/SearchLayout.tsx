@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/search/SearchBar';
 import RecentSearches from '@/components/search/RecentSearches';
 import SearchResults from '@/components/search/SearchResults';
-import { GetEpigramsResponseType } from '@/schema/epigrams';
-import getEpigrams from '@/apis/getEpigrams';
 import testData from '@/components/search/test';
 
 // TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
-// TODO 실제 api와 연동
+// TODO 실제 api와 연동 후 테스트 코드 삭제
 // TODO 검색 결과를 URL 에 저장, 새로고침시 데이터 분실에 대응
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
   const [currentSearch, setCurrentSearch] = useState<string>('');
-  const [, setResults] = useState<GetEpigramsResponseType | null>(null);
 
   // 검색어가 제출될 때 작동
   const handleSearch = async (search: string) => {
@@ -24,14 +21,6 @@ function SearchLayout() {
       return updatedSearches;
     });
     setCurrentSearch(search);
-
-    // API에서 데이터 가져오기
-    try {
-      const response = await getEpigrams({ keyword: search, limit: 10 }); // TODO 후에 무한스크롤로 구현
-      setResults(response);
-    } catch (error) {
-      setResults(null);
-    }
   };
 
   // 모두지우기 클릭 시 저장된 최근 검색어 삭제

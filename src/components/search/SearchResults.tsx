@@ -1,30 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
+import { GetEpigramsResponseType } from '@/schema/epigrams';
 
 // TODO highlightedSections의 key 설정 부분에 더 나은 방법이 생각나면 변경
 
-interface Tag {
-  name: string;
-  id: number;
-}
-
-interface Epigram {
-  likeCount: number;
-  tags: Tag[];
-  id: number;
-  writerId: number;
-  referenceUrl: string;
-  referenceTitle: string;
-  author: string;
-  content: string;
-}
-
 interface SearchResultsProps {
-  results: {
-    totalCount: number;
-    nextCursor: number;
-    list: Epigram[];
-  } | null;
+  results: GetEpigramsResponseType | null;
   query: string;
 }
 
