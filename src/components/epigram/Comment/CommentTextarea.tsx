@@ -20,6 +20,7 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
 
   const form = useForm<CommentFormValues>({
     resolver: zodResolver(CommentFormSchema),
+    //NOTE: 초기값 설정
     defaultValues: {
       content: '',
       isPrivate: false,
@@ -81,9 +82,11 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
                 render={({ field }) => (
                   <FormItem className='flex items-center space-x-2'>
                     <FormControl className='m-0'>
+                      {/* NOTE: Switch를 눌렀을때 onCheckedChange실행되면서 반대의 값을 받음  */}
+                      {/* NOTE: field.onChange는 react hook form에서 setValue와 연결되어있어서 자동으로 값을 담아줌 */}
                       <Switch checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
-                    <Label htmlFor='isPrivate' className='text-sm'>
+                    <Label htmlFor='isPrivate' className='text-sm m-0'>
                       {field.value ? '비공개' : '공개'}
                     </Label>
                   </FormItem>
