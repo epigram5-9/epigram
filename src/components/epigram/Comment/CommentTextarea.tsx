@@ -31,7 +31,6 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
       epigramId,
       ...values,
     };
-    /* eslint-disable-next-line no-console */
     postCommentMutation.mutate(commentData, {
       onSuccess: () => {
         form.reset();
@@ -81,12 +80,12 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
                 name='isPrivate'
                 render={({ field }) => (
                   <FormItem className='flex items-center space-x-2'>
-                    <Label htmlFor='isPrivate' className='text-sm'>
-                      공개
-                    </Label>
                     <FormControl className='m-0'>
                       <Switch checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
+                    <Label htmlFor='isPrivate' className='text-sm'>
+                      {field.value ? '비공개' : '공개'}
+                    </Label>
                   </FormItem>
                 )}
               />
