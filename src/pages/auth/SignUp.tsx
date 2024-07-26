@@ -6,8 +6,11 @@ import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import useRegisterMutation from '@/hooks/useRegisterMutation';
 
 export default function SignUp() {
+  const mutationRegister = useRegisterMutation();
+
   const form = useForm<PostSignUpRequestType>({
     resolver: zodResolver(PostSignUpRequest),
     mode: 'onBlur',
@@ -28,7 +31,7 @@ export default function SignUp() {
       </header>
       <div className='w-full'>
         <Form {...form}>
-          <form className='flex flex-col items-center w-full h-full px-6'>
+          <form onSubmit={form.handleSubmit((values: PostSignUpRequestType) => mutationRegister.mutate(values))} className='flex flex-col items-center w-full h-full px-6'>
             <FormField
               control={form.control}
               name='email'
