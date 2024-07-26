@@ -1,11 +1,12 @@
-import type { PostSignUpRequestType, PostAuthResponseType } from '@/schema/auth';
+import type { PostSigninRequestType, PostSigninResponseType, PostSignUpRequestType, PostSignUpResponseType } from '@/schema/auth';
 import httpClient from '.';
 
-// TODO: signin, signup 단어가 비슷해 login, register로 바꿀 예정
-
-const postSignup = async (request: PostSignUpRequestType): Promise<PostAuthResponseType> => {
-  const response = await httpClient.post('/auth/signUp', request);
+export const postSignin = async (request: PostSigninRequestType): Promise<PostSigninResponseType> => {
+  const response = await httpClient.post('/auth/signIn', request);
   return response.data;
 };
 
-export default postSignup;
+export const postSignup = async (request: PostSignUpRequestType): Promise<PostSignUpResponseType> => {
+  const response = await httpClient.post('/auth/signUp', request);
+  return response.data;
+};
