@@ -30,6 +30,8 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['off'],
+    'react/require-default-props': 'off',
+    'react/self-closing-comp': 'off',
   },
   settings: {
     react: {
