@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { CommentFormSchema, CommentFormValues } from '@/schema/comment';
-import { usePostCommentMutation } from '@/hooks/usePostCommentHook';
+import usePostCommentMutation from '@/hooks/usePostCommentHook';
 
 interface CommentTextareaProps {
   epigramId: number;
