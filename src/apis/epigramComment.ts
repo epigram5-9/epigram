@@ -1,5 +1,6 @@
 import httpClient from '@/apis/index';
 import { CommentRequestSchema, CommentRequestType, CommentResponseSchema, CommentResponseType } from '@/schema/comment';
+import { PostCommentRequest } from '@/types/epigram.types';
 
 export const getEpigramComments = async (params: CommentRequestType): Promise<CommentResponseType> => {
   try {
@@ -29,4 +30,7 @@ export const getEpigramComments = async (params: CommentRequestType): Promise<Co
   }
 };
 
-export const postComment = async () => {};
+export const postComment = async (commentData: PostCommentRequest) => {
+  const response = await httpClient.post('/comments', commentData);
+  return response.data;
+};

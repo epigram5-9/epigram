@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { CommentFormSchema, CommentFormValues } from '@/schema/comment';
+import { usePostCommentMutation } from '@/hooks/usePostCommentHook';
 
 interface CommentTextareaProps {
   epigramId: number;
@@ -15,6 +16,7 @@ interface CommentTextareaProps {
 
 function CommentTextarea({ epigramId }: CommentTextareaProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const postCommentMutation = usePostCommentMutation();
 
   const form = useForm<CommentFormValues>({
     resolver: zodResolver(CommentFormSchema),
@@ -30,9 +32,12 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
       ...values,
     };
     /* eslint-disable-next-line no-console */
-    console.log('댓글 제출:', commentData);
-    form.reset();
-    setIsFocused(false);
+    postCommentMutation.mutate(commentData, {
+      onSuccess: () => {
+        form.reset();
+        setIsFocused(false);
+      },
+    });
   };
 
   const handleCancel = () => {
@@ -60,7 +65,7 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
                   />
                   {isFocused && (
                     <button type='button' onClick={handleCancel} className='absolute top-2 right-2'>
-                      <Image src='/Icon/cancleIcon.svg' alt='취소' width={20} height={20} />
+                      <Image src='/Icon/cancelIcon.svg' alt='취소' width={20} height={20} />
                     </button>
                   )}
                 </div>
@@ -86,8 +91,8 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
                 )}
               />
             </div>
-            <Button type='submit' disabled={!form.formState.isValid} className='bg-black-500 text-white text-xs px-4 rounded-lg'>
-              저장
+            <Button type='submit' disabled={!form.formState.isValid || postCommentMutation.isPending} className='bg-black-500 text-white text-xs px-4 rounded-lg'>
+              {postCommentMutation.isPending ? '저장 중...' : '저장'}
             </Button>
           </div>
         )}

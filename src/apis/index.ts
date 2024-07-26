@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 const getToken = () =>
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidGVhbUlkIjoiNS05Iiwic2NvcGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjE5Nzc2MDEsImV4cCI6MTcyMTk3OTQwMSwiaXNzIjoic3AtZXBpZ3JhbSJ9.qEzlvd8iiA2_yBl5FuO5fyUmp9YLe9WTf-BWRq_02Ns';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidGVhbUlkIjoiNS05Iiwic2NvcGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjE5Nzk0MzIsImV4cCI6MTcyMTk4MTIzMiwiaXNzIjoic3AtZXBpZ3JhbSJ9.Ii8vAMjXqT4hvu0V_KX9TZZsfTPFa2PoPXcy5TEXfY0';
 
 const httpClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,

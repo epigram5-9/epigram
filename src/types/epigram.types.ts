@@ -10,3 +10,9 @@ export interface EpigramCommentProps {
   epigramId: number;
   currentUserId: GetUserResponseType['id'] | undefined;
 }
+
+export interface PostCommentRequest {
+  epigramId: number;
+  isPrivate: boolean;
+  content: string;
+}
