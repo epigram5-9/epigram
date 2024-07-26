@@ -50,6 +50,7 @@ function SearchResults({ results, query }: SearchResultsProps) {
     return 0;
   });
 
+  // TODO useMemo 사용하는게 나을 것 같음(멘토님)
   const filteredResults = sortedResults.filter((item) => item.content.includes(query) || item.author.includes(query) || item.tags.some((tag) => tag.name.includes(query)));
 
   if (filteredResults.length === 0) {
