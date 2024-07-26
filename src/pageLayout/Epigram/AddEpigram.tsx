@@ -49,8 +49,11 @@ function AddEpigram() {
     return () => subscription.unsubscribe();
   }, [form, watchForm]);
 
-  const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement(form.setValue, form.getValues, form.setError);
-
+  const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement({
+    setValue: form.setValue,
+    getValues: form.getValues,
+    setError: form.setError,
+  });
   const addEpigramMutation = useAddEpigram({
     onSuccess: () => {
       setAlertContent({
@@ -76,7 +79,7 @@ function AddEpigram() {
     }
   };
 
-  const authorOptions = [
+  const AUTHOR_OPTIONS = [
     { value: 'directly', label: '직접 입력' },
     { value: 'unknown', label: '알 수 없음' },
     { value: 'me', label: '본인' },
@@ -86,17 +89,23 @@ function AddEpigram() {
   // NOTE: 본인을 선택 시 유저의 nickname이 들어감
   const handleAuthorChange = async (value: string) => {
     setSelectedAuthorOption(value);
-    let authorValue = '';
-    if (value === 'unknown') {
-      authorValue = '알 수 없음';
-    } else if (value === 'me') {
-      if (isPending) {
-        authorValue = '로딩 중...';
-      } else if (userData) {
-        authorValue = userData.nickname;
-      } else {
-        authorValue = '본인 (정보 없음)';
-      }
+    let authorValue: string;
+
+    switch (value) {
+      case 'unknown':
+        authorValue = '알 수 없음';
+        break;
+      case 'me':
+        if (isPending) {
+          authorValue = '로딩 중...';
+        } else if (userData) {
+          authorValue = userData.nickname;
+        } else {
+          authorValue = '본인 (정보 없음)';
+        }
+        break;
+      default:
+        authorValue = '';
     }
     form.setValue('author', authorValue);
   };
@@ -110,7 +119,7 @@ function AddEpigram() {
   }
 
   // NOTE: 태그를 저장하려고 할때 enter키를 누르면 폼제출이 되는걸 방지
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddTag();
@@ -161,7 +170,7 @@ function AddEpigram() {
               </FormLabel>
               <RadioGroup onValueChange={handleAuthorChange} value={selectedAuthorOption}>
                 <div className='flex gap-2'>
-                  {authorOptions.map((option) => (
+                  {AUTHOR_OPTIONS.map((option) => (
                     <div key={option.value} className='flex items-center space-x-2 text-xl'>
                       <RadioGroupItem value={option.value} id={option.value} />
                       <FormLabel htmlFor={option.value} className='font-medium lg:text-xl'>
@@ -253,7 +262,7 @@ function AddEpigram() {
                         setCurrentTag(e.target.value);
                         form.clearErrors('tags');
                       }}
-                      onKeyDown={handleKeyDown}
+                      onKeyDown={handleKeyUp}
                       maxLength={10}
                     />
 
