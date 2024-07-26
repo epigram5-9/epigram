@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import Image from 'next/image';
 
 const formSchema = z.object({
   content: z.string().min(1, '댓글을 입력해주세요.').max(100, '100자 이내로 입력해주세요.'),
@@ -35,34 +36,41 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
       epigramId,
       ...values,
     };
-    // NOTE: 로직 구현전이라서 임시 console.log 사용
     /* eslint-disable-next-line no-console */
     console.log('댓글 제출:', commentData);
     form.reset();
     setIsFocused(false);
   };
 
+  const handleCancel = () => {
+    setIsFocused(false);
+    form.reset();
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full relative'>
         <FormField
           control={form.control}
           name='content'
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea
-                  className={`bg-slate-100 w-full text-base lg:text-xl text-black p-4 border-solid border-2 rounded-lg resize-none focus-visible:ring-0 ${
-                    isFocused ? 'border-black' : 'border-line-200'
-                  }`}
-                  placeholder='100자 이내로 입력해 주세요.'
-                  onFocus={() => setIsFocused(true)}
-                  {...field}
-                  onBlur={() => {
-                    field.onBlur();
-                    setIsFocused(false); // 추가적인 onBlur 동작
-                  }}
-                />
+                <div className='relative'>
+                  <Textarea
+                    className={`bg-slate-100 w-full text-base lg:text-xl text-black p-4 border-solid border-2 rounded-lg resize-none focus-visible:ring-0 ${
+                      isFocused ? 'border-black' : 'border-line-200'
+                    }`}
+                    placeholder='100자 이내로 입력해 주세요.'
+                    onFocus={() => setIsFocused(true)}
+                    {...field}
+                  />
+                  {isFocused && (
+                    <button type='button' onClick={handleCancel} className='absolute top-2 right-2'>
+                      <Image src='/Icon/cancleIcon.svg' alt='취소' width={20} height={20} />
+                    </button>
+                  )}
+                </div>
               </FormControl>
             </FormItem>
           )}
