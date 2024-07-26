@@ -1,5 +1,5 @@
 import CommentList from '@/components/epigram/Comment/CommentList';
-import { Textarea } from '@/components/ui/textarea';
+import CommentTextarea from '@/components/epigram/Comment/CommentTextarea';
 import { paddingStyles } from '@/styles/CommentCardStyles';
 import { EpigramCommentProps } from '@/types/epigram.types';
 import Image from 'next/image';
@@ -14,10 +14,7 @@ function EpigramComment({ epigramId, currentUserId }: EpigramCommentProps) {
             <div className='w-12 h-12'>
               <Image src='/profile.svg' alt='프로필 사진' width={48} height={48} />
             </div>
-            <Textarea
-              className='bg-slate-100 w-full text-base lg:text-xl text-black p-4 border-solid border-line-200 border-2 rounded-lg resize-none focus-visible:ring-0'
-              placeholder='100자 이내로 입력해 주세요.'
-            />
+            <CommentTextarea epigramId={epigramId} />
           </div>
         </div>
         <CommentList epigramId={epigramId} currentUserId={currentUserId} />
