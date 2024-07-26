@@ -20,7 +20,6 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
 
   const form = useForm<CommentFormValues>({
     resolver: zodResolver(CommentFormSchema),
-    //NOTE: 초기값 설정
     defaultValues: {
       content: '',
       isPrivate: false,
