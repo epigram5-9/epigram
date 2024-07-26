@@ -30,9 +30,15 @@ const CommentRequestSchema = z.object({
   cursor: z.number().optional(),
 });
 
+const CommentFormSchema = z.object({
+  content: z.string().min(1, '댓글을 입력해주세요.').max(100, '100자 이내로 입력해주세요.'),
+  isPrivate: z.boolean().default(true),
+});
+
+export type CommentFormValues = z.infer<typeof CommentFormSchema>;
 export type CommentRequestType = z.infer<typeof CommentRequestSchema>;
 export type CommentResponseType = z.infer<typeof CommentResponseSchema>;
 export type CommentType = z.infer<typeof CommentSchema>;
 export type Writer = z.infer<typeof WriterSchema>;
 
-export { CommentRequestSchema, CommentResponseSchema, CommentSchema, WriterSchema };
+export { CommentRequestSchema, CommentResponseSchema, CommentFormSchema, CommentSchema, WriterSchema };

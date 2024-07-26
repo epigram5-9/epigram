@@ -6,15 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import Image from 'next/image';
-
-const formSchema = z.object({
-  content: z.string().min(1, '댓글을 입력해주세요.').max(100, '100자 이내로 입력해주세요.'),
-  isPrivate: z.boolean().default(true),
-});
-
-type CommentFormValues = z.infer<typeof formSchema>;
+import { CommentFormSchema, CommentFormValues } from '@/schema/comment';
 
 interface CommentTextareaProps {
   epigramId: number;
@@ -24,7 +17,7 @@ function CommentTextarea({ epigramId }: CommentTextareaProps) {
   const [isFocused, setIsFocused] = useState(false);
 
   const form = useForm<CommentFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(CommentFormSchema),
     defaultValues: {
       content: '',
       isPrivate: false,

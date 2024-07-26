@@ -1,4 +1,4 @@
-import { GetEpigramRequestSchema } from '@/schema/epigram';
+import { EpigramRequestSchema } from '@/schema/epigram';
 import useEpigramQuery from '@/hooks/useEpigramQueryHook';
 import EpigramComment from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
@@ -10,7 +10,7 @@ function DetailPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const parsedId = GetEpigramRequestSchema.safeParse({ id });
+  const parsedId = EpigramRequestSchema.safeParse({ id });
 
   const { data: epigram, isLoading, error } = useEpigramQuery(parsedId.success ? parsedId.data : undefined, parsedId.success);
   const { data: userData } = useMeQuery();
