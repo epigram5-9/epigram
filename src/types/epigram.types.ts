@@ -17,3 +17,7 @@ export interface PostCommentRequest {
   isPrivate: boolean;
   content: string;
 }
+
+export interface DeleteEpigramType {
+  id: number;
+}
