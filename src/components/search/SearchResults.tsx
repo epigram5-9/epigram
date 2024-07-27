@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { GetEpigramsResponseType } from '@/schema/epigrams';
 
@@ -36,22 +36,27 @@ function handleHighlightText(text: string, highlight: string) {
 }
 
 function SearchResults({ results, query }: SearchResultsProps) {
+  // 태그와 내용 순서로 정렬 - 항상 useMemo를 호출하고, results가 null인 경우 빈 배열 반환
+  const sortedResults = useMemo(() => {
+    if (!results) return [];
+    return results.list.sort((a, b) => {
+      const aHasTag = a.tags.some((tag) => tag.name.includes(query));
+      const bHasTag = b.tags.some((tag) => tag.name.includes(query));
+
+      if (aHasTag && !bHasTag) return -1;
+      if (!aHasTag && bHasTag) return 1;
+      return 0;
+    });
+  }, [results, query]);
+
+  const filteredResults = useMemo(
+    () => sortedResults.filter((item) => item.content.includes(query) || item.author.includes(query) || item.tags.some((tag) => tag.name.includes(query))),
+    [sortedResults, query],
+  );
+
   if (!results) {
     return <span>검색 결과를 불러오는 중 문제가 발생했습니다.</span>;
   }
-
-  // 태그와 내용 순서로 정렬
-  const sortedResults = results.list.sort((a, b) => {
-    const aHasTag = a.tags.some((tag) => tag.name.includes(query));
-    const bHasTag = b.tags.some((tag) => tag.name.includes(query));
-
-    if (aHasTag && !bHasTag) return -1;
-    if (!aHasTag && bHasTag) return 1;
-    return 0;
-  });
-
-  // TODO useMemo 사용하는게 나을 것 같음(멘토님)
-  const filteredResults = sortedResults.filter((item) => item.content.includes(query) || item.author.includes(query) || item.tags.some((tag) => tag.name.includes(query)));
 
   if (filteredResults.length === 0) {
     return (
