@@ -262,7 +262,7 @@ function AddEpigram() {
                         setCurrentTag(e.target.value);
                         form.clearErrors('tags');
                       }}
-                      onKeyDown={handleKeyUp}
+                      onKeyUp={handleKeyUp}
                       maxLength={10}
                     />
 
