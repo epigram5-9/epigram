@@ -6,6 +6,7 @@ import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { toast } from '../ui/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
+import { Button } from '../ui/button';
 
 interface MoreOptionsMenuProps {
   epigram: number;
@@ -45,9 +46,9 @@ function MoreOptionsMenu({ epigram }: MoreOptionsMenuProps) {
     <div className='relative'>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type='button'>
-            <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} />
-          </button>
+          <Button type='button'>
+            <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} /> <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} />
+          </Button>
         </DropdownMenuTrigger>
         {/* NOTE: width를 조정할려면 Dropdown컴포넌트에서 min-w 수정 필요 */}
         <DropdownMenuContent className='absolute top-[-36px] left-5 z-10 bg-white'>
@@ -58,7 +59,7 @@ function MoreOptionsMenu({ epigram }: MoreOptionsMenuProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       <AlertDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <AlertDialogContent className='w-[384px] bg-white z-50 flex flex-col items-center rounded-lg'>
+        <AlertDialogContent className='w-[312px] md:w-96 lg:w-[400px] h-40 md:h-[216px] lg:h-56 px-7 py-9 gap-3 bg-white z-50 flex flex-col justify-center items-center rounded-lg'>
           <AlertDialogHeader>
             <AlertDialogTitle>에피그램을 삭제하시겠어요?</AlertDialogTitle>
           </AlertDialogHeader>
