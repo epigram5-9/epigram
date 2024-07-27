@@ -7,8 +7,6 @@ const httpClient = axios.create({
   paramsSerializer: (parameters) => qs.stringify(parameters, { arrayFormat: 'repeat', encode: false }),
 });
 
-export default httpClient;
-
 // NOTE: eslint-disable no-param-reassign 미해결로 인한 설정
 httpClient.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem('accessToken');
@@ -50,3 +48,5 @@ httpClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export default httpClient;
