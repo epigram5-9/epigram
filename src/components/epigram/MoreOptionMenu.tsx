@@ -2,11 +2,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useDeleteEpigram from '@/hooks/useDeleteEpigramHook';
-import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { toast } from '../ui/use-toast';
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
 import { Button } from '../ui/button';
+import DeleteAlertModal from './DeleteAlertModal';
 
 interface MoreOptionsMenuProps {
   epigram: number;
@@ -58,24 +57,7 @@ function MoreOptionsMenu({ epigram }: MoreOptionsMenuProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <AlertDialogContent className='w-[312px] md:w-96 lg:w-[400px] h-40 md:h-[216px] lg:h-56 px-7 py-9 gap-3 bg-white z-50 flex flex-col justify-center items-center rounded-lg'>
-          <AlertDialogHeader>
-            <AlertDialogTitle>에피그램을 삭제하시겠어요?</AlertDialogTitle>
-          </AlertDialogHeader>
-          <AlertDialogFooter className='flex flex-row gap-2'>
-            <AlertDialogCancel
-              className='w-28 px-4 bg-blue-200 rounded-lg
-            '
-            >
-              취소
-            </AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className='w-28 bg-state-error text-white rounded-lg'>
-              삭제하기
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteAlertModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} onConfirm={handleDeleteConfirm} title='에피그램을 삭제하시겠어요?' />
     </div>
   );
 }
