@@ -1,9 +1,9 @@
 import axios, { AxiosError } from 'axios';
-import { GetEpigramResponseType, GetEpigramRequestType } from '@/schema/epigram';
+import { GetEpigramResponseType, EpigramRequestType } from '@/schema/epigram';
 import TOKEN from '@/lib/constants';
 import httpClient from '.';
 
-const getEpigram = async (request: GetEpigramRequestType): Promise<GetEpigramResponseType> => {
+const getEpigram = async (request: EpigramRequestType): Promise<GetEpigramResponseType> => {
   const { id } = request;
 
   if (id === undefined) {
