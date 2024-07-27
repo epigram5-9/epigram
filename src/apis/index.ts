@@ -1,34 +1,52 @@
 import axios from 'axios';
 import qs from 'qs';
 
-// NOTE: 토큰 가져오는 함수
-const getToken = () =>
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQsInRlYW1JZCI6IjUtOSIsInNjb3BlIjoicmVmcmVzaCIsImlhdCI6MTcyMTc1MzA3OSwiZXhwIjoxNzIyMzU3ODc5LCJpc3MiOiJzcC1lcGlncmFtIn0.76ZQCcyle7jM8hu5PQauhQ5zvehW1Cm8KulYAdN1Les';
-
 // NOTE: axios 선언
 const httpClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   paramsSerializer: (parameters) => qs.stringify(parameters, { arrayFormat: 'repeat', encode: false }),
 });
 
-// NOTE: 요청 인터셉터 추가
-httpClient.interceptors.request.use(
-  (config) => {
-    const newConfig = { ...config };
-    const token = getToken();
-    if (token) {
-      newConfig.headers.Authorization = `Bearer ${token}`;
-    }
+// NOTE: eslint-disable no-param-reassign 미해결로 인한 설정
+httpClient.interceptors.request.use((config) => {
+  const accessToken = localStorage.getItem('accessToken');
+  /* eslint-disable no-param-reassign */
+  if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+  /* eslint-enable no-param-reassign */
+  return config;
+});
 
-    if (newConfig.data instanceof FormData) {
-      newConfig.headers['Content-Type'] = 'multipart/form-data';
-    } else {
-      newConfig.headers['Content-Type'] = 'application/json';
-    }
+httpClient.interceptors.response.use(
+  (response) => response,
 
-    return newConfig;
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      if (!refreshToken) {
+        window.location.href = '/auth/SignIn';
+        return Promise.reject(error);
+      }
+
+      return httpClient
+        .post('/auth/refresh-token', null, {
+          headers: { Authorization: `Bearer ${refreshToken}` },
+        })
+        .then((response) => {
+          const { accessToken, refreshToken: newRefreshToken } = response.data;
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', newRefreshToken);
+
+          const originalRequest = error.config;
+          return httpClient(originalRequest);
+        })
+        .catch(() => {
+          window.location.href = '/auth/SignIn';
+          return Promise.reject(error);
+        });
+    }
+    return Promise.reject(error);
   },
-  (error) => Promise.reject(error),
 );
 
 export default httpClient;
