@@ -2,6 +2,7 @@ import useMonthlyEmotionLogs from '@/hooks/useGetEmotion';
 import { Emotion } from '@/types/emotion';
 import { useEffect, useState } from 'react';
 import Calendar from './Calendar';
+import Chart from './Chart';
 
 interface EmotionMonthlyLogsProps {
   userId: number;
@@ -30,5 +31,10 @@ export default function EmotionMonthlyLogs({ userId }: EmotionMonthlyLogsProps) 
   // 월별 감정 로그 조회
   const { data: monthlyEmotionLogs = [] } = useMonthlyEmotionLogs(emotionRequest);
 
-  return <Calendar currentDate={currentDate} setCurrentDate={setCurrentDate} monthlyEmotionLogs={monthlyEmotionLogs} />;
+  return (
+    <>
+      <Calendar currentDate={currentDate} setCurrentDate={setCurrentDate} monthlyEmotionLogs={monthlyEmotionLogs} />
+      <Chart monthlyEmotionLogs={monthlyEmotionLogs} />
+    </>
+  );
 }

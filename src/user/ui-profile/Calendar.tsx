@@ -68,7 +68,7 @@ export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLo
               const isToday = day === currentDate.getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
               const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
               const emotion: EmotionType = filteredEmotionMap[dateString]; // 날짜에 해당하는 감정 가져오기
-              const iconPath = iconPaths[emotion]; // 해당 감정 아이콘 출력
+              const iconPath = emotion && iconPaths[emotion] ? iconPaths[emotion].path : '/icon/BW/SmileFaceBWIcon.svg';
 
               return (
                 <div
