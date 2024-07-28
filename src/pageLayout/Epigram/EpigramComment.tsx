@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import CommentList from '@/components/epigram/Comment/CommentList';
 import CommentTextarea from '@/components/epigram/Comment/CommentTextarea';
 import { paddingStyles } from '@/styles/CommentCardStyles';
@@ -5,6 +6,16 @@ import { EpigramCommentProps } from '@/types/epigram.types';
 import Image from 'next/image';
 
 function EpigramComment({ epigramId, currentUserId, userImage }: EpigramCommentProps) {
+  const [editingComment, setEditingComment] = useState<{ id: number; content: string; isPrivate: boolean } | null>(null);
+
+  const handleEditComment = (id: number, content: string, isPrivate: boolean) => {
+    setEditingComment({ id, content, isPrivate });
+  };
+
+  const handleEditComplete = () => {
+    setEditingComment(null);
+  };
+
   return (
     <div className='bg-slate-100 flex justify-center '>
       <div className='w-80 md:w-96 lg:w-[640px] pt-6 lg:pt-12'>
@@ -18,10 +29,10 @@ function EpigramComment({ epigramId, currentUserId, userImage }: EpigramCommentP
                 <Image src='/profile.svg' alt='기본 프로필 사진' width={48} height={48} />
               )}
             </div>
-            <CommentTextarea epigramId={epigramId} />
+            <CommentTextarea epigramId={epigramId} editingComment={editingComment} onEditComplete={handleEditComplete} />
           </div>
         </div>
-        <CommentList epigramId={epigramId} currentUserId={currentUserId} />
+        <CommentList epigramId={epigramId} currentUserId={currentUserId} onEditComment={handleEditComment} />
       </div>
     </div>
   );

@@ -11,12 +11,17 @@ import DeleteAlertModal from '../DeleteAlertModal';
 
 interface CommentItemProps extends CommentCardProps {
   comment: CommentType;
+  onEditComment: (id: number, content: string, isPrivate: boolean) => void;
 }
 
-function CommentItem({ comment, status }: CommentItemProps) {
+function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
   const deleteCommentMutation = useDeleteCommentMutation();
   const { toast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleEditClick = () => {
+    onEditComment(comment.id, comment.content, comment.isPrivate);
+  };
 
   const handleDeleteComment = async () => {
     try {
@@ -54,9 +59,15 @@ function CommentItem({ comment, status }: CommentItemProps) {
             </div>
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
-                <div className={`text-neutral-700 underline leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>수정</div>
                 <Button
-                  className={`text-red-400 underline leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                  className={`w-3 text-neutral-700 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                  onClick={handleEditClick}
+                  type='button'
+                >
+                  수정
+                </Button>
+                <Button
+                  className={`w-3 text-red-400 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
                   onClick={() => setIsDeleteModalOpen(true)}
                   type='button'
                 >
