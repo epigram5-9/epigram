@@ -89,7 +89,13 @@ function SearchLayout() {
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
         <SearchBar onSearch={handleSearch} currentSearch={currentSearch} />
         <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />
-        {isLoading && <p>Loading...</p>}
+        {isLoading && (
+          <div className='flex flex-col py-4 px-6 lg:p-6 gap-2 lg:gap-[16px]'>
+            <div className='flex flex-col gap-1 md:gap-2 lg:gap-6'>
+              <span className='text-black-600 font-iropkeBatang iropke-lg lg:iropke-xl'>검색 결과를 불러오는 중 입니다...</span>
+            </div>
+          </div>
+        )}
         {!isLoading && error && <p>Error: {error.message}</p>}
         {!isLoading && currentSearch && searchResults && <SearchResults results={searchResults || null} query={currentSearch} />}
       </div>
