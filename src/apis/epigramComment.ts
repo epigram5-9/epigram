@@ -1,6 +1,6 @@
 import httpClient from '@/apis/index';
 import { CommentRequestSchema, CommentRequestType, CommentResponseSchema, CommentResponseType } from '@/schema/comment';
-import { PostCommentRequest } from '@/types/epigram.types';
+import { PatchCommentRequest, PostCommentRequest } from '@/types/epigram.types';
 
 export const getEpigramComments = async (params: CommentRequestType): Promise<CommentResponseType> => {
   try {
@@ -37,5 +37,10 @@ export const postComment = async (commentData: PostCommentRequest) => {
 
 export const deleteComment = async (commentId: number) => {
   const response = await httpClient.delete(`/comments/${commentId}`);
+  return response.data;
+};
+
+export const patchComment = async (commentId: number, commentData: PatchCommentRequest) => {
+  const response = await httpClient.patch(`/comments/${commentId}`, commentData);
   return response.data;
 };
