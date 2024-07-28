@@ -3,11 +3,12 @@ import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
-import { CommentCardProps } from '@/types/CommentCardTypes';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '../DeleteAlertModal';
+import { CommentCardProps } from '@/components/Card/CommentCard';
+
 
 interface CommentItemProps extends CommentCardProps {
   comment: CommentType;
