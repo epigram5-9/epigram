@@ -12,9 +12,9 @@ export const DEFAULT_TRASH_VALUE = -1; // 기본값 설정 (필요에 따라 사
 
 // 아이콘 파일 경로 매핑
 export const iconPaths = {
-  MOVED: '/icon/Color/HeartFaceColorIcon.svg',
-  HAPPY: '/icon/Color/SmileFaceColorIcon.svg',
-  WORRIED: '/icon/Color/ThinkFaceColorIcon.svg',
-  SAD: '/icon/Color/SadFaceColorIcon.svg',
-  ANGRY: '/icon/Color/AngryFaceColorIcon.svg',
+  MOVED: { path: '/icon/Color/HeartFaceColorIcon.svg', name: '기쁨', color: 'bg-illust-green' },
+  HAPPY: { path: '/icon/Color/SmileFaceColorIcon.svg', name: '감동', color: 'bg-illust-yellow' },
+  WORRIED: { path: '/icon/Color/ThinkFaceColorIcon.svg', name: '고민', color: 'bg-sub-gray_1' },
+  SAD: { path: '/icon/Color/SadFaceColorIcon.svg', name: '슬픔', color: 'bg-sub-gray_2' },
+  ANGRY: { path: '/icon/Color/AngryFaceColorIcon.svg', name: '분노', color: 'bg-sub-gray_3' },
 };

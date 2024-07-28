@@ -1,31 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { subMonths } from 'date-fns';
-import useMonthlyEmotionLogs from '@/hooks/useGetEmotion';
-import { Emotion, EmotionType } from '@/types/emotion';
+import { EmotionLog, EmotionType } from '@/types/emotion';
 import useCalendar from '../../hooks/useCalendar';
 import { DAY_LIST, DATE_MONTH_FIXER, iconPaths } from '../utill/constants';
 import CalendarHeader from './CalendarHeader';
 
 interface CalendarProps {
-  userId: number;
+  currentDate: Date; // 현재 날짜
+  setCurrentDate: React.Dispatch<React.SetStateAction<Date>>; // 현재 날짜를 설정하는 함수
+  monthlyEmotionLogs: EmotionLog[];
 }
 
-export default function Calendar({ userId }: CalendarProps) {
+export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLogs }: CalendarProps) {
   // 캘린더 함수 호출
-  const { weekCalendarList, currentDate, setCurrentDate } = useCalendar();
+  const { weekCalendarList } = useCalendar(currentDate);
   // 감정 필터
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionType | null>(null);
-
-  // 감정 달력 객체 상태 추가
-  const [emotionRequest, setEmotionRequest] = useState<Emotion>({
-    userId,
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth() + 1,
-  });
-
-  // 월별 감정 로그 조회
-  const { data: monthlyEmotionLogs = [] } = useMonthlyEmotionLogs(emotionRequest);
 
   // 달력에 출력할 수 있게 매핑
   const emotionMap: Record<string, EmotionType> = Array.isArray(monthlyEmotionLogs)
@@ -36,15 +27,6 @@ export default function Calendar({ userId }: CalendarProps) {
         return acc;
       }, {})
     : {};
-
-  // '월'이 변경될 때마다 request 업데이트
-  useEffect(() => {
-    setEmotionRequest({
-      userId,
-      year: currentDate.getFullYear(),
-      month: currentDate.getMonth() + 1,
-    });
-  }, [currentDate]);
 
   // 이전 달 클릭
   const handlePrevMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, DATE_MONTH_FIXER));
@@ -86,7 +68,7 @@ export default function Calendar({ userId }: CalendarProps) {
               const isToday = day === currentDate.getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
               const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
               const emotion: EmotionType = filteredEmotionMap[dateString]; // 날짜에 해당하는 감정 가져오기
-              const iconPath = iconPaths[emotion]; // 해당 감정 아이콘 출력
+              const iconPath = emotion && iconPaths[emotion] ? iconPaths[emotion].path : '/icon/BW/SmileFaceBWIcon.svg';
 
               return (
                 <div

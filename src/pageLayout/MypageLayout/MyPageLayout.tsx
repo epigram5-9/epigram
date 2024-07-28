@@ -1,7 +1,7 @@
 import Header from '@/components/Header/Header';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 import UserInfo from '@/types/user';
-import Calendar from '@/user/ui-profile/Calendar';
+import EmotionMonthlyLogs from '@/user/ui-profile/EmotionMonthlyLogs';
 import Profile from '@/user/ui-profile/Profile';
 import { useRouter } from 'next/navigation';
 
@@ -31,8 +31,7 @@ export default function MyPageLayout() {
       <div className='w-full flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
         <Profile image={data.image} nickname={data.nickname} />
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>오늘의 감정</div>
-        <Calendar userId={data.id} />
-        <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 border border-black'>감정차트</div>
+        <EmotionMonthlyLogs userId={data.id} />
       </div>
       <div className='bg-background-100 flex flex-col items-center w-full py-[100px]'>
         <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] gap-12'>

@@ -31,13 +31,13 @@ export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth, 
           </DropdownMenuTrigger>
           <DropdownMenuContent className='bg-white'>
             <DropdownMenuGroup className='flex flex-row'>
-              {Object.entries(iconPaths).map(([emotionKey, iconPath]) => (
+              {Object.entries(iconPaths).map(([emotionKey, { path, name }]) => (
                 <DropdownMenuItem key={emotionKey}>
                   <Button
-                    className={`p-0 w-14 h-14 bg-slate-400 bg-opacity-20 rounded-2xl flex justify-center ${selectEmotion === emotionKey ? `border-4 border-illust-yellow` : ''}`}
+                    className={`p-0 w-14 h-14 bg-opacity-20 rounded-2xl flex justify-center ${selectEmotion === emotionKey ? 'border-4 border-illust-yellow' : ''}`}
                     onClick={() => onEmotionSelect(emotionKey as EmotionType)}
                   >
-                    <Image src={iconPath} alt='감정' width={36} height={36} />
+                    <Image src={path} alt={name} width={36} height={36} />
                   </Button>
                 </DropdownMenuItem>
               ))}

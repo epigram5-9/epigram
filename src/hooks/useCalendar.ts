@@ -1,11 +1,8 @@
 import { getDaysInMonth } from 'date-fns';
-import React, { useState } from 'react';
 import { CALENDAR_LENGTH, DAY_OF_WEEK } from '../user/utill/constants';
 
 interface CalendarData {
   weekCalendarList: number[][]; // 주별 날짜 리스트
-  currentDate: Date; // 현재 날짜
-  setCurrentDate: React.Dispatch<React.SetStateAction<Date>>; // 현재 날짜를 설정하는 함수
 }
 
 // 이전 달의 날짜를 계산하는 함수
@@ -21,9 +18,7 @@ const getNextDays = (currentDayList: number[], prevDayList: number[]): number[] 
   return Array.from({ length: Math.max(nextDayCount, 0) }, (_, index) => index + 1);
 };
 
-const useCalendar = (): CalendarData => {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date()); // 현재 날짜를 상태로 관리
-
+const useCalendar = (currentDate: Date): CalendarData => {
   // 현재 월의 총 날짜 수를 가져옴
   const totalMonthDays = getDaysInMonth(currentDate);
 
@@ -66,8 +61,6 @@ const useCalendar = (): CalendarData => {
   // 캘린더 정보를 반환
   return {
     weekCalendarList, // 주별 날짜 리스트
-    currentDate,
-    setCurrentDate,
   };
 };
 
