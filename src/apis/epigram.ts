@@ -1,9 +1,10 @@
 import axios, { AxiosError } from 'axios';
 import { GetEpigramResponseType, EpigramRequestType } from '@/schema/epigram';
 import TOKEN from '@/lib/constants';
+import { DeleteEpigramType } from '@/types/epigram.types';
 import httpClient from '.';
 
-const getEpigram = async (request: EpigramRequestType): Promise<GetEpigramResponseType> => {
+export const getEpigram = async (request: EpigramRequestType): Promise<GetEpigramResponseType> => {
   const { id } = request;
 
   if (id === undefined) {
@@ -36,4 +37,7 @@ const getEpigram = async (request: EpigramRequestType): Promise<GetEpigramRespon
   }
 };
 
-export default getEpigram;
+export const deleteEpigram = async (id: number): Promise<DeleteEpigramType> => {
+  const response = await httpClient.delete(`/epigrams/${id}`);
+  return response.data;
+};

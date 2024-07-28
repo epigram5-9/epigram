@@ -3,7 +3,7 @@ import { GetUserRequestType } from '@/schema/user';
 import { EpigramRequestType } from '@/schema/epigram';
 import { CommentRequestType } from '@/schema/comment';
 import { getMe, getUser } from './user';
-import getEpigram from './epigram';
+import { getEpigram } from './epigram';
 import { getEpigramComments } from './epigramComment';
 
 const queries = createQueryKeyStore({
