@@ -1,15 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
 import { CommentCardProps } from '@/types/CommentCardTypes';
+import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
+import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import DeleteAlertModal from '../DeleteAlertModal';
 
 interface CommentItemProps extends CommentCardProps {
   comment: CommentType;
 }
 
 function CommentItem({ comment, status }: CommentItemProps) {
+  const deleteCommentMutation = useDeleteCommentMutation();
+  const { toast } = useToast();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleDeleteComment = async () => {
+    try {
+      await deleteCommentMutation.mutateAsync(comment.id);
+      setIsDeleteModalOpen(false);
+      toast({
+        title: '댓글이 삭제되었습니다.',
+        variant: 'destructive',
+      });
+    } catch (error) {
+      toast({
+        title: '댓글 삭제 실패했습니다.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <div
       className={`bg-slate-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
@@ -31,7 +55,13 @@ function CommentItem({ comment, status }: CommentItemProps) {
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
                 <div className={`text-neutral-700 underline leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>수정</div>
-                <div className={`text-red-400 underline leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>삭제</div>
+                <Button
+                  className={`text-red-400 underline leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  type='button'
+                >
+                  삭제
+                </Button>
               </div>
             )}
           </div>
@@ -42,6 +72,7 @@ function CommentItem({ comment, status }: CommentItemProps) {
           </div>
         </div>
       </div>
+      <DeleteAlertModal isOpen={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen} onConfirm={handleDeleteComment} title='댓글을 삭제하시겠습니까?' />
     </div>
   );
 }
