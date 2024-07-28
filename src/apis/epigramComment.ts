@@ -39,3 +39,8 @@ export const patchComment = async (commentId: number, commentData: PatchCommentR
   const response = await httpClient.patch(`/comments/${commentId}`, commentData);
   return response.data;
 };
+
+export const deleteComment = async (commentId: number) => {
+  const response = await httpClient.delete(`/comments/${commentId}`);
+  return response.data;
+};
