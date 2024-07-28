@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
-import { CommentCardProps } from '@/types/CommentCardTypes';
+import { CommentCardProps } from '@/components/Card/CommentCard';
 
 interface CommentItemProps extends CommentCardProps {
   comment: CommentType;
