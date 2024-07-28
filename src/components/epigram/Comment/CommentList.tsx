@@ -39,7 +39,7 @@ function CommentList({ epigramId, currentUserId, onEditComment }: CommentListPro
     }
 
     return () => {
-      // NOTE: effect가 실행되기전에 호출해서 메모리 누수를 방지해준다고 함
+      // NOTE: effect가 실행되기전에 호출해서 메모리 누수를 방지해줌
       if (observerRef.current) {
         observerRef.current.disconnect();
       }

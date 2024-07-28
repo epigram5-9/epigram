@@ -29,8 +29,9 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
     },
   });
 
+  // NOTE: 수정중인지 새댓글작성중인지의 상태가 변활때 폼 초기화
   useEffect(() => {
-    if (editingComment) {
+    if (editingComment !== null) {
       form.reset({
         content: editingComment.content,
         isPrivate: editingComment.isPrivate,
@@ -45,7 +46,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
 
   const onSubmit = (values: CommentFormValues) => {
     if (editingComment) {
-      // 수정 모드
+      // NOTE: 댓글 수정 시
       patchCommentMutation.mutate(
         { commentId: editingComment.id, ...values },
         {
@@ -56,7 +57,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
         },
       );
     } else {
-      // 새 댓글 작성 모드
+      // NOTE: 새 댓글 작성 시
       const commentData = {
         epigramId,
         ...values,
@@ -69,6 +70,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
     }
   };
 
+  // NOTE: 수정 취소
   const handleCancel = () => {
     form.reset();
     onEditComplete();

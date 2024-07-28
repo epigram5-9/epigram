@@ -23,6 +23,7 @@ function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
     onEditComment(comment.id, comment.content, comment.isPrivate);
   };
 
+  // NOTE: 댓글 삭제
   const handleDeleteComment = async () => {
     try {
       await deleteCommentMutation.mutateAsync(comment.id);

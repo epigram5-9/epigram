@@ -6,6 +6,7 @@ import { EpigramCommentProps } from '@/types/epigram.types';
 import Image from 'next/image';
 
 function EpigramComment({ epigramId, currentUserId, userImage }: EpigramCommentProps) {
+  // NOTE: 현재 수정 중인 댓글 상태, null이면 댓글 수정이 아닌 새 댓글 작성 취급
   const [editingComment, setEditingComment] = useState<{ id: number; content: string; isPrivate: boolean } | null>(null);
 
   const handleEditComment = (id: number, content: string, isPrivate: boolean) => {
