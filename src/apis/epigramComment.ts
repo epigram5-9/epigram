@@ -34,3 +34,8 @@ export const postComment = async (commentData: PostCommentRequest) => {
   const response = await httpClient.post('/comments', commentData);
   return response.data;
 };
+
+export const deleteComment = async (commentId: number) => {
+  const response = await httpClient.delete(`/comments/${commentId}`);
+  return response.data;
+};
