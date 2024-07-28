@@ -20,13 +20,13 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
   );
 
   // 감정 종류 및 총 감정 수 계산
-  const totalCount = monthlyEmotionLogs.length;
-  const emotions: EmotionType[] = ['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY'];
-  const radius = 90; // 원의 반지름
-  const circumference = 2 * Math.PI * radius;
+  const TOTAL_COUNT = monthlyEmotionLogs.length;
+  const EMOTIONS: EmotionType[] = ['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY'];
+  const RADIUS = 90; // 원의 반지름
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
   // 가장 많이 나타나는 감정 찾기
-  const maxEmotion = emotions.reduce((max, emotion) => (emotionCounts[emotion] > emotionCounts[max] ? emotion : max), emotions[0]);
+  const maxEmotion = EMOTIONS.reduce((max, emotion) => (emotionCounts[emotion] > emotionCounts[max] ? emotion : max), EMOTIONS[0]);
 
   // 원형 차트의 각 감정에 대한 strokeDasharray와 strokeDashoffset 계산
   let offset = 0;
@@ -37,11 +37,11 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
       <div className='flex justify-between items-center px-[112px]'>
         <div className='w-[200px] h-[200px] relative'>
           <svg viewBox='0 0 200 200'>
-            <circle cx='100' cy='100' r={radius} fill='none' stroke='beige' strokeWidth='20' />
-            {emotions.map((emotion) => {
+            <circle cx='100' cy='100' r={RADIUS} fill='none' stroke='beige' strokeWidth='20' />
+            {EMOTIONS.map((emotion) => {
               const count = emotionCounts[emotion] || 0;
-              const percentage = totalCount > 0 ? count / totalCount : 0; // 0으로 나누기 방지
-              const strokeDasharray = `${circumference * percentage} ${circumference * (1 - percentage)}`;
+              const percentage = TOTAL_COUNT > 0 ? count / TOTAL_COUNT : 0; // 0으로 나누기 방지
+              const strokeDasharray = `${CIRCUMFERENCE * percentage} ${CIRCUMFERENCE * (1 - percentage)}`;
 
               // 색상 설정
               let strokeColor;
@@ -62,9 +62,9 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
                   strokeColor = '#48BB98';
               }
 
-              const circle = <circle key={emotion} cx='100' cy='100' r={radius} fill='none' stroke={strokeColor} strokeWidth='20' strokeDasharray={strokeDasharray} strokeDashoffset={offset} />;
+              const circle = <circle key={emotion} cx='100' cy='100' r={RADIUS} fill='none' stroke={strokeColor} strokeWidth='20' strokeDasharray={strokeDasharray} strokeDashoffset={offset} />;
 
-              offset += circumference * percentage; // 다음 원을 위한 offset 업데이트
+              offset += CIRCUMFERENCE * percentage; // 다음 원을 위한 offset 업데이트
               return circle;
             })}
           </svg>
@@ -76,9 +76,9 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
         </div>
         <div>
           <div className='flex flex-col gap-4'>
-            {emotions.map((emotion) => {
+            {EMOTIONS.map((emotion) => {
               const count = emotionCounts[emotion] || 0;
-              const percentage = totalCount > 0 ? Math.floor((count / totalCount) * 100) : 0; // 퍼센트 계산 및 소수점 버리기
+              const percentage = TOTAL_COUNT > 0 ? Math.floor((count / TOTAL_COUNT) * 100) : 0; // 퍼센트 계산 및 소수점 버리기
 
               return (
                 <div key={emotion} className='flex items-center gap-3'>
