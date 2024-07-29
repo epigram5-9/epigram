@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useEffect } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
@@ -8,40 +8,37 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { AddEpigramFormSchema, AddEpigramFormType, EditEpigramRequestType } from '@/schema/addEpigram';
-import useEpigramQuery from '@/hooks/useEpigramQueryHook';
 import useEditEpigram from '@/hooks/useEditEpigramHook';
 import useTagManagement from '@/hooks/useTagManagementHook';
-import { EpigramRequestSchema } from '@/schema/epigram';
+import { GetEpigramResponseType } from '@/schema/epigram';
 import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
 import { AxiosError } from 'axios';
 import Header from '../Header/Header';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
-function EditEpigram() {
+interface EditEpigramProps {
+  epigram: GetEpigramResponseType;
+}
+
+function EditEpigram({ epigram }: EditEpigramProps) {
   const router = useRouter();
-  const { id } = router.query;
-  const [isAlertOpen, setIsAlertOpen] = React.useState(false);
-  const [alertContent, setAlertContent] = React.useState({ title: '', description: '' });
-
-  const parsedId = EpigramRequestSchema.safeParse({ id });
-
-  const { data: epigram, isLoading, error } = useEpigramQuery(parsedId.success ? parsedId.data : undefined, parsedId.success);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertContent, setAlertContent] = useState({ title: '', description: '' });
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
     defaultValues: {
-      content: '',
-      author: '',
-      referenceTitle: '',
-      referenceUrl: '',
-      tags: [],
+      content: epigram.content,
+      author: epigram.author,
+      referenceTitle: epigram.referenceTitle || '',
+      referenceUrl: epigram.referenceUrl || '',
+      tags: epigram.tags.map((tag) => tag.name),
     },
-    mode: 'onBlur',
   });
 
   const { selectedAuthorOption, handleAuthorChange, AUTHOR_OPTIONS } = useAuthorSelection({
     setValue: form.setValue,
-    initialAuthor: epigram?.author || '',
+    initialAuthor: epigram.author,
   });
 
   useEffect(() => {
@@ -70,7 +67,7 @@ function EditEpigram() {
       });
       setIsAlertOpen(true);
     },
-    onError: () => {
+    onError: (error) => {
       let errorMessage = '다시 시도해주세요.';
 
       if (error instanceof AxiosError) {
@@ -101,30 +98,37 @@ function EditEpigram() {
   };
 
   const handleSubmit = (data: AddEpigramFormType) => {
-    if (parsedId.success) {
-      const editRequest: EditEpigramRequestType = {
-        id: Number(parsedId.data.id),
-        ...data,
-      };
+    const editRequest: EditEpigramRequestType = {
+      id: epigram.id,
+      ...data,
+      referenceTitle: data.referenceTitle?.trim() || null,
+      referenceUrl: data.referenceUrl?.trim() || null,
+    };
 
-      // referenceTitle과 referenceUrl이 모두 비어있으면 요청에서 제외
-      if (!editRequest.referenceTitle && !editRequest.referenceUrl) {
-        delete editRequest.referenceTitle;
-        delete editRequest.referenceUrl;
-      }
+    editEpigramMutation.mutate(editRequest);
+  };
 
-      editEpigramMutation.mutate(editRequest);
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    if (alertContent.title === '수정 완료') {
+      router.push(`/epigram/${epigram.id}`);
     }
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (!parsedId.success) return <div>잘못된 Epigram ID입니다.</div>;
-  if (error) return <div>에러 발생!! {(error as Error).message}</div>;
-  if (!epigram) return <div>Epigram을 찾을 수 없습니다.</div>;
-
   return (
     <>
-      <Header icon='back' routerPage={`/epigram/${id}`} isLogo insteadOfLogo='에피그램 수정' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <Header
+        icon='back'
+        routerPage={`/epigram/${epigram.id}`}
+        isLogo
+        insteadOfLogo='에피그램 수정'
+        isProfileIcon
+        isShareIcon={false}
+        isButton={false}
+        textInButton=''
+        disabled={false}
+        onClick={() => {}}
+      />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
@@ -266,13 +270,13 @@ function EditEpigram() {
         </Form>
 
         <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-          <AlertDialogContent>
+          <AlertDialogContent className='bg-white'>
             <AlertDialogHeader>
               <AlertDialogTitle>{alertContent.title}</AlertDialogTitle>
               <AlertDialogDescription>{alertContent.description}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogAction onClick={() => router.push(`/epigram/${id}`)}>확인</AlertDialogAction>
+              <AlertDialogAction onClick={handleAlertClose}>확인</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
