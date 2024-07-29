@@ -12,14 +12,12 @@ import useAddEpigram from '@/hooks/epigramQueryHook';
 import { useRouter } from 'next/router';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import useTagManagement from '@/hooks/useTagManagementHook';
-import { useMeQuery } from '@/hooks/userQueryHooks';
+import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
 
 function AddEpigram() {
   const router = useRouter();
-  const { data: userData, isPending, isError } = useMeQuery();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
-  const [selectedAuthorOption, setSelectedAuthorOption] = useState('directly'); // 기본값을 'directly'로 설정
   const [isFormValid, setIsFormValid] = useState(false);
 
   const form = useForm<AddEpigramFormType>({
@@ -31,6 +29,10 @@ function AddEpigram() {
       referenceUrl: '',
       tags: [],
     },
+  });
+
+  const { selectedAuthorOption, handleAuthorChange, AUTHOR_OPTIONS } = useAuthorSelection({
+    setValue: form.setValue,
   });
 
   // NOTE: 필수항목들에 값이 들어있는지 확인 함수
@@ -78,45 +80,6 @@ function AddEpigram() {
       router.push(`/epigram/${addEpigramMutation.data?.id}`);
     }
   };
-
-  const AUTHOR_OPTIONS = [
-    { value: 'directly', label: '직접 입력' },
-    { value: 'unknown', label: '알 수 없음' },
-    { value: 'me', label: '본인' },
-  ];
-
-  // NOTE: default를 직접 입력으로 설정
-  // NOTE: 본인을 선택 시 유저의 nickname이 들어감
-  const handleAuthorChange = async (value: string) => {
-    setSelectedAuthorOption(value);
-    let authorValue: string;
-
-    switch (value) {
-      case 'unknown':
-        authorValue = '알 수 없음';
-        break;
-      case 'me':
-        if (isPending) {
-          authorValue = '로딩 중...';
-        } else if (userData) {
-          authorValue = userData.nickname;
-        } else {
-          authorValue = '본인 (정보 없음)';
-        }
-        break;
-      default:
-        authorValue = '';
-    }
-    form.setValue('author', authorValue);
-  };
-
-  if (isPending) {
-    return <div>사용자 정보를 불러오는 중...</div>;
-  }
-
-  if (isError) {
-    return <div>사용자 정보를 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.</div>;
-  }
 
   // NOTE: 태그를 저장하려고 할때 enter키를 누르면 폼제출이 되는걸 방지
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -265,7 +228,6 @@ function AddEpigram() {
                       onKeyUp={handleKeyUp}
                       maxLength={10}
                     />
-
                     <Button
                       type='button'
                       className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3 bg-blue-500 text-white rounded'

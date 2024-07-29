@@ -12,7 +12,9 @@ import useEpigramQuery from '@/hooks/useEpigramQueryHook';
 import useEditEpigram from '@/hooks/useEditEpigramHook';
 import useTagManagement from '@/hooks/useTagManagementHook';
 import { EpigramRequestSchema } from '@/schema/epigram';
+import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
 import Header from '../Header/Header';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 function EditEpigram() {
   const router = useRouter();
@@ -33,6 +35,11 @@ function EditEpigram() {
       referenceUrl: '',
       tags: [],
     },
+  });
+
+  const { selectedAuthorOption, handleAuthorChange, AUTHOR_OPTIONS } = useAuthorSelection({
+    setValue: form.setValue,
+    initialAuthor: epigram?.author || '',
   });
 
   useEffect(() => {
@@ -88,32 +95,51 @@ function EditEpigram() {
   return (
     <>
       <Header icon='back' routerPage={`/epigram/${id}`} isLogo insteadOfLogo='에피그램 수정' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
-      <div className='flex flex-col items-center p-4'>
+      <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4 w-full max-w-md'>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
             <FormField
               control={form.control}
               name='content'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>내용</FormLabel>
+                <FormItem className='flex flex-col gap-2 lg:gap-4 h-44 lg:h-52'>
+                  <FormLabel className='text-semibold lg:text-2xl text-black-600' htmlFor='content'>
+                    내용
+                  </FormLabel>
                   <FormControl>
-                    <Textarea {...field} placeholder='에피그램 내용을 입력하세요.' />
+                    <Textarea className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2' id='content' {...field} placeholder='에피그램 내용을 입력하세요.' />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className='text-state-error text-right' />
                 </FormItem>
               )}
             />
+            <div className='flex flex-col gap-2 lg:gap-4'>
+              <FormLabel className='text-semibold lg:text-2xl text-black-600'>
+                저자
+                <span className='text-state-error'>*</span>
+              </FormLabel>
+              <RadioGroup onValueChange={handleAuthorChange} value={selectedAuthorOption}>
+                <div className='flex gap-2'>
+                  {AUTHOR_OPTIONS.map((option) => (
+                    <div key={option.value} className='flex items-center space-x-2 text-xl'>
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <FormLabel htmlFor={option.value} className='font-medium lg:text-xl'>
+                        {option.label}
+                      </FormLabel>
+                    </div>
+                  ))}
+                </div>
+              </RadioGroup>
+            </div>
             <FormField
               control={form.control}
               name='author'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>저자</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='저자를 입력하세요.' />
+                    <Input className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2' id='author' type='text' placeholder='저자 이름 입력' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className='text-state-error text-right' />
                 </FormItem>
               )}
             />
