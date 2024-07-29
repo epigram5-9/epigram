@@ -39,6 +39,11 @@ export const AddEpigramFormSchema = z
     path: ['referenceUrl', 'referenceTitle'],
   });
 
+export const EditEpigramRequestSchema = AddEpigramRequestSchema.partial().extend({
+  id: z.number().int().positive(),
+});
+
 export type AddEpigramRequestType = z.infer<typeof AddEpigramRequestSchema>;
 export type AddEpigramResponseType = z.infer<typeof AddEpigramResponseSchema>;
 export type AddEpigramFormType = z.infer<typeof AddEpigramFormSchema>;
+export type EditEpigramRequestType = z.infer<typeof EditEpigramRequestSchema>;
