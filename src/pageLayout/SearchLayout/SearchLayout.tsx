@@ -1,54 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/Header/Header';
 import SearchBar from '@/components/search/SearchBar';
 import RecentSearches from '@/components/search/RecentSearches';
 import SearchResults from '@/components/search/SearchResults';
-
-// TODO 실제 api와 연동 후 삭제
-import { GetEpigramsResponseType } from '@/schema/epigrams';
-import testData from '@/components/search/test';
+import useEpigrams from '@/hooks/useGetEpigramsHooks';
 
 // TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
-// TODO 검색 결과를 URL 에 저장, 새로고침시 데이터 분실에 대응
 
-// TODO 실제 API 호출로 대체할 부분(아직은 테스트 데이터 사용)
-async function fetchSearchResults(query: string): Promise<GetEpigramsResponseType> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const filteredList = testData.list.filter((item) => item.content.toLowerCase().includes(query.toLowerCase()));
-      resolve({
-        totalCount: filteredList.length,
-        nextCursor: testData.nextCursor,
-        list: filteredList.map((item) => ({
-          id: item.id,
-          likeCount: item.likeCount,
-          tags: item.tags,
-          writerId: item.writerId,
-          referenceUrl: item.referenceUrl,
-          referenceTitle: item.referenceTitle,
-          author: item.author,
-          content: item.content,
-        })),
-      });
-    }, 1000);
-  });
-}
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
   const [currentSearch, setCurrentSearch] = useState<string>('');
   const router = useRouter();
 
-  const {
-    data: searchResults,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['searchResults', currentSearch],
-    queryFn: () => fetchSearchResults(currentSearch),
-    enabled: !!currentSearch,
-  });
+  const { data: searchResults, isLoading, error } = useEpigrams(currentSearch);
 
   // 검색어가 제출될 때 작동
   const handleSearch = async (search: string) => {
