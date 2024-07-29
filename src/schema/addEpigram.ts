@@ -36,7 +36,7 @@ export const AddEpigramFormSchema = z
   })
   .refine((data) => (data.referenceUrl === '' && data.referenceTitle === '') || (data.referenceUrl !== '' && data.referenceTitle !== ''), {
     message: 'URL과 제목을 모두 입력하거나 모두 비워주세요.',
-    path: ['referenceUrl', 'referenceTitle'],
+    path: ['referenceUrl'],
   });
 
 export const EditEpigramRequestSchema = AddEpigramRequestSchema.partial().extend({

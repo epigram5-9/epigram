@@ -13,6 +13,7 @@ import useEditEpigram from '@/hooks/useEditEpigramHook';
 import useTagManagement from '@/hooks/useTagManagementHook';
 import { EpigramRequestSchema } from '@/schema/epigram';
 import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
+import { AxiosError } from 'axios';
 import Header from '../Header/Header';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
@@ -35,6 +36,7 @@ function EditEpigram() {
       referenceUrl: '',
       tags: [],
     },
+    mode: 'onBlur',
   });
 
   const { selectedAuthorOption, handleAuthorChange, AUTHOR_OPTIONS } = useAuthorSelection({
@@ -69,9 +71,23 @@ function EditEpigram() {
       setIsAlertOpen(true);
     },
     onError: () => {
+      let errorMessage = '다시 시도해주세요.';
+
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 400) {
+          errorMessage = '입력 내용을 다시 확인해주세요.';
+        } else if (error.response?.status === 401) {
+          errorMessage = '로그인이 필요합니다.';
+        } else if (error.response?.status === 403) {
+          errorMessage = '수정 권한이 없습니다.';
+        } else if (error.response?.status === 404) {
+          errorMessage = '해당 에피그램을 찾을 수 없습니다.';
+        }
+      }
+
       setAlertContent({
         title: '수정 실패',
-        description: '에피그램 수정 중 오류가 발생했습니다. 다시 시도해주세요.',
+        description: errorMessage,
       });
       setIsAlertOpen(true);
     },
@@ -87,9 +103,16 @@ function EditEpigram() {
   const handleSubmit = (data: AddEpigramFormType) => {
     if (parsedId.success) {
       const editRequest: EditEpigramRequestType = {
-        id: Number(parsedId.data.id), // id를 number로 변환
+        id: Number(parsedId.data.id),
         ...data,
       };
+
+      // referenceTitle과 referenceUrl이 모두 비어있으면 요청에서 제외
+      if (!editRequest.referenceTitle && !editRequest.referenceUrl) {
+        delete editRequest.referenceTitle;
+        delete editRequest.referenceUrl;
+      }
+
       editEpigramMutation.mutate(editRequest);
     }
   };
@@ -166,6 +189,7 @@ function EditEpigram() {
                           aria-label='출처 제목'
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -182,6 +206,7 @@ function EditEpigram() {
                           aria-label='출처 URL'
                         />
                       </FormControl>
+                      <FormMessage className='text-state-error' />
                     </FormItem>
                   )}
                 />
