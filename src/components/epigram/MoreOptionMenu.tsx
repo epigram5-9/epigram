@@ -32,6 +32,10 @@ function MoreOptionsMenu({ epigram }: MoreOptionsMenuProps) {
     },
   });
 
+  const handleEditClick = () => {
+    router.push(`/epigram/${epigram}/edit`);
+  };
+
   const handleDeleteClick = () => {
     setIsModalOpen(true);
   };
@@ -46,12 +50,14 @@ function MoreOptionsMenu({ epigram }: MoreOptionsMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button type='button'>
-            <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} /> <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} />
+            <Image src='/meatballIcon.svg' alt='더 보기 아이콘' width={36} height={36} />
           </Button>
         </DropdownMenuTrigger>
         {/* NOTE: width를 조정할려면 Dropdown컴포넌트에서 min-w 수정 필요 */}
         <DropdownMenuContent className='absolute top-[-36px] left-5 z-10 bg-white'>
-          <DropdownMenuItem className='hover:text-illust-blue cursor-pointer text-center'>수정</DropdownMenuItem>
+          <DropdownMenuItem className='hover:text-illust-blue cursor-pointer text-center' onClick={handleEditClick}>
+            수정
+          </DropdownMenuItem>
           <DropdownMenuItem className='hover:text-red-500 cursor-pointer text-center' onClick={handleDeleteClick}>
             삭제
           </DropdownMenuItem>
