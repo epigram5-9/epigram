@@ -105,6 +105,10 @@ function EditEpigram({ epigram }: EditEpigramProps) {
       referenceUrl: data.referenceUrl?.trim() || null,
     };
 
+    if (!editRequest.referenceTitle && !editRequest.referenceUrl) {
+      delete editRequest.referenceTitle;
+      delete editRequest.referenceUrl;
+    }
     editEpigramMutation.mutate(editRequest);
   };
 
