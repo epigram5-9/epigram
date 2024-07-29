@@ -7,6 +7,7 @@ import { GetEpigramsResponseType } from '@/schema/epigrams';
 interface SearchResultsProps {
   results: GetEpigramsResponseType | null;
   query: string;
+  isLoading: boolean;
 }
 
 // 텍스트 하이라이팅 함수
@@ -35,7 +36,7 @@ function handleHighlightText(text: string, highlight: string) {
   );
 }
 
-function SearchResults({ results, query }: SearchResultsProps) {
+function SearchResults({ results, query, isLoading }: SearchResultsProps) {
   // 태그와 내용 순서로 정렬 - 항상 useMemo를 호출하고, results가 null인 경우 빈 배열 반환
   const sortedResults = useMemo(() => {
     if (!results) return [];
@@ -54,11 +55,17 @@ function SearchResults({ results, query }: SearchResultsProps) {
     [sortedResults, query],
   );
 
-  if (!results) {
-    return <span>검색 결과를 불러오는 중 문제가 발생했습니다.</span>;
+  if (isLoading) {
+    return (
+      <div className='flex flex-col py-4 px-6 lg:p-6 gap-2 lg:gap-[16px]'>
+        <div className='flex flex-col gap-1 md:gap-2 lg:gap-6'>
+          <span className='text-black-600 font-iropkeBatang iropke-lg lg:iropke-xl'>검색 결과를 불러오는 중 입니다...</span>
+        </div>
+      </div>
+    );
   }
 
-  if (filteredResults.length === 0) {
+  if (!results || filteredResults.length === 0) {
     return (
       <div className='flex flex-col py-4 px-6 lg:p-6 gap-2 lg:gap-[16px]'>
         <div className='flex flex-col gap-1 md:gap-2 lg:gap-6'>
