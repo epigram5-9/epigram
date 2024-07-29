@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { KeyboardEvent, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
@@ -77,6 +77,13 @@ function EditEpigram() {
     },
   });
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+
   const handleSubmit = (data: AddEpigramFormType) => {
     if (parsedId.success) {
       const editRequest: EditEpigramRequestType = {
@@ -143,62 +150,92 @@ function EditEpigram() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name='referenceTitle'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>참조 제목</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder='참조 제목을 입력하세요.' />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='referenceUrl'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>참조 URL</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder='참조 URL을 입력하세요.' />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className='space-y-2'>
+              <p className='text-sm font-medium text-gray-700'>출처</p>
+              <div className='space-y-2'>
+                <FormField
+                  control={form.control}
+                  name='referenceTitle'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2 placeholder:text-gray-400 placeholder:text-sm'
+                          {...field}
+                          placeholder='출처 제목 입력'
+                          aria-label='출처 제목'
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='referenceUrl'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2 placeholder:text-gray-400 placeholder:text-sm'
+                          {...field}
+                          placeholder='URL (ex. https://www.website.com)'
+                          aria-label='출처 URL'
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
             <FormField
               control={form.control}
               name='tags'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>태그</FormLabel>
-                  <FormControl>
-                    <div>
-                      <Input value={currentTag} onChange={(e) => setCurrentTag(e.target.value)} placeholder='태그를 입력하세요.' />
-                      <Button type='button' onClick={handleAddTag}>
-                        태그 추가
-                      </Button>
-                    </div>
-                  </FormControl>
+                <FormItem className='flex flex-col gap-2 lg:gap-4'>
+                  <FormLabel htmlFor='tags' className='text-semibold lg:text-2xl text-black-600'>
+                    태그
+                    <span className='text-state-error'>*</span>
+                  </FormLabel>
+                  <div className='relative'>
+                    <Input
+                      className='h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2 pr-20'
+                      id='tags'
+                      type='text'
+                      placeholder='입력하여 태그 추가(최대10자)'
+                      value={currentTag}
+                      onChange={(e) => {
+                        setCurrentTag(e.target.value);
+                        form.clearErrors('tags');
+                      }}
+                      onKeyDown={handleKeyDown}
+                      maxLength={10}
+                    />
+                    <Button
+                      type='button'
+                      className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3 bg-blue-500 text-white rounded'
+                      onClick={handleAddTag}
+                      disabled={field.value.length >= 3 || currentTag.length === 0}
+                    >
+                      저장
+                    </Button>
+                  </div>
+                  <FormMessage className='text-state-error text-right' />
+                  {/* NOTE: 태그의 키값을 변경하는 대신 중복된 태그를 저장 못하게 설정 */}
                   <div className='flex flex-wrap gap-2 mt-2'>
                     {field.value.map((tag) => (
-                      <div key={tag} className='bg-gray-200 px-2 py-1 rounded'>
-                        {tag}
-                        <Button type='button' onClick={() => handleRemoveTag(tag)} className='ml-2 text-red-500'>
-                          X
+                      <div key={tag} className='bg-background-100 px-2 py-1 rounded-full flex items-center'>
+                        <span className='text-sm md:text-lg lg:text-2xl'>{tag}</span>
+                        <Button type='button' className='text-red-500 text-sm md:text-lg lg:text-2xl p-0 px-2' onClick={() => handleRemoveTag(tag)}>
+                          ×
                         </Button>
                       </div>
                     ))}
                   </div>
-                  <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type='submit' disabled={editEpigramMutation.isPending}>
-              {editEpigramMutation.isPending ? '수정 중...' : '수정 완료'}
+            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 ' type='submit'>
+              수정하기
             </Button>
           </form>
         </Form>

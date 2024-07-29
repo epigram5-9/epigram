@@ -81,8 +81,8 @@ function AddEpigram() {
     }
   };
 
-  // NOTE: 태그를 저장하려고 할때 enter키를 누르면 폼제출이 되는걸 방지
-  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+  // NOTE: handleKeyUp을 사용했더니 폼제출이 먼저 실행돼서 다시 handleKeyDown으로 수정
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddTag();
@@ -225,7 +225,7 @@ function AddEpigram() {
                         setCurrentTag(e.target.value);
                         form.clearErrors('tags');
                       }}
-                      onKeyUp={handleKeyUp}
+                      onKeyDown={handleKeyDown}
                       maxLength={10}
                     />
                     <Button
