@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { GetEpigramResponseType, EpigramRequestType } from '@/schema/epigram';
 import TOKEN from '@/lib/constants';
 import { DeleteEpigramType } from '@/types/epigram.types';
+import { AddEpigramResponseType, EditEpigramRequestType } from '@/schema/addEpigram';
 import httpClient from '.';
 
 export const getEpigram = async (request: EpigramRequestType): Promise<GetEpigramResponseType> => {
@@ -39,5 +40,12 @@ export const getEpigram = async (request: EpigramRequestType): Promise<GetEpigra
 
 export const deleteEpigram = async (id: number): Promise<DeleteEpigramType> => {
   const response = await httpClient.delete(`/epigrams/${id}`);
+  return response.data;
+};
+
+// NOTE: 에피그램 수정 api 함수
+export const patchEpigram = async (request: EditEpigramRequestType): Promise<AddEpigramResponseType> => {
+  const { id, ...data } = request;
+  const response = await httpClient.patch(`/epigrams/${id}`, data);
   return response.data;
 };
