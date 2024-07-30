@@ -1,7 +1,7 @@
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuGroup, DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { EmotionType } from '@/types/emotion';
+import { EmotionTypeEN } from '@/types/emotion';
 import ARROW_BOTTOM_ICON from '../../../public/icon/arrow-bottom-icon.svg';
 import ARROW_RIGHT_ICON from '../../../public/icon/arrow-right-icon.svg';
 import ARROW_LEFT_ICON from '../../../public/icon/arrow-left-icon.svg';
@@ -11,8 +11,8 @@ interface CalendarHeaderProps {
   currentDate: Date;
   onPrevMonth: () => void;
   onNextMonth: () => void;
-  onEmotionSelect: (emotion: EmotionType) => void;
-  selectEmotion: EmotionType | null;
+  onEmotionSelect: (emotion: EmotionTypeEN) => void;
+  selectEmotion: EmotionTypeEN | null;
 }
 
 export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth, onEmotionSelect, selectEmotion }: CalendarHeaderProps) {
@@ -35,7 +35,7 @@ export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth, 
                 <DropdownMenuItem key={emotionKey}>
                   <Button
                     className={`p-0 w-14 h-14 bg-opacity-20 rounded-2xl flex justify-center ${selectEmotion === emotionKey ? 'border-4 border-illust-yellow' : ''}`}
-                    onClick={() => onEmotionSelect(emotionKey as EmotionType)}
+                    onClick={() => onEmotionSelect(emotionKey as EmotionTypeEN)}
                   >
                     <Image src={path} alt={name} width={36} height={36} />
                   </Button>

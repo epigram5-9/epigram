@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { subMonths } from 'date-fns';
-import { EmotionLog, EmotionType } from '@/types/emotion';
+import { EmotionLog, EmotionTypeEN } from '@/types/emotion';
 import useCalendar from '../../hooks/useCalendar';
 import { DAY_LIST, DATE_MONTH_FIXER, iconPaths } from '../utill/constants';
 import CalendarHeader from './CalendarHeader';
@@ -16,14 +16,14 @@ export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLo
   // 캘린더 함수 호출
   const { weekCalendarList } = useCalendar(currentDate);
   // 감정 필터
-  const [selectedEmotion, setSelectedEmotion] = useState<EmotionType | null>(null);
+  const [selectedEmotion, setSelectedEmotion] = useState<EmotionTypeEN | null>(null);
 
   // 달력에 출력할 수 있게 매핑
-  const emotionMap: Record<string, EmotionType> = Array.isArray(monthlyEmotionLogs)
-    ? monthlyEmotionLogs.reduce<Record<string, EmotionType>>((acc, log) => {
+  const emotionMap: Record<string, EmotionTypeEN> = Array.isArray(monthlyEmotionLogs)
+    ? monthlyEmotionLogs.reduce<Record<string, EmotionTypeEN>>((acc, log) => {
         const date = new Date(log.createdAt);
         const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-        acc[dateString] = log.emotion as EmotionType;
+        acc[dateString] = log.emotion as EmotionTypeEN;
         return acc;
       }, {})
     : {};
@@ -34,7 +34,7 @@ export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLo
   const handleNextMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, -DATE_MONTH_FIXER));
 
   // 감정 필터
-  const handleEmotionSelect = (emotion: EmotionType) => {
+  const handleEmotionSelect = (emotion: EmotionTypeEN) => {
     // 현재 선택된 감정과 같으면 초기화
     if (selectedEmotion === emotion) {
       setSelectedEmotion(null);
@@ -67,7 +67,7 @@ export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLo
               // 현재 날짜와 비교
               const isToday = day === currentDate.getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
               const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-              const emotion: EmotionType = filteredEmotionMap[dateString]; // 날짜에 해당하는 감정 가져오기
+              const emotion: EmotionTypeEN = filteredEmotionMap[dateString]; // 날짜에 해당하는 감정 가져오기
               const iconPath = emotion && iconPaths[emotion] ? iconPaths[emotion].path : '/icon/BW/SmileFaceBWIcon.svg';
 
               return (

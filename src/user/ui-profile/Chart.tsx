@@ -1,4 +1,4 @@
-import { EmotionLog, EmotionType } from '@/types/emotion';
+import { EmotionLog, EmotionTypeEN } from '@/types/emotion';
 import Image from 'next/image';
 import { iconPaths } from '../utill/constants';
 
@@ -21,7 +21,7 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
 
   // 감정 종류 및 총 감정 수 계산
   const TOTAL_COUNT = monthlyEmotionLogs.length;
-  const EMOTIONS: EmotionType[] = ['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY'];
+  const EMOTIONS: EmotionTypeEN[] = ['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY'];
   const RADIUS = 90; // 원의 반지름
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
