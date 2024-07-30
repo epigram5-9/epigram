@@ -3,6 +3,7 @@ import MoreOptionsMenu from '@/components/epigram/MoreOptionMenu';
 import { EpigramFigureProps } from '@/types/epigram.types';
 import useEpigramLike from '@/hooks/useEpigramLike';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
   const isAuthor = currentUserId === epigram.writerId;
@@ -33,12 +34,14 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
             </div>
           </Button>
           {epigram.referenceTitle && (
-            <button type='button'>
-              <div className='w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
-                <p className='text-gray-300 text-sm lg:text-xl'>{epigram.referenceTitle}</p>
-                <Image src='/placeLink.svg' alt='지도링크' width={20} height={20} className='lg:w-9 lg:h-9' />
-              </div>
-            </button>
+            <Button type='button'>
+              <Link href={`${epigram.referenceUrl}`} target='_blank'>
+                <div className='w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
+                  <p className='text-gray-300 text-sm lg:text-xl'>{epigram.referenceTitle}</p>
+                  <Image src='/placeLink.svg' alt='지도링크' width={20} height={20} className='lg:w-9 lg:h-9' />
+                </div>
+              </Link>
+            </Button>
           )}
         </div>
       </figure>
