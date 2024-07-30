@@ -23,8 +23,8 @@ function RecentEpigrams() {
 
   return (
     <div>
-      <h1 className='text-black-600 text-2xl font-semibold font-pretendard leading-loose'>최신 에피그램</h1>
-      <div className='mt-10 flex flex-col items-center'>
+      <h1 className='text-black-600 text-2xl font-semibold font-pretendard leading-loose text-[16px] lg:text-[24px]'>최신 에피그램</h1>
+      <div className='mt-[24px] lg:mt-[40px] gap-[16px] flex flex-col items-center'>
         {data?.list.map((epigram: RecentEpigramType) => (
           <div
             key={epigram.id}
