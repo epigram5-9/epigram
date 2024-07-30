@@ -1,14 +1,21 @@
 import React from 'react';
 
-// figma 상으로는 sm ~ 3xl 사이즈로 구현되어 있는데, tailwind 환경을 반영해
-// xs ~ 2xl 으로 정의했습니다.
+interface Tag {
+  name: string;
+  id: number;
+}
+
+interface EpigramCardProps {
+  content: string;
+  author: string;
+  tags: Tag[];
+}
+
 const sizeStyles = {
-  xs: 'w-[286px] max-h-[132px]',
-  sm: 'sm:w-[312px] sm:max-h-[152px]',
+  base: 'w-[312px] max-h-[152px]',
   md: 'md:w-[384px] md:max-h-[180px]',
   lg: 'lg:w-[540px] lg:max-h-[160px]',
   xl: 'xl:w-[640px] xl:max-h-[196px]',
-  '2xl': '2xl:w-[744px] 2xl:max-h-[196px]',
 };
 
 const textSizeStyles = {
@@ -17,44 +24,38 @@ const textSizeStyles = {
   md: 'md:text-base',
   lg: 'lg:text-xl',
   xl: 'xl:text-2xl',
-  '2xl': '2xl:text-2xl',
 };
 
-function EpigramCard() {
+function EpigramCard({ content, author, tags }: EpigramCardProps) {
   return (
-    <div className={`relative flex-col justify-start items-end gap-2 inline-flex ${sizeStyles.xs} ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${sizeStyles.xl} ${sizeStyles['2xl']}`}>
+    <div className={`relative flex-col justify-start items-end gap-2 inline-flex ${sizeStyles.base} ${sizeStyles.md} ${sizeStyles.lg} ${sizeStyles.xl}`}>
       <div className='w-full p-[22px] bg-white rounded-[14.67px] shadow border border-zinc-100 flex-col justify-start items-start flex relative overflow-hidden'>
         {/* eslint-disable-next-line */}
         <div className='absolute inset-0 bg-stripes w-full h-full'></div> {/* 줄무늬를 만들려면 비어있는 div가 필요합니다. */}
         <div className='relative w-full z-10 flex flex-col justify-start items-start flex-1'>
           <div className='self-stretch flex-col justify-start items-start gap-2 flex'>
             <div
-              className={`self-stretch ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-neutral-700 font-normal font-iropkeBatang leading-normal`}
+              className={`self-stretch ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} text-neutral-700 font-normal font-iropkeBatang leading-normal`}
             >
-              {/* 테스트 텍스트입니다. */}
-              오랫동안 꿈을 그리는 사람은 마침내 그 꿈을 닮아 간다.
+              {content}
             </div>
             <div
-              className={`self-stretch ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-right text-slate-400 font-normal font-iropkeBatang leading-normal`}
+              className={`self-stretch ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} text-right text-slate-400 font-normal font-iropkeBatang leading-normal`}
             >
-              {/* 테스트 텍스트입니다. */}- 앙드레 말로 -
+              - {author} -
             </div>
           </div>
         </div>
       </div>
       <div className='justify-start items-start gap-2 inline-flex'>
-        <div
-          className={`text-right ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-iropkeBatang leading-normal`}
-        >
-          {/* 테스트 텍스트입니다. */}
-          #나아가야할때
-        </div>
-        <div
-          className={`text-right ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} ${textSizeStyles['2xl']} text-slate-400 font-normal font-iropkeBatang leading-normal`}
-        >
-          {/* 테스트 텍스트입니다. */}
-          #꿈을이루고싶을때
-        </div>
+        {tags.map((tag) => (
+          <div
+            key={tag.id}
+            className={`text-right ${textSizeStyles.xs} ${textSizeStyles.sm} ${textSizeStyles.md} ${textSizeStyles.lg} ${textSizeStyles.xl} text-slate-400 font-normal font-iropkeBatang leading-normal`}
+          >
+            #{tag.name}
+          </div>
+        ))}
       </div>
     </div>
   );
