@@ -8,7 +8,7 @@ function CommentCard({ writer, content, createdAt, status }: CommentCardProps) {
 
   return (
     <div
-      className={`bg-slate-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
+      className={`bg-background-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
     >
       <div className='justify-start items-start gap-4 inline-flex'>
         <div className='w-12 h-12 relative'>
