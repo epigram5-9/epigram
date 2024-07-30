@@ -1,5 +1,4 @@
 import type { GetUserResponseType, GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
-
 import httpClient from '.';
 
 export const getMe = async (): Promise<GetUserResponseType> => {

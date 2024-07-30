@@ -11,3 +11,4 @@ export const useGetEmotion = () =>
     queryKey: ['emotion'],
     queryFn: getEmotion,
   });
+
