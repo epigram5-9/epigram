@@ -1,8 +1,6 @@
 import quries from '@/apis/queries';
-
 import { updateMe, createPresignedUrl } from '@/apis/user';
 import { GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
-
 import { MutationOptions } from '@/types/query';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
