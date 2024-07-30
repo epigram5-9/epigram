@@ -10,17 +10,17 @@ function MainLayout() {
     <>
       <Header icon='search' routerPage='/.' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <main className='w-full min-h-screen bg-background-100 flex flex-col items-center'>
-        <div className='flex flex-col items-center gap-6 mt-6'>
-          <section className='w-[360px] flex flex-col items-center'>
+        <div className='w-[360px] flex flex-col items-center gap-6 mt-6'>
+          <section className='mt-10'>
             <TodayEpigram />
           </section>
-          <section className='w-[360px] flex flex-col items-center'>
+          <section className='mt-10'>
             <EmotionSelector />
           </section>
-          <section className='w-[360px] flex flex-col items-center'>
+          <section className='mt-10'>
             <RecentEpigrams />
           </section>
-          <section className='w-[360px] flex flex-col items-center'>
+          <section className='mt-10'>
             <RecentComments />
           </section>
         </div>

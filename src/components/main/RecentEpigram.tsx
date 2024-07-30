@@ -23,23 +23,29 @@ function RecentEpigrams() {
 
   return (
     <div>
-      <h1>최신 에피그램</h1>
-      {data?.list.map((epigram: RecentEpigramType) => (
-        <div
-          key={epigram.id}
-          onClick={() => handleEpigramClick(epigram.id)}
-          role='button'
-          tabIndex={0}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleEpigramClick(epigram.id);
-            }
-          }}
-        >
-          <EpigramCard content={epigram.content} author={epigram.author} tags={epigram.tags} />
-        </div>
-      ))}
-      {data && limit < data.totalCount && <LoadMoreButton onClick={loadMore} />}
+      <h1 className='text-black-600 text-2xl font-semibold font-pretendard leading-loose'>최신 에피그램</h1>
+      <div className='mt-10 flex flex-col items-center'>
+        {data?.list.map((epigram: RecentEpigramType) => (
+          <div
+            key={epigram.id}
+            onClick={() => handleEpigramClick(epigram.id)}
+            role='button'
+            tabIndex={0}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleEpigramClick(epigram.id);
+              }
+            }}
+          >
+            <EpigramCard content={epigram.content} author={epigram.author} tags={epigram.tags} />
+          </div>
+        ))}
+        {data && limit < data.totalCount && (
+          <div className='mt-10 w-full flex justify-center'>
+            <LoadMoreButton onClick={loadMore} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

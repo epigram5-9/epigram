@@ -24,11 +24,17 @@ function RecentComments() {
 
   return (
     <div>
-      <h1>최신 댓글</h1>
-      {comments.map((comment) => (
-        <CommentCard key={comment.id} writer={comment.writer} content={comment.content} createdAt={new Date(comment.createdAt)} status='view' />
-      ))}
-      {data?.totalCount && comments.length < data.totalCount && <LoadMoreButton onClick={handleLoadMore} />}
+      <h1 className='text-black-600 text-2xl font-semibold font-pretendard leading-loose'>최신 댓글</h1>
+      <div className='mt-10 flex flex-col items-center'>
+        {comments.map((comment) => (
+          <CommentCard key={comment.id} writer={comment.writer} content={comment.content} createdAt={new Date(comment.createdAt)} status='view' />
+        ))}
+        {data?.totalCount && comments.length < data.totalCount && (
+          <div className='mt-10 flex justify-center w-full'>
+            <LoadMoreButton onClick={handleLoadMore} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
