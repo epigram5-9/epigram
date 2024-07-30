@@ -1,8 +1,8 @@
 import useGetEpigrams from '@/hooks/useGetEpigrams';
 import MyEpigrams from '@/user/ui-content/MyEpigrams';
-import NONE_EPI from '../../../public/none-epi.svg';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import NONE_EPI from '../../../public/none-epi.svg';
 
 interface MyContentProps {
   userId: number;
