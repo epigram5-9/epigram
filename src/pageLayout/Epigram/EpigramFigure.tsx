@@ -28,7 +28,7 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
         <figcaption className='text-gray-400 text-right text-base lg:text-2xl font-normal'>-{epigram.author}-</figcaption>
         <div className='flex justify-center gap-4'>
           <Button type='button' onClick={handleLikeClick} disabled={isPending}>
-            <div className='w-20 lg:w-28 h-9 lg:h-11 flex items-center justify-center text-white rounded-full bg-black'>
+            <div className='p-4 w-20 lg:w-28 h-9 lg:h-11 flex items-center justify-center gap-2 text-white rounded-full bg-black'>
               <Image src='/likeIcon.svg' alt='좋아요 아이콘' width={20} height={20} className='lg:w-9 lg:h-9' />
               <p className='text-sm lg:text-xl'>{likeCount}</p>
             </div>
@@ -36,8 +36,8 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
           {epigram.referenceTitle && (
             <Button type='button'>
               <Link href={`${epigram.referenceUrl}`} target='_blank'>
-                <div className='w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
-                  <p className='text-gray-300 text-sm lg:text-xl'>{epigram.referenceTitle}</p>
+                <div className='p-4 w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
+                  <p className='text-gray-300 text-sm lg:text-xl truncate ...'>{epigram.referenceTitle}</p>
                   <Image src='/placeLink.svg' alt='지도링크' width={20} height={20} className='lg:w-9 lg:h-9' />
                 </div>
               </Link>
