@@ -2,9 +2,9 @@ import { EpigramRequestSchema } from '@/schema/epigram';
 import useEpigramQuery from '@/hooks/useEpigramQueryHook';
 import EpigramComment from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useMeQuery } from '@/hooks/userQueryHooks';
+import Header from '@/components/Header/Header';
 
 function DetailPage() {
   const router = useRouter();
@@ -22,11 +22,7 @@ function DetailPage() {
 
   return (
     <div className='flex flex-col '>
-      <nav className='flex justify-between border-b-2 px-6 py-4'>
-        <Image src='/arrow-left.svg' alt='뒤로가기 버튼' width={36} height={36} />
-        <Image src='/logo.svg' alt='Epigram 로고' width={172} height={48} />
-        <Image src='/share.svg' alt='공유 버튼' width={36} height={36} />
-      </nav>
+      <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />;
       <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
       <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} userImage={userData?.image} />
     </div>

@@ -1,13 +1,8 @@
 import type { GetUserResponseType, GetUserRequestType, PatchMeRequestType } from '@/schema/user';
-import TOKEN from '@/lib/constants';
 import httpClient from '.';
 
 export const getMe = async (): Promise<GetUserResponseType> => {
-  const response = await httpClient.get('/users/me', {
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-    },
-  });
+  const response = await httpClient.get('/users/me');
   return response.data;
 };
 
