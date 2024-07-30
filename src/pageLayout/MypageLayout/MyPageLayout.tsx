@@ -1,7 +1,7 @@
 import Header from '@/components/Header/Header';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 import UserInfo from '@/types/user';
-import EmotionMonthlyLogs from '@/user/ui-profile/EmotionMonthlyLogs';
+import EmotionMonthlyLogs from '@/pageLayout/MypageLayout/EmotionMonthlyLogs';
 import Profile from '@/user/ui-profile/Profile';
 import { useRouter } from 'next/navigation';
 
