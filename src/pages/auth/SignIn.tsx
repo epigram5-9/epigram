@@ -28,7 +28,6 @@ export default function SignIn() {
           <Image src='/lg.svg' alt='logo' width={172} height={48} />
         </Link>
       </header>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit((values: PostSigninRequestType) => mutationSignin.mutate(values))} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
           <div className='flex flex-col items-center lg:gap-4 gap-[10px] w-full lg:max-w-[640px] md:max-w-[384px]'>
@@ -85,15 +84,15 @@ export default function SignIn() {
         </Link>
       </div>
       <div className='flex gap-4'>
-        <Button type='button' className='md:size-[60px] p-0'>
+        <Link href={`https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&redirect_uri=http://localhost:3000&response_type=code`}>
           <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
-        <Button type='button' className='md:size-[60px] p-0'>
+        </Link>
+        <Link href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:3000&response_type=code&scope=email%20profile`}>
           <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
-        <Button type='button' className='md:size-[60px] p-0'>
+        </Link>
+        <Link href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=code`}>
           <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
+        </Link>
       </div>
     </div>
   );

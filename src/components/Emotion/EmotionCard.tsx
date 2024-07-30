@@ -7,7 +7,7 @@
 import React from 'react';
 import cn from '@/lib/utils';
 import Image from 'next/image';
-import { EmotionIconCardProps } from '@/types/EmotionTypes';
+import { EmotionIconCardProps } from '@/types/emotion';
 
 // 아이콘 파일 경로 매핑
 const iconPaths = {
