@@ -1,9 +1,9 @@
 import axios from 'axios';
 import qs from 'qs';
 
+// NOTE: axios 선언
 const httpClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
   paramsSerializer: (parameters) => qs.stringify(parameters, { arrayFormat: 'repeat', encode: false }),
 });
 
