@@ -85,15 +85,15 @@ export default function SignIn() {
         </Link>
       </div>
       <div className='flex gap-4'>
-        <Button type='button' className='md:size-[60px] p-0'>
+        <Link href={`https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&redirect_uri=http://localhost:3000&response_type=code`}>
           <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
-        <Button type='button' className='md:size-[60px] p-0'>
+        </Link>
+        <Link href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:3000&response_type=code&scope=email%20profile`}>
           <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
-        <Button type='button' className='md:size-[60px] p-0'>
+        </Link>
+        <Link href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=code`}>
           <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
+        </Link>
       </div>
     </div>
   );
