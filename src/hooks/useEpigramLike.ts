@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleEpigramLike } from '@/apis/epigram';
-import { GetEpigramResponseType, GetEpigramRequestType } from '@/schema/epigram';
+import { GetEpigramResponseType, EpigramRequestType } from '@/schema/epigram';
 import { toast } from '@/components/ui/use-toast';
 
 const useEpigramLike = (epigram: GetEpigramResponseType) => {
@@ -10,7 +10,7 @@ const useEpigramLike = (epigram: GetEpigramResponseType) => {
   const queryClient = useQueryClient();
 
   const { mutate: toggleLike, isPending } = useMutation({
-    mutationFn: (request: GetEpigramRequestType) => toggleEpigramLike(request),
+    mutationFn: (request: EpigramRequestType) => toggleEpigramLike(request),
     onSuccess: (updatedEpigram) => {
       setIsLiked(!isLiked);
       setLikeCount(updatedEpigram.likeCount);

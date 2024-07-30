@@ -41,6 +41,7 @@ export const patchEpigram = async (request: EditEpigramRequestType): Promise<Add
   const response = await httpClient.patch(`/epigrams/${id}`, data);
   return response.data;
 };
+
 export const toggleEpigramLike = async (request: EpigramRequestType): Promise<GetEpigramResponseType> => {
   const { id } = request;
 
