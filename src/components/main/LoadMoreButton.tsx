@@ -21,7 +21,7 @@ function LoadMoreButton({ onClick }: LoadMoreButtonProps) {
       <div className='w-6 h-6 relative'>
         <Image src='/icon/plus-icon.svg' alt='plus icon' layout='fill' objectFit='contain' />
       </div>
-      <div className='text-#abb8ce text-sm font-normal font-Pretendard leading-normal'>더보기</div>
+      <div className='text-blue-400 text-sm font-normal font-pretendard leading-normal'>더보기</div>
     </div>
   );
 }

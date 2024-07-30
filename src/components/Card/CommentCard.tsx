@@ -8,12 +8,12 @@ function CommentCard({ writer, content, createdAt, status }: CommentCardProps) {
 
   return (
     <div
-      className={`bg-slate-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
+      className={`bg-background-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
     >
       <div className='justify-start items-start gap-4 inline-flex'>
         <div className='w-12 h-12 relative'>
           <div className='w-12 h-12 bg-zinc-300 rounded-full overflow-hidden flex items-center justify-center'>
-            <Image src={writer.image} alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
+            <Image src='/ProfileTestImage.jpg' alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
           </div>
         </div>
         <div className={`flex-col justify-start items-start ${gapStyles.sm} ${gapStyles.md} ${gapStyles.lg} inline-flex ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}>
