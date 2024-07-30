@@ -1,6 +1,5 @@
 import * as z from 'zod';
 
-
 const PWD_VALIDATION_REGEX = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
 // NOTE: 회원가입 스키마
@@ -37,14 +36,11 @@ const User = z.object({
   image: z.string(),
 });
 
-
 export const PostAuthResponse = z.object({
-
   accessToken: z.string(),
   refreshToken: z.string(),
   user: User,
 });
-
 
 // NOTE: 회원가입 타입
 export type PostSignUpRequestType = z.infer<typeof PostSignUpRequest>;
@@ -52,4 +48,3 @@ export type PostSignUpResponseType = z.infer<typeof PostAuthResponse>;
 // NOTE: 로그인 타입
 export type PostSigninRequestType = z.infer<typeof PostSigninRequest>;
 export type PostSigninResponseType = z.infer<typeof PostAuthResponse>;
-
