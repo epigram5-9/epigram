@@ -1,5 +1,8 @@
 import useGetEpigrams from '@/hooks/useGetEpigrams';
 import MyEpigrams from '@/user/ui-content/MyEpigrams';
+import NONE_EPI from '../../../public/none-epi.svg';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 interface MyContentProps {
   userId: number;
@@ -48,7 +51,7 @@ export default function MyContent({ userId }: MyContentProps) {
           내 댓글(0)
         </button>
       </div>
-      <div className='w-full'>
+      <div className='w-full py-[36px]'>
         <div className='flex flex-col gap-[48px]'>
           {epigrams.totalCount > 0 ? (
             epigrams.list.map((epi) => {
@@ -61,7 +64,16 @@ export default function MyContent({ userId }: MyContentProps) {
               return <MyEpigrams key={epi.id} epigram={epigram} />;
             })
           ) : (
-            <div className='text-center text-gray-500'>에피그램이 없습니다.</div>
+            <div className='flex flex-col gap-4 justify-center items-center'>
+              <Image src={NONE_EPI} alt='돋보기아이콘' width={144} height={144} />
+              <div className='flex flex-col gap-[48px] justify-center items-center'>
+                <div className='text-center'>
+                  <p>아직 작성한 에피그램이 없어요!</p>
+                  <p>에피그램을 작성하고 감정을 공유해보세요.</p>
+                </div>
+                <Button className='px-[18px] py-3 rounded-[100px] border border-neutral-200 justify-center items-center gap-1'>에피그램 만들기</Button>
+              </div>
+            </div>
           )}
         </div>
       </div>
