@@ -46,4 +46,4 @@ const queries = createQueryKeyStore({
   },
 });
 
-export default quries;
+export default queries;
