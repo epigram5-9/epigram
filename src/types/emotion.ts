@@ -10,7 +10,7 @@ export type EmotionTypeEN = 'MOVED' | 'HAPPY' | 'WORRIED' | 'SAD' | 'ANGRY';
 export interface EmotionLog {
   id: number;
   userId: number;
-  emotion: EmotionType;
+  emotion: EmotionTypeEN;
   createdAt: Date;
 }
 

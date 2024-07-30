@@ -30,7 +30,7 @@ export const PostPresignedUrlResponse = z.object({
   url: z.string().url(),
 });
 
-export type GetUserReponseType = z.infer<typeof GetUserReponse>;
+export type GetUserResponseType = z.infer<typeof GetUserReponse>;
 export type GetUserRequestType = z.infer<typeof GetUserRequest>;
 export type PatchMeRequestType = z.infer<typeof PatchMeRequest>;
 
