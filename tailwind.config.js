@@ -50,6 +50,9 @@ module.exports = {
         'sub-gray_2': '#E3E9F1',
         'sub-gray_3': '#EFF3F8',
       },
+      boxShadow: {
+        '3xl': '0px 0px 36px 0px rgba(0, 0, 0, 0.05)',
+      },
       screens: {
         sm: '640px',
         md: '768px',
