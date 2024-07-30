@@ -28,6 +28,7 @@ export default function SignIn() {
           <Image src='/lg.svg' alt='logo' width={172} height={48} />
         </Link>
       </header>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit((values: PostSigninRequestType) => mutationSignin.mutate(values))} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
           <div className='flex flex-col items-center lg:gap-4 gap-[10px] w-full lg:max-w-[640px] md:max-w-[384px]'>
