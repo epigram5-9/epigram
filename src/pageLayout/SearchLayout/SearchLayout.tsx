@@ -18,6 +18,12 @@ function SearchLayout() {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
+  const isBrowser = typeof window !== 'undefined'; // 브라우저 환경에서만 localStorage에 접근
+  const accessToken = isBrowser ? localStorage.getItem('accessToken') : null;
+  const isUserLoggedIn = !!accessToken;
+  const userId = isUserLoggedIn ? 'loggedInUser' : 'guest'; // 사용자 ID를 기반으로 저장 키 생성
+  const recentSearchesKey = `recentSearches_${userId}`;
+
   const { data: searchResults, isLoading } = useEpigrams(currentSearch, page);
 
   // 새로운 검색 결과를 allResults에 누적, 총 결과 개수와 다음 커서를 업데이트
@@ -52,11 +58,6 @@ function SearchLayout() {
     };
   }, [allResults.length, isLoading, nextCursor]);
 
-  const isBrowser = typeof window !== 'undefined'; // 브라우저 환경에서만 localStorage에 접근
-  const isUserLoggedIn = isBrowser && !!localStorage.getItem('accessToken');
-  const userId = isUserLoggedIn ? 'loggedInUser' : 'guest'; // 사용자 ID를 기반으로 저장 키 생성
-  const recentSearchesKey = `recentSearches_${userId}`;
-
   // 컴포넌트가 처음 렌더링 될 때 저장된 최근 검색어 불러오기, 로그인된 사용자 별로 최근 검색어를 구분하여 URL에 데이터 저장
   useEffect(() => {
     if (isBrowser) {
@@ -69,7 +70,7 @@ function SearchLayout() {
     if (query) {
       setCurrentSearch(query);
     }
-  }, [recentSearchesKey, router.query.q]);
+  }, [recentSearchesKey]);
 
   // 모두지우기 클릭 시 저장된 최근 검색어 삭제
   const handleClearAll = () => {
@@ -103,7 +104,7 @@ function SearchLayout() {
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
         <SearchBar onSearch={handleSearch} currentSearch={currentSearch} />
         <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />
-        <SearchResults results={{ totalCount, nextCursor: nextCursor ?? 0, list: allResults }} query={currentSearch} isLoading={isLoading} />
+        {currentSearch && <SearchResults results={{ totalCount, nextCursor: nextCursor ?? 0, list: allResults }} query={currentSearch} isLoading={isLoading} />}
         <div ref={loadMoreRef} />
       </div>
     </>
