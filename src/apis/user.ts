@@ -1,19 +1,19 @@
-import type { GetUserReponseType, GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
+import type { GetUserResponseType, GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
 
 import httpClient from '.';
 
-export const getMe = async (): Promise<GetUserReponseType> => {
+export const getMe = async (): Promise<GetUserResponseType> => {
   const response = await httpClient.get('/users/me');
   return response.data;
 };
 
-export const getUser = async (request: GetUserRequestType): Promise<GetUserReponseType> => {
+export const getUser = async (request: GetUserRequestType): Promise<GetUserResponseType> => {
   const { id } = request;
   const response = await httpClient.get(`/users/${id}`);
   return response.data;
 };
 
-export const updateMe = async (request: PatchMeRequestType): Promise<GetUserReponseType> => {
+export const updateMe = async (request: PatchMeRequestType): Promise<GetUserResponseType> => {
   const response = await httpClient.patch('/users/me', { ...request });
   return response.data;
 };

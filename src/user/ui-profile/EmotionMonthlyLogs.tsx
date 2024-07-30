@@ -1,4 +1,4 @@
-import useMonthlyEmotionLogs from '@/hooks/useGetEmotion';
+import { useMonthlyEmotionLogs } from '@/hooks/useGetEmotion';
 import { Emotion } from '@/types/emotion';
 import { useEffect, useState } from 'react';
 import Calendar from './Calendar';
