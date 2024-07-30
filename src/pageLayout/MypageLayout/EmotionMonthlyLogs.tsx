@@ -32,9 +32,9 @@ export default function EmotionMonthlyLogs({ userId }: EmotionMonthlyLogsProps) 
   const { data: monthlyEmotionLogs = [] } = useMonthlyEmotionLogs(emotionRequest);
 
   return (
-    <>
+    <div className='pb-[110px]'>
       <Calendar currentDate={currentDate} setCurrentDate={setCurrentDate} monthlyEmotionLogs={monthlyEmotionLogs} />
       <Chart monthlyEmotionLogs={monthlyEmotionLogs} />
-    </>
+    </div>
   );
 }
