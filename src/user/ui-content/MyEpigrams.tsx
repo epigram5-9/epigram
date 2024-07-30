@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { Button } from '@/components/ui/button';
 import { Epigram } from '@/types/epigram.types';
 import NONE_EPI from '../../../public/none-epi.svg';
@@ -27,10 +28,35 @@ interface MyEpigramProps {
 }
 
 function MyEpigrams({ epigrams, totalCount, onMoreEpigramLoad }: MyEpigramProps) {
+  const router = useRouter();
+
+  // 에피그램 등록 페이지 이동
+  const handleAddEpigram = () => {
+    router.push('/addEpigram');
+  };
+
+  // 에피그램 상세 페이지 이동
+  const handleEpigramClick = (epigramId: number) => {
+    router.push(`/epigram/${epigramId}`);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, epigramId: number) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleEpigramClick(epigramId);
+    }
+  };
+
   return totalCount > 0 ? (
     <div className='flex flex-col gap-[48px]'>
       {epigrams.map((epigram) => (
-        <div key={epigram.id} className={`relative flex-col justify-start items-end gap-2 inline-flex ${sizeStyles.xs} ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${sizeStyles.xl}`}>
+        <div
+          key={epigram.id}
+          onClick={() => handleEpigramClick(epigram.id)}
+          onKeyDown={(event) => handleKeyDown(event, epigram.id)}
+          role='button'
+          tabIndex={0}
+          className={`relative flex-col justify-start items-end gap-2 inline-flex cursor-pointer ${sizeStyles.xs} ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${sizeStyles.xl}`}
+        >
           <div className='w-full p-[22px] bg-white rounded-[14.67px] shadow border border-zinc-100 flex-col justify-start items-start flex relative overflow-hidden'>
             <div className='absolute inset-0 bg-stripes w-full h-full'></div>
             <div className='relative w-full z-10 flex flex-col justify-start items-start flex-1'>
@@ -76,7 +102,9 @@ function MyEpigrams({ epigrams, totalCount, onMoreEpigramLoad }: MyEpigramProps)
           <p>아직 작성한 에피그램이 없어요!</p>
           <p>에피그램을 작성하고 감정을 공유해보세요.</p>
         </div>
-        <Button className='px-[18px] py-3 rounded-[100px] border border-neutral-200 justify-center items-center gap-1'>에피그램 만들기</Button>
+        <Button className='px-[18px] py-3 rounded-[100px] border border-neutral-200 justify-center items-center gap-1' onClick={handleAddEpigram}>
+          에피그램 만들기
+        </Button>
       </div>
     </div>
   );
