@@ -21,19 +21,19 @@ export type GetMonthlyEmotionLogsRequestType = z.infer<typeof GetMonthlyEmotionL
 export type GetMonthlyEmotionLogsResponseType = z.infer<typeof GetMonthlyEmotionLogsResponse>;
 
 export const PostEmotionRequest = z.object({
-  emotion: z.enum(['MOVED', 'JOY', 'WORRY', 'SADNESS', 'ANGER']),
+  emotion: z.enum(['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY']),
 });
 
 export const PostEmotionResponse = z.object({
   createdAt: z.coerce.date(),
-  emotion: z.enum(['MOVED', 'JOY', 'WORRY', 'SADNESS', 'ANGER']),
+  emotion: z.enum(['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY']),
   userId: z.number(),
   id: z.number(),
 });
 
 export const GetEmotionResponse = z.object({
   createdAt: z.coerce.date(),
-  emotion: z.enum(['MOVED', 'JOY', 'WORRY', 'SADNESS', 'ANGER']),
+  emotion: z.enum(['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY']),
   userId: z.number(),
   id: z.number(),
 });
