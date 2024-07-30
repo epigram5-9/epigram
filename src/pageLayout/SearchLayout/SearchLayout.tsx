@@ -8,6 +8,8 @@ import useEpigrams from '@/hooks/useGetEpigramsHooks';
 import { GetEpigramsResponseType } from '@/schema/epigrams';
 
 // TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
+// TODO 주석 추가하기 useEffect 등등 기능 관련
+// TODO 무한 로딩 해결
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
@@ -50,7 +52,7 @@ function SearchLayout() {
         observerRef.current = null;
       }
     };
-  }, [isLoading, allResults.length]);
+  }, [allResults.length]);
 
   // 컴포넌트가 처음 렌더링 될 때 저장된 최근 검색어 불러오기, URL에 데이터 저장
   useEffect(() => {
