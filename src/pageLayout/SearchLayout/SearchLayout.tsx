@@ -7,8 +7,6 @@ import SearchResults from '@/components/search/SearchResults';
 import useEpigrams from '@/hooks/useGetEpigramsHooks';
 import { GetEpigramsResponseType } from '@/schema/epigrams';
 
-// TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
-
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
   const [currentSearch, setCurrentSearch] = useState<string>('');
@@ -22,7 +20,7 @@ function SearchLayout() {
 
   const { data: searchResults, isLoading } = useEpigrams(currentSearch, page);
 
-  // 새로운 검색 결과를 allResults에 누적하고, 총 결과 개수와 다음 커서를 업데이트합니다.
+  // 새로운 검색 결과를 allResults에 누적, 총 결과 개수와 다음 커서를 업데이트
   useEffect(() => {
     if (searchResults?.list) {
       setAllResults((prevResults) => [...prevResults, ...searchResults.list]);
@@ -31,12 +29,12 @@ function SearchLayout() {
     }
   }, [searchResults]);
 
-  // observerRef가 화면에 나타날 때 페이지를 증가시키고 추가 데이터를 로드하도록 합니다.
+  // observerRef가 화면에 나타날 때 페이지 증가,추가 데이터 로드
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
 
     observerRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !isLoading) {
+      if (entries[0].isIntersecting && !isLoading && nextCursor !== null) {
         setPage((prevPage) => prevPage + 1);
       }
     });
@@ -52,33 +50,44 @@ function SearchLayout() {
         observerRef.current = null;
       }
     };
-  }, [allResults.length]);
+  }, [allResults.length, isLoading, nextCursor]);
 
-  // 컴포넌트가 처음 렌더링 될 때 저장된 최근 검색어 불러오기, URL에 데이터 저장
+  const isBrowser = typeof window !== 'undefined'; // 브라우저 환경에서만 localStorage에 접근
+  const isUserLoggedIn = isBrowser && !!localStorage.getItem('accessToken');
+  const userId = isUserLoggedIn ? 'loggedInUser' : 'guest'; // 사용자 ID를 기반으로 저장 키 생성
+  const recentSearchesKey = `recentSearches_${userId}`;
+
+  // 컴포넌트가 처음 렌더링 될 때 저장된 최근 검색어 불러오기, 로그인된 사용자 별로 최근 검색어를 구분하여 URL에 데이터 저장
   useEffect(() => {
-    const storedSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-    setSearches(storedSearches);
+    if (isBrowser) {
+      const storedSearches = JSON.parse(localStorage.getItem(recentSearchesKey) || '[]');
+      setSearches(storedSearches);
+    }
 
     const searchParams = new URLSearchParams(window.location.search);
     const query = searchParams.get('q');
     if (query) {
       setCurrentSearch(query);
     }
-  }, [router.query.q]);
+  }, [recentSearchesKey, router.query.q]);
 
   // 모두지우기 클릭 시 저장된 최근 검색어 삭제
   const handleClearAll = () => {
     setSearches([]);
-    localStorage.removeItem('recentSearches');
+    if (isBrowser) {
+      localStorage.removeItem(recentSearchesKey);
+    }
   };
 
   // 검색어가 제출될 때 작동
-  const handleSearch = async (search: string) => {
+  const handleSearch = (search: string) => {
     setPage(0);
     setAllResults([]);
     setSearches((prevSearches) => {
       const updatedSearches = [search, ...prevSearches.filter((item) => item !== search)].slice(0, 10);
-      localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+      if (isBrowser) {
+        localStorage.setItem(recentSearchesKey, JSON.stringify(updatedSearches));
+      }
       return updatedSearches;
     });
     setCurrentSearch(search);
