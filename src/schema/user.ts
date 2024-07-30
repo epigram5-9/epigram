@@ -18,6 +18,6 @@ export const GetUserReponse = z.object({
   id: z.number(),
 });
 
-export type GetUserReponseType = z.infer<typeof GetUserReponse>;
+export type GetUserResponseType = z.infer<typeof GetUserReponse>;
 export type GetUserRequestType = z.infer<typeof GetUserRequest>;
 export type PatchMeRequestType = z.infer<typeof PatchMeRequest>;
