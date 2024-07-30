@@ -8,8 +8,6 @@ import useEpigrams from '@/hooks/useGetEpigramsHooks';
 import { GetEpigramsResponseType } from '@/schema/epigrams';
 
 // TODO 로그인한 사용자에 따라서 최근 검색어를 관리할 수 있도록 추후에 수정
-// TODO 주석 추가하기 useEffect 등등 기능 관련
-// TODO 무한 로딩 해결
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
@@ -24,6 +22,7 @@ function SearchLayout() {
 
   const { data: searchResults, isLoading } = useEpigrams(currentSearch, page);
 
+  // 새로운 검색 결과를 allResults에 누적하고, 총 결과 개수와 다음 커서를 업데이트합니다.
   useEffect(() => {
     if (searchResults?.list) {
       setAllResults((prevResults) => [...prevResults, ...searchResults.list]);
@@ -32,6 +31,7 @@ function SearchLayout() {
     }
   }, [searchResults]);
 
+  // observerRef가 화면에 나타날 때 페이지를 증가시키고 추가 데이터를 로드하도록 합니다.
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
 
@@ -45,7 +45,7 @@ function SearchLayout() {
       observerRef.current.observe(loadMoreRef.current);
     }
 
-    // 옵저버 클린업
+    // 옵저버 클린업 (메모리 누수 방지)
     return () => {
       if (observerRef.current) {
         observerRef.current.disconnect();
@@ -74,8 +74,8 @@ function SearchLayout() {
 
   // 검색어가 제출될 때 작동
   const handleSearch = async (search: string) => {
-    setPage(0); // 검색어가 변경되면 페이지를 초기화
-    setAllResults([]); // 모든 결과를 초기화
+    setPage(0);
+    setAllResults([]);
     setSearches((prevSearches) => {
       const updatedSearches = [search, ...prevSearches.filter((item) => item !== search)].slice(0, 10);
       localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
