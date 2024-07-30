@@ -12,7 +12,7 @@ interface EpigramCardProps {
 }
 
 const sizeStyles = {
-  sm: 'sm:w-[312px] sm:max-h-[152px]',
+  base: 'w-[312px] max-h-[152px]',
   md: 'md:w-[384px] md:max-h-[180px]',
   lg: 'lg:w-[540px] lg:max-h-[160px]',
   xl: 'xl:w-[640px] xl:max-h-[196px]',
@@ -28,7 +28,7 @@ const textSizeStyles = {
 
 function EpigramCard({ content, author, tags }: EpigramCardProps) {
   return (
-    <div className={`relative flex-col justify-start items-end gap-2 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${sizeStyles.xl}`}>
+    <div className={`relative flex-col justify-start items-end gap-2 inline-flex ${sizeStyles.base} ${sizeStyles.md} ${sizeStyles.lg} ${sizeStyles.xl}`}>
       <div className='w-full p-[22px] bg-white rounded-[14.67px] shadow border border-zinc-100 flex-col justify-start items-start flex relative overflow-hidden'>
         {/* eslint-disable-next-line */}
         <div className='absolute inset-0 bg-stripes w-full h-full'></div> {/* 줄무늬를 만들려면 비어있는 div가 필요합니다. */}

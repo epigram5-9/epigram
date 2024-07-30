@@ -4,6 +4,7 @@ import TodayEpigram from '@/components/main/TodayEpigram';
 import TodayEmotion from '@/components/main/TodayEmotion';
 import RecentEpigrams from '@/components/main/RecentEpigram';
 import RecentComments from '@/components/main/RecentComment';
+import FAB from '@/components/main/FAB';
 
 function MainLayout() {
   return (
@@ -25,6 +26,7 @@ function MainLayout() {
           </section>
         </div>
       </main>
+      <FAB />
     </>
   );
 }
