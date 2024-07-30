@@ -19,7 +19,7 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
               </p>
             ))}
           </div>
-          {isAuthor && <MoreOptionsMenu />}
+          {isAuthor && <MoreOptionsMenu epigram={epigram.id} />}
         </div>
         <blockquote className=''>
           <p className='text-2xl lg:text-3xl font-normal'>{epigram.content}</p>

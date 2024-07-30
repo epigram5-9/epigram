@@ -4,7 +4,11 @@ import useEpigramCommentsQuery from '@/hooks/useEpigramCommentsQueryHook';
 import CommentItem from './CommentItem';
 import NoComment from './NoComment';
 
-function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
+interface CommentListProps extends Omit<EpigramCommentProps, 'userImage'> {
+  onEditComment: (id: number, content: string, isPrivate: boolean) => void;
+}
+
+function CommentList({ epigramId, currentUserId, onEditComment }: CommentListProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useEpigramCommentsQuery(epigramId);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -35,7 +39,7 @@ function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
     }
 
     return () => {
-      // NOTE: effect가 실행되기전에 호출해서 메모리 누수를 방지해준다고 함
+      // NOTE: effect가 실행되기전에 호출해서 메모리 누수를 방지해줌
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
@@ -54,7 +58,7 @@ function CommentList({ epigramId, currentUserId }: EpigramCommentProps) {
       {allComments.length > 0 ? (
         <>
           {allComments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'complete'} />
+            <CommentItem key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'complete'} onEditComment={onEditComment} />
           ))}
           <div ref={lastCommentRef}>{isFetchingNextPage && <div>더 많은 댓글을 불러오는 중...</div>}</div>
         </>

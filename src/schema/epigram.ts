@@ -19,14 +19,12 @@ const GetEpigramResponseSchema = z.object({
   isLiked: z.boolean().optional(),
 });
 
-// GetEpigramRequestType 스키마
-const GetEpigramRequestSchema = z.object({
+const EpigramRequestSchema = z.object({
   id: z.union([z.string(), z.number(), z.undefined()]),
 });
 
-// 타입 추론
 export type Tag = z.infer<typeof TagSchema>;
 export type GetEpigramResponseType = z.infer<typeof GetEpigramResponseSchema>;
-export type GetEpigramRequestType = z.infer<typeof GetEpigramRequestSchema>;
+export type EpigramRequestType = z.infer<typeof EpigramRequestSchema>;
 
-export { TagSchema, GetEpigramResponseSchema, GetEpigramRequestSchema };
+export { TagSchema, GetEpigramResponseSchema, EpigramRequestSchema };

@@ -1,10 +1,10 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
 import { GetUserRequestType } from '@/schema/user';
-import { GetEpigramRequestType } from '@/schema/epigram';
+import { EpigramRequestType } from '@/schema/epigram';
 import { CommentRequestType } from '@/schema/comment';
 import { getMe, getUser } from './user';
 import { getEpigram } from './epigram';
-import getEpigramComments from './epigramComment';
+import { getEpigramComments } from './epigramComment';
 
 const queries = createQueryKeyStore({
   user: {
@@ -19,7 +19,7 @@ const queries = createQueryKeyStore({
   },
   // NOTE: Epigram 관련 query함수
   epigram: {
-    getEpigram: (request: GetEpigramRequestType) => ({
+    getEpigram: (request: EpigramRequestType) => ({
       queryKey: ['epigram', request.id, request],
       queryFn: () => {
         if (request.id === undefined) {

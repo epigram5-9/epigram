@@ -1,4 +1,4 @@
-import { GetEpigramRequestSchema } from '@/schema/epigram';
+import { EpigramRequestSchema } from '@/schema/epigram';
 import useEpigramQuery from '@/hooks/useEpigramQueryHook';
 import EpigramComment from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
@@ -10,7 +10,7 @@ function DetailPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const parsedId = GetEpigramRequestSchema.safeParse({ id });
+  const parsedId = EpigramRequestSchema.safeParse({ id });
 
   const { data: epigram, isLoading, error } = useEpigramQuery(parsedId.success ? parsedId.data : undefined, parsedId.success);
   const { data: userData } = useMeQuery();
@@ -28,7 +28,7 @@ function DetailPage() {
         <Image src='/share.svg' alt='공유 버튼' width={36} height={36} />
       </nav>
       <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
-      <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} />
+      <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} userImage={userData?.image} />
     </div>
   );
 }

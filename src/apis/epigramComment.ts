@@ -1,7 +1,8 @@
 import httpClient from '@/apis/index';
 import { CommentRequestSchema, CommentRequestType, CommentResponseSchema, CommentResponseType } from '@/schema/comment';
+import { PatchCommentRequest, PostCommentRequest } from '@/types/epigram.types';
 
-const getEpigramComments = async (params: CommentRequestType): Promise<CommentResponseType> => {
+export const getEpigramComments = async (params: CommentRequestType): Promise<CommentResponseType> => {
   try {
     // 요청 파라미터 유효성 검사
     const validatedParams = CommentRequestSchema.parse(params);
@@ -29,4 +30,17 @@ const getEpigramComments = async (params: CommentRequestType): Promise<CommentRe
   }
 };
 
-export default getEpigramComments;
+export const postComment = async (commentData: PostCommentRequest) => {
+  const response = await httpClient.post('/comments', commentData);
+  return response.data;
+};
+
+export const deleteComment = async (commentId: number) => {
+  const response = await httpClient.delete(`/comments/${commentId}`);
+  return response.data;
+};
+
+export const patchComment = async (commentId: number, commentData: PatchCommentRequest) => {
+  const response = await httpClient.patch(`/comments/${commentId}`, commentData);
+  return response.data;
+};
