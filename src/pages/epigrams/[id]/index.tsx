@@ -21,7 +21,7 @@ function DetailPage() {
   if (!epigram) return <div>Epigram을 찾을 수 없습니다.</div>;
 
   return (
-    <div className='flex flex-col '>
+    <div className='flex flex-col min-h-screen '>
       <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
       <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} userImage={userData?.image} />
