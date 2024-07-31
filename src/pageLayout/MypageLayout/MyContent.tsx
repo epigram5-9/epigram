@@ -8,20 +8,23 @@ import { CommentResponseType } from '@/schema/comment';
 import useCommentsHook from '@/hooks/useCommentsHook';
 import useGetMyContentHook from '@/hooks/useGetMyContentHook';
 import { GetMyContentCountType } from '@/schema/user';
+import MyComment from '@/user/ui-content/MyComment';
+import UserInfo from '@/types/user';
 import spinner from '../../../public/spinner.svg';
 
 interface MyContentProps {
-  userId: number;
+  user: UserInfo;
 }
 
-export default function MyContent({ userId }: MyContentProps) {
+export default function MyContent({ user }: MyContentProps) {
   const limit = 3;
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [selectedTab, setSelectedTab] = useState<'epigrams' | 'comments'>('epigrams');
   const { toast } = useToast();
 
+  /** ************ 내 에피그램/댓글 카운트 조회 ************* */
   const [totalCount, setTotalCount] = useState<GetMyContentCountType>({ epigramCount: 0, commentCount: 0 });
-  const { data: count } = useGetMyContentHook({ id: userId });
+  const { data: count } = useGetMyContentHook({ id: user.id });
   useEffect(() => {
     if (count) {
       setTotalCount({ epigramCount: count.epigramCount, commentCount: count.commentCount });
@@ -34,7 +37,7 @@ export default function MyContent({ userId }: MyContentProps) {
   const epigramsRequest = {
     limit,
     cursor: epigramCursor,
-    writerId: userId,
+    writerId: user.id,
   };
   const { data: epigramsData, isLoading: isEpigramsLoading, error: epigramsError } = useGetEpigrams(epigramsRequest);
 
@@ -44,10 +47,11 @@ export default function MyContent({ userId }: MyContentProps) {
   const commentsRequest = {
     limit,
     cursor: commentCursor,
-    id: userId,
+    id: user.id,
   };
   const { data: commentData, isLoading: isCommentsLoading, error: commentsError } = useCommentsHook(commentsRequest);
 
+  // [내 에피그램] 탭 선택 시
   useEffect(() => {
     if (selectedTab === 'epigrams' && epigramsData) {
       setEpigrams((prev) => ({
@@ -59,6 +63,7 @@ export default function MyContent({ userId }: MyContentProps) {
     }
   }, [epigramsData, selectedTab]);
 
+  // [내 댓글] 탭 선택 시
   useEffect(() => {
     if (selectedTab === 'comments' && commentData) {
       setComments((prev) => ({
@@ -70,13 +75,18 @@ export default function MyContent({ userId }: MyContentProps) {
     }
   }, [commentData, selectedTab]);
 
+  // 더보기 버튼 클릭 시
   const handleMoreLoad = () => {
     if (selectedTab === 'epigrams' && epigrams.nextCursor) {
       setEpigramCursor(epigrams.nextCursor);
       setIsLoadingMore(true);
+    } else if (selectedTab === 'comments' && comments.nextCursor) {
+      setCommentCursor(comments.nextCursor);
+      setIsLoadingMore(true);
     }
   };
 
+  // [내 에피그램] [내 댓글] 탭 선택
   const handleTabClick = (tab: 'epigrams' | 'comments') => {
     setSelectedTab(tab);
     // 데이터 초기화
@@ -90,10 +100,12 @@ export default function MyContent({ userId }: MyContentProps) {
     setIsLoadingMore(false);
   };
 
+  // 로딩 중
   if ((isEpigramsLoading || isCommentsLoading) && !isLoadingMore) {
     return <Image src={spinner} alt='로딩중' width={200} height={200} />;
   }
 
+  // 에러
   if (epigramsError || commentsError) {
     toast({
       description: epigramsError?.message || commentsError?.message,
@@ -123,17 +135,13 @@ export default function MyContent({ userId }: MyContentProps) {
       </div>
       <div className='w-full py-[36px]'>
         <div className='flex flex-col gap-[48px]'>
-          {selectedTab === 'epigrams' && (
-            <>
-              <MyEpigrams epigrams={epigrams.list} totalCount={epigrams.totalCount} onMoreEpigramLoad={handleMoreLoad} />
-              {isLoadingMore && (
-                <div className='w-full flex items-center justify-center lg:mt-[70px] md:mt-[50px]'>
-                  <Image src={spinner} alt='로딩중' width={200} height={200} />
-                </div>
-              )}
-            </>
+          {selectedTab === 'epigrams' && <MyEpigrams epigrams={epigrams.list} totalCount={epigrams.totalCount} onMoreEpigramLoad={handleMoreLoad} />}
+          {selectedTab === 'comments' && <MyComment comments={comments.list} totalCount={comments.totalCount} onMoreEpigramLoad={handleMoreLoad} />}
+          {isLoadingMore && (
+            <div className='w-full flex items-center justify-center lg:mt-[70px] md:mt-[50px]'>
+              <Image src={spinner} alt='로딩중' width={200} height={200} />
+            </div>
           )}
-          {selectedTab === 'comments' && <div className='flex flex-col gap-[48px]'>내댓글목록 {comments.totalCount}</div>}
         </div>
       </div>
     </div>
