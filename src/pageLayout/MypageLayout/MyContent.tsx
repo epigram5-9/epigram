@@ -96,7 +96,7 @@ export default function MyContent({ userId }: MyContentProps) {
       <div className='inline-flex gap-6'>
         <button
           type='button'
-          className={`text-black-600 font-semibold text-2xl ${selectedTab === 'epigrams' ? 'cursor-not-allowed' : ''}`}
+          className={`font-semibold text-2xl ${selectedTab === 'epigrams' ? 'cursor-default text-black-600 ' : 'cursor-pointer text-neutral-400 '}`}
           onClick={() => selectedTab !== 'epigrams' && handleTabClick('epigrams')}
           disabled={selectedTab === 'epigrams'}
         >
@@ -104,7 +104,7 @@ export default function MyContent({ userId }: MyContentProps) {
         </button>
         <button
           type='button'
-          className={`text-neutral-400 font-semibold text-2xl ${selectedTab === 'comments' ? 'cursor-not-allowed' : ''}`}
+          className={`font-semibold text-2xl ${selectedTab === 'comments' ? 'cursor-default text-black-600 ' : 'cursor-pointer text-neutral-400 '}`}
           onClick={() => selectedTab !== 'comments' && handleTabClick('comments')}
           disabled={selectedTab === 'comments'}
         >
@@ -123,7 +123,7 @@ export default function MyContent({ userId }: MyContentProps) {
               )}
             </>
           )}
-          {selectedTab === 'comments' && <div className='flex flex-col gap-[48px]'>{/* Your comments component here */}</div>}
+          {selectedTab === 'comments' && <div className='flex flex-col gap-[48px]'>내댓글목록</div>}
         </div>
       </div>
     </div>
