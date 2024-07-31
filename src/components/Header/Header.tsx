@@ -20,7 +20,6 @@ import SHARE_ICON from '../../../public/icon/share-icon.svg';
 
 export interface HeaderProps {
   icon: 'back' | 'search' | '';
-  routerPage: string;
   isLogo: boolean;
   insteadOfLogo: string;
   isProfileIcon: boolean;
@@ -31,9 +30,14 @@ export interface HeaderProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareIcon, textInButton, routerPage, disabled, onClick }: HeaderProps) {
+function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareIcon, textInButton, disabled, onClick }: HeaderProps) {
   const router = useRouter();
   const { toast } = useToast();
+
+  // 뒤로가기
+  const handleBack = () => {
+    router.back();
+  };
 
   // 페이지 이동 함수
   const handleNavigateTo = (path: string) => {
@@ -65,7 +69,7 @@ function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareI
       <div className='container flex justify-between items-center'>
         <div className='flex items-center space-x-4'>
           {icon === 'back' && (
-            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={() => handleNavigateTo(routerPage)} aria-label='뒤로가기 버튼'>
+            <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={handleBack} aria-label='뒤로가기 버튼'>
               <Image src={ARROW_LEFT_ICON} alt='뒤로가기 버튼 이미지' />
             </button>
           )}
