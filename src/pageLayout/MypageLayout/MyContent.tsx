@@ -14,47 +14,43 @@ interface MyContentProps {
 
 export default function MyContent({ userId }: MyContentProps) {
   const limit = 3;
-  const [cursor, setCursor] = useState(0);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<'epigrams' | 'comments'>('epigrams');
   const { toast } = useToast();
 
   /** ************ 내 에피그램 조회 ************* */
+  const [epigramCursor, setEpigramCursor] = useState<number>(0);
   const [epigrams, setEpigrams] = useState<EpigramsResponse>({ totalCount: 0, nextCursor: null, list: [] });
   const epigramsRequest = {
     limit,
-    cursor,
+    cursor: epigramCursor,
     writerId: userId,
   };
-  const { data, isLoading, error } = useGetEpigrams(epigramsRequest);
-
-  useEffect(() => {
-    if (data && data.list.length > 0) {
-      setEpigrams((prev) => ({
-        totalCount: data.totalCount,
-        nextCursor: data.nextCursor,
-        list: [...prev.list, ...data.list],
-      }));
-      setIsLoadingMore(false);
-    }
-  }, [data]);
-
-  const handleMoreEpigramLoad = () => {
-    if (epigrams.nextCursor !== null) {
-      setCursor(epigrams.nextCursor);
-      setIsLoadingMore(true);
-    }
-  };
+  const { data: epigramsData, isLoading: isEpigramsLoading, error: epigramsError } = useGetEpigrams(epigramsRequest);
 
   /** ************ 내 댓글 조회 ************* */
+  const [commentCursor, setCommentCursor] = useState<number>(0);
   const [comments, setComments] = useState<CommentResponseType>({ totalCount: 0, nextCursor: null, list: [] });
   const commentsRequest = {
     limit,
-    cursor,
+    cursor: commentCursor,
     id: userId,
   };
-  const { data: commentData } = useCommentsHook(commentsRequest);
+  const { data: commentData, isLoading: isCommentsLoading, error: commentsError } = useCommentsHook(commentsRequest);
+
   useEffect(() => {
-    if (commentData && commentData.list.length > 0) {
+    if (selectedTab === 'epigrams' && epigramsData) {
+      setEpigrams((prev) => ({
+        totalCount: epigramsData.totalCount,
+        nextCursor: epigramsData.nextCursor,
+        list: [...prev.list, ...epigramsData.list],
+      }));
+      setIsLoadingMore(false);
+    }
+  }, [epigramsData, selectedTab]);
+
+  useEffect(() => {
+    if (selectedTab === 'comments' && commentData) {
       setComments((prev) => ({
         totalCount: commentData.totalCount,
         nextCursor: commentData.nextCursor,
@@ -62,15 +58,35 @@ export default function MyContent({ userId }: MyContentProps) {
       }));
       setIsLoadingMore(false);
     }
-  }, [commentData]);
+  }, [commentData, selectedTab]);
 
-  if (isLoading && !isLoadingMore) {
+  const handleMoreLoad = () => {
+    if (selectedTab === 'epigrams' && epigrams.nextCursor) {
+      setEpigramCursor(epigrams.nextCursor);
+      setIsLoadingMore(true);
+    }
+  };
+
+  const handleTabClick = (tab: 'epigrams' | 'comments') => {
+    setSelectedTab(tab);
+    // 데이터 초기화
+    if (tab === 'epigrams') {
+      setEpigrams({ totalCount: 0, nextCursor: null, list: [] });
+      setEpigramCursor(0);
+    } else {
+      setComments({ totalCount: 0, nextCursor: null, list: [] });
+      setCommentCursor(0);
+    }
+    setIsLoadingMore(false);
+  };
+
+  if ((isEpigramsLoading || isCommentsLoading) && !isLoadingMore) {
     return <Image src={spinner} alt='로딩중' width={200} height={200} />;
   }
 
-  if (error) {
+  if (epigramsError || commentsError) {
     toast({
-      description: error.message,
+      description: epigramsError?.message || commentsError?.message,
       className: 'border-state-error text-state-error font-semibold',
     });
   }
@@ -78,21 +94,36 @@ export default function MyContent({ userId }: MyContentProps) {
   return (
     <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] gap-12'>
       <div className='inline-flex gap-6'>
-        <button type='button' className='text-black-600 font-semibold text-2xl'>
+        <button
+          type='button'
+          className={`text-black-600 font-semibold text-2xl ${selectedTab === 'epigrams' ? 'cursor-not-allowed' : ''}`}
+          onClick={() => selectedTab !== 'epigrams' && handleTabClick('epigrams')}
+          disabled={selectedTab === 'epigrams'}
+        >
           내 에피그램({epigrams.totalCount})
         </button>
-        <button type='button' className='text-neutral-400 font-semibold text-2xl'>
+        <button
+          type='button'
+          className={`text-neutral-400 font-semibold text-2xl ${selectedTab === 'comments' ? 'cursor-not-allowed' : ''}`}
+          onClick={() => selectedTab !== 'comments' && handleTabClick('comments')}
+          disabled={selectedTab === 'comments'}
+        >
           내 댓글({comments.totalCount})
         </button>
       </div>
       <div className='w-full py-[36px]'>
         <div className='flex flex-col gap-[48px]'>
-          <MyEpigrams epigrams={epigrams.list} totalCount={epigrams.totalCount} onMoreEpigramLoad={handleMoreEpigramLoad} />
-          {isLoadingMore && (
-            <div className='w-full flex items-center justify-center lg:mt-[70px] md:mt-[50px]'>
-              <Image src={spinner} alt='로딩중' width={200} height={200} />
-            </div>
+          {selectedTab === 'epigrams' && (
+            <>
+              <MyEpigrams epigrams={epigrams.list} totalCount={epigrams.totalCount} onMoreEpigramLoad={handleMoreLoad} />
+              {isLoadingMore && (
+                <div className='w-full flex items-center justify-center lg:mt-[70px] md:mt-[50px]'>
+                  <Image src={spinner} alt='로딩중' width={200} height={200} />
+                </div>
+              )}
+            </>
           )}
+          {selectedTab === 'comments' && <div className='flex flex-col gap-[48px]'>{/* Your comments component here */}</div>}
         </div>
       </div>
     </div>
