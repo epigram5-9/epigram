@@ -18,6 +18,8 @@ import SHARE_ICON from '../../../public/icon/share-icon.svg';
 // NOTE isButton 일 경우 textInButton의 값을 무조건 지정해줘야 합니다.
 // NOTE SHARE_ICON 추가 시 토스트 기능도 사용하려면 해당 컴포넌트 아래 <Toaster /> 를 추가해주세요.
 
+// TODO 새로 바뀐 피그마 시안으로 바꿀지 추후 결정
+
 export interface HeaderProps {
   icon: 'back' | 'search' | '';
   isLogo: boolean;
