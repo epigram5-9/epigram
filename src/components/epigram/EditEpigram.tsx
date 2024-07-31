@@ -115,7 +115,7 @@ function EditEpigram({ epigram }: EditEpigramProps) {
   const handleAlertClose = () => {
     setIsAlertOpen(false);
     if (alertContent.title === '수정 완료') {
-      router.push(`/epigram/${epigram.id}`);
+      router.push(`/epigrams/${epigram.id}`);
     }
   };
 
@@ -123,7 +123,7 @@ function EditEpigram({ epigram }: EditEpigramProps) {
     <>
       <Header
         icon='back'
-        routerPage={`/epigram/${epigram.id}`}
+        routerPage={`/epigrams/${epigram.id}`}
         isLogo
         insteadOfLogo='에피그램 수정'
         isProfileIcon

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { EpigramCommentProps } from '@/types/epigram.types';
 import useEpigramCommentsQuery from '@/hooks/useEpigramCommentsQueryHook';
-import CommentItem from './CommentItem';
 import NoComment from './NoComment';
+import CommentItem from './CommentItem';
 
 interface CommentListProps extends Omit<EpigramCommentProps, 'userImage'> {
   onEditComment: (id: number, content: string, isPrivate: boolean) => void;
@@ -58,7 +58,7 @@ function CommentList({ epigramId, currentUserId, onEditComment }: CommentListPro
       {allComments.length > 0 ? (
         <>
           {allComments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'complete'} onEditComment={onEditComment} />
+            <CommentItem key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'view'} onEditComment={onEditComment} />
           ))}
           <div ref={lastCommentRef}>{isFetchingNextPage && <div>더 많은 댓글을 불러오는 중...</div>}</div>
         </>
