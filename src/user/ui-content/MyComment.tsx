@@ -5,8 +5,8 @@ import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyle
 import { CommentType } from '@/schema/comment';
 import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '@/components/epigram/DeleteAlertModal';
-import NONE_EPI from '../../../public/none-epi.svg';
 import CommentTextarea from '@/components/epigram/Comment/CommentTextarea';
+import NONE_EPI from '../../../public/none-epi.svg';
 
 interface MyCommentProps {
   comments: CommentType[];
@@ -44,6 +44,17 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
     onEditComment();
   };
 
+  // 에피그램 상세 페이지 이동
+  const handleCommentClick = (epigramId: number) => {
+    router.push(`/epigrams/${epigramId}`);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, epigramId: number) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleCommentClick(epigramId);
+    }
+  };
+
   return totalCount > 0 ? (
     <div className='flex flex-col'>
       {comments.map((comment) => {
@@ -52,6 +63,10 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
         return (
           <div
             key={comment.id}
+            onClick={() => handleCommentClick(comment.epigramId)}
+            onKeyDown={(event) => handleKeyDown(event, comment.epigramId)}
+            role='button'
+            tabIndex={0}
             className={`bg-background-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
           >
             <div className='justify-start items-start gap-4 inline-flex w-full'>
