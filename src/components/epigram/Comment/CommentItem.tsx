@@ -4,13 +4,13 @@ import { CommentType } from '@/schema/comment';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
-import { CommentCardProps } from '@/types/CommentCardTypes';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '../DeleteAlertModal';
 
-interface CommentItemProps extends CommentCardProps {
+interface CommentItemProps {
   comment: CommentType;
+  status?: 'view' | 'edit';
   onEditComment: (id: number, content: string, isPrivate: boolean) => void;
 }
 

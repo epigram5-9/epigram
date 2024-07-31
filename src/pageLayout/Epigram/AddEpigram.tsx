@@ -77,7 +77,7 @@ function AddEpigram() {
   const handleAlertClose = () => {
     setIsAlertOpen(false);
     if (alertContent.title === '등록 완료') {
-      router.push(`/epigram/${addEpigramMutation.data?.id}`);
+      router.push(`/epigrams/${addEpigramMutation.data?.id}`);
     }
   };
 
