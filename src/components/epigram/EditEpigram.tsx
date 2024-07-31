@@ -1,87 +1,95 @@
-import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Header from '@/components/Header/Header';
+import { useRouter } from 'next/router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
-import useAddEpigram from '@/hooks/epigramQueryHook';
-import { useRouter } from 'next/router';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { AddEpigramFormSchema, AddEpigramFormType, EditEpigramRequestType } from '@/schema/addEpigram';
+import useEditEpigram from '@/hooks/useEditEpigramHook';
 import useTagManagement from '@/hooks/useTagManagementHook';
+import { GetEpigramResponseType } from '@/schema/epigram';
 import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
+import { AxiosError } from 'axios';
+import Header from '../Header/Header';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
-function AddEpigram() {
+interface EditEpigramProps {
+  epigram: GetEpigramResponseType;
+}
+
+function EditEpigram({ epigram }: EditEpigramProps) {
   const router = useRouter();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
-  const [isFormValid, setIsFormValid] = useState(false);
 
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
     defaultValues: {
-      content: '',
-      author: '',
-      referenceTitle: '',
-      referenceUrl: '',
-      tags: [],
+      content: epigram.content,
+      author: epigram.author,
+      referenceTitle: epigram.referenceTitle || '',
+      referenceUrl: epigram.referenceUrl || '',
+      tags: epigram.tags.map((tag) => tag.name),
     },
   });
 
   const { selectedAuthorOption, handleAuthorChange, AUTHOR_OPTIONS } = useAuthorSelection({
     setValue: form.setValue,
+    initialAuthor: epigram.author,
   });
 
-  // NOTE: 필수항목들에 값이 들어있는지 확인 함수
-  const checkFormEmpty = useCallback(() => {
-    const { content, author, tags } = form.getValues();
-    return content.trim() !== '' && author.trim() !== '' && tags.length > 0;
-  }, [form]);
-
-  // NOTE: form값이 변경될때 필수항목들이 들어있는지 확인
-  const watchForm = useCallback(() => {
-    setIsFormValid(checkFormEmpty());
-  }, [checkFormEmpty]);
-
   useEffect(() => {
-    const subscription = form.watch(watchForm);
-    return () => subscription.unsubscribe();
-  }, [form, watchForm]);
+    if (epigram) {
+      form.reset({
+        content: epigram.content,
+        author: epigram.author,
+        referenceTitle: epigram.referenceTitle || '',
+        referenceUrl: epigram.referenceUrl || '',
+        tags: epigram.tags.map((tag) => tag.name),
+      });
+    }
+  }, [epigram, form]);
 
   const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement({
     setValue: form.setValue,
     getValues: form.getValues,
     setError: form.setError,
   });
-  const addEpigramMutation = useAddEpigram({
+
+  const editEpigramMutation = useEditEpigram({
     onSuccess: () => {
       setAlertContent({
-        title: '등록 완료',
-        description: '등록이 완료되었습니다.',
+        title: '수정 완료',
+        description: '에피그램이 성공적으로 수정되었습니다.',
       });
       setIsAlertOpen(true);
-      form.reset();
     },
-    onError: () => {
+    onError: (error) => {
+      let errorMessage = '다시 시도해주세요.';
+
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 400) {
+          errorMessage = '입력 내용을 다시 확인해주세요.';
+        } else if (error.response?.status === 401) {
+          errorMessage = '로그인이 필요합니다.';
+        } else if (error.response?.status === 403) {
+          errorMessage = '수정 권한이 없습니다.';
+        } else if (error.response?.status === 404) {
+          errorMessage = '해당 에피그램을 찾을 수 없습니다.';
+        }
+      }
+
       setAlertContent({
-        title: '등록 실패',
-        description: '다시 시도해주세요.',
+        title: '수정 실패',
+        description: errorMessage,
       });
       setIsAlertOpen(true);
     },
   });
 
-  const handleAlertClose = () => {
-    setIsAlertOpen(false);
-    if (alertContent.title === '등록 완료') {
-      router.push(`/epigram/${addEpigramMutation.data?.id}`);
-    }
-  };
-
-  // NOTE: handleKeyUp을 사용했더니 폼제출이 먼저 실행돼서 다시 handleKeyDown으로 수정
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -89,24 +97,42 @@ function AddEpigram() {
     }
   };
 
-  // NOTE: url와title은 필수 항목이 아니라서 빈칸으로 제출할 때 항목에서 제외
   const handleSubmit = (data: AddEpigramFormType) => {
-    const submitData = { ...data };
+    const editRequest: EditEpigramRequestType = {
+      id: epigram.id,
+      ...data,
+      referenceTitle: data.referenceTitle?.trim() || null,
+      referenceUrl: data.referenceUrl?.trim() || null,
+    };
 
-    if (!submitData.referenceUrl) {
-      delete submitData.referenceUrl;
+    if (!editRequest.referenceTitle && !editRequest.referenceUrl) {
+      delete editRequest.referenceTitle;
+      delete editRequest.referenceUrl;
     }
+    editEpigramMutation.mutate(editRequest);
+  };
 
-    if (!submitData.referenceTitle) {
-      delete submitData.referenceTitle;
+  const handleAlertClose = () => {
+    setIsAlertOpen(false);
+    if (alertContent.title === '수정 완료') {
+      router.push(`/epigram/${epigram.id}`);
     }
-
-    addEpigramMutation.mutate(submitData);
   };
 
   return (
     <>
-      <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <Header
+        icon='back'
+        routerPage={`/epigram/${epigram.id}`}
+        isLogo
+        insteadOfLogo='에피그램 수정'
+        isProfileIcon
+        isShareIcon={false}
+        isButton={false}
+        textInButton=''
+        disabled={false}
+        onClick={() => {}}
+      />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
@@ -115,12 +141,11 @@ function AddEpigram() {
               name='content'
               render={({ field }) => (
                 <FormItem className='flex flex-col gap-2 lg:gap-4 h-44 lg:h-52'>
-                  <FormLabel htmlFor='content' className='text-semibold lg:text-2xl text-black-600'>
+                  <FormLabel className='text-semibold lg:text-2xl text-black-600' htmlFor='content'>
                     내용
-                    <span className='text-state-error'>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2' id='content' placeholder='500자 이내로 입력해주세요.' {...field} />
+                    <Textarea className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2' id='content' {...field} placeholder='에피그램 내용을 입력하세요.' />
                   </FormControl>
                   <FormMessage className='text-state-error text-right' />
                 </FormItem>
@@ -150,61 +175,51 @@ function AddEpigram() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    {/* NOTE: 직접 입력 radio버튼을 선택하지않으면 수정 불가 */}
-                    <Input
-                      className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2'
-                      id='author'
-                      type='text'
-                      placeholder='저자 이름 입력'
-                      {...field}
-                      disabled={selectedAuthorOption !== 'directly'}
-                    />
+                    <Input className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2' id='author' type='text' placeholder='저자 이름 입력' {...field} />
                   </FormControl>
                   <FormMessage className='text-state-error text-right' />
                 </FormItem>
               )}
             />
-            <fieldset className='flex flex-col gap-2 lg:gap-4'>
-              <legend className='text-semibold lg:text-2xl text-black-600 mb-1'>출처</legend>
-              <FormField
-                control={form.control}
-                name='referenceTitle'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className='h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2'
-                        id='referenceTitle'
-                        type='text'
-                        placeholder='출처 제목 입력'
-                        aria-label='출처 제목'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className='text-state-error text-right' />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='referenceUrl'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className='h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2'
-                        id='referenceUrl'
-                        type='text'
-                        placeholder='URL (ex.http://www.website.com)'
-                        aria-label='출처 URL'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className='text-state-error text-right' />
-                  </FormItem>
-                )}
-              />
-            </fieldset>
+            <div className='space-y-2'>
+              <p className='text-sm font-medium text-gray-700'>출처</p>
+              <div className='space-y-2'>
+                <FormField
+                  control={form.control}
+                  name='referenceTitle'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2 placeholder:text-gray-400 placeholder:text-sm'
+                          {...field}
+                          placeholder='출처 제목 입력'
+                          aria-label='출처 제목'
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='referenceUrl'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className='w-full h-11 lg:h-16 lg:text-2xl border-blue-300 border-2 rounded-xl p-2 placeholder:text-gray-400 placeholder:text-sm'
+                          {...field}
+                          placeholder='URL (ex. https://www.website.com)'
+                          aria-label='출처 URL'
+                        />
+                      </FormControl>
+                      <FormMessage className='text-state-error' />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
             <FormField
               control={form.control}
               name='tags'
@@ -252,27 +267,26 @@ function AddEpigram() {
                 </FormItem>
               )}
             />
-            {/* NOTE: 필수항목들에 값이 채워져있으면 폼제출 버튼 활성화 */}
-            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 ' type='submit' disabled={addEpigramMutation.isPending || !isFormValid}>
-              {addEpigramMutation.isPending ? '제출 중...' : '작성 완료'}
+            <Button className='h-11 lg:h-16 rounded-xl text-semibold lg:text-2xl text-white bg-black-500 disabled:bg-blue-400 ' type='submit'>
+              수정하기
             </Button>
           </form>
         </Form>
-      </div>
 
-      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-        <AlertDialogContent className='bg-white'>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{alertContent.title}</AlertDialogTitle>
-            <AlertDialogDescription>{alertContent.description}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={handleAlertClose}>확인</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+          <AlertDialogContent className='bg-white'>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{alertContent.title}</AlertDialogTitle>
+              <AlertDialogDescription>{alertContent.description}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={handleAlertClose}>확인</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
     </>
   );
 }
 
-export default AddEpigram;
+export default EditEpigram;
