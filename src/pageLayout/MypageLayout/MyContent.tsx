@@ -4,6 +4,8 @@ import MyEpigrams from '@/user/ui-content/MyEpigrams';
 import Image from 'next/image';
 import { useToast } from '@/components/ui/use-toast';
 import { EpigramsResponse } from '@/types/epigram.types';
+import { CommentResponseType } from '@/schema/comment';
+import useCommentsHook from '@/hooks/useCommentsHook';
 import spinner from '../../../public/spinner.svg';
 
 interface MyContentProps {
@@ -13,10 +15,11 @@ interface MyContentProps {
 export default function MyContent({ userId }: MyContentProps) {
   const limit = 3;
   const [cursor, setCursor] = useState(0);
-  const [epigrams, setEpigrams] = useState<EpigramsResponse>({ totalCount: 0, nextCursor: null, list: [] });
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const { toast } = useToast();
 
+  /** ************ 내 에피그램 조회 ************* */
+  const [epigrams, setEpigrams] = useState<EpigramsResponse>({ totalCount: 0, nextCursor: null, list: [] });
   const epigramsRequest = {
     limit,
     cursor,
@@ -42,6 +45,25 @@ export default function MyContent({ userId }: MyContentProps) {
     }
   };
 
+  /** ************ 내 댓글 조회 ************* */
+  const [comments, setComments] = useState<CommentResponseType>({ totalCount: 0, nextCursor: null, list: [] });
+  const commentsRequest = {
+    limit,
+    cursor,
+    id: userId,
+  };
+  const { data: commentData } = useCommentsHook(commentsRequest);
+  useEffect(() => {
+    if (commentData && commentData.list.length > 0) {
+      setComments((prev) => ({
+        totalCount: commentData.totalCount,
+        nextCursor: commentData.nextCursor,
+        list: [...prev.list, ...commentData.list],
+      }));
+      setIsLoadingMore(false);
+    }
+  }, [commentData]);
+
   if (isLoading && !isLoadingMore) {
     return <Image src={spinner} alt='로딩중' width={200} height={200} />;
   }
@@ -60,7 +82,7 @@ export default function MyContent({ userId }: MyContentProps) {
           내 에피그램({epigrams.totalCount})
         </button>
         <button type='button' className='text-neutral-400 font-semibold text-2xl'>
-          내 댓글(0)
+          내 댓글({comments.totalCount})
         </button>
       </div>
       <div className='w-full py-[36px]'>

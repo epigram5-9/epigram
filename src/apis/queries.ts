@@ -6,7 +6,7 @@ import { GetMonthlyEmotionLogsRequestType } from '@/schema/emotion';
 import { GetEpigramsParamsType } from '@/schema/epigrams';
 import { getMe, getUser } from './user';
 import { getEpigram } from './epigram';
-import { getEpigramComments } from './epigramComment';
+import { getEpigramComments, getMyEpigramComments } from './epigramComment';
 import getMonthlyEmotionLogs from './emotion';
 import getEpigrams from './getEpigrams';
 
@@ -38,6 +38,10 @@ const queries = createQueryKeyStore({
     getComments: (request: CommentRequestType) => ({
       queryKey: ['epigramComments', request],
       queryFn: () => getEpigramComments(request),
+    }),
+    getMyComments: (request: CommentRequestType) => ({
+      queryKey: ['myEpigramComments', request],
+      queryFn: () => getMyEpigramComments(request),
     }),
   },
   emotion: {
