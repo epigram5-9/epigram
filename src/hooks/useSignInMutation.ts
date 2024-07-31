@@ -11,7 +11,7 @@ const useSigninMutation = () => {
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      router.push('/');
+      router.push('/epigrams');
     },
     onError: () => {
       toast({ description: '이메일 혹은 비밀번호를 확인해주세요.', className: 'border-state-error text-state-error font-semibold' });
