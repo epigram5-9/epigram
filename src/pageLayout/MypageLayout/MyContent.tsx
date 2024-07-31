@@ -7,11 +7,10 @@ import { EpigramsResponse } from '@/types/epigram.types';
 import { CommentResponseType } from '@/schema/comment';
 import useCommentsHook from '@/hooks/useCommentsHook';
 import useGetMyContentHook from '@/hooks/useGetMyContentHook';
-import { GetMyContentCountType } from '@/schema/user';
 import MyComment from '@/user/ui-content/MyComment';
 import UserInfo from '@/types/user';
-import spinner from '../../../public/spinner.svg';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
+import spinner from '../../../public/spinner.svg';
 
 interface MyContentProps {
   user: UserInfo;

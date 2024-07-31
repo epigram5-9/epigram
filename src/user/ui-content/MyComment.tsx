@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import { CommentType } from '@/schema/comment';
 import { Button } from '@/components/ui/button';
-import NONE_EPI from '../../../public/none-epi.svg';
 import DeleteAlertModal from '@/components/epigram/DeleteAlertModal';
+import NONE_EPI from '../../../public/none-epi.svg';
 
 interface MyCommentProps {
   comments: CommentType[];
