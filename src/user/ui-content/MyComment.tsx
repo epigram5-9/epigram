@@ -1,22 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import { CommentType } from '@/schema/comment';
 import { Button } from '@/components/ui/button';
 import NONE_EPI from '../../../public/none-epi.svg';
+import DeleteAlertModal from '@/components/epigram/DeleteAlertModal';
 
 interface MyCommentProps {
   comments: CommentType[];
   totalCount: number;
   onMoreEpigramLoad: () => void;
+  onDeleteComment: (commentId: number) => void;
 }
 
-function MyComment({ comments, totalCount, onMoreEpigramLoad }: MyCommentProps) {
+function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment }: MyCommentProps) {
   const router = useRouter();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
 
   const handleMoveToMain = () => {
     router.push('/epigrams');
+  };
+
+  const handleDeleteComment = () => {
+    if (selectedCommentId !== null) {
+      onDeleteComment(selectedCommentId);
+      setIsDeleteModalOpen(false);
+    }
   };
 
   return totalCount > 0 ? (
@@ -49,7 +60,16 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad }: MyCommentProps) 
                   </div>
                   <div className='justify-start items-start gap-4 flex'>
                     <Button className={`text-neutral-700 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>수정</Button>
-                    <Button className={`text-red-400 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>삭제</Button>
+                    <Button
+                      onClick={() => {
+                        setSelectedCommentId(comment.id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                      type='button'
+                      className={`text-red-400 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                    >
+                      삭제
+                    </Button>
                   </div>
                 </div>
                 <div
@@ -69,6 +89,7 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad }: MyCommentProps) 
           </Button>
         </div>
       )}
+      <DeleteAlertModal isOpen={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen} onConfirm={handleDeleteComment} title='댓글을 삭제하시겠습니까?' />
     </div>
   ) : (
     <div className='flex flex-col gap-4 justify-center items-center'>
