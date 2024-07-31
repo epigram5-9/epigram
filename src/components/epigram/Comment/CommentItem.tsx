@@ -57,6 +57,7 @@ function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
               <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>
                 {getCustomRelativeTime(comment.createdAt)}
               </div>
+              <Image src={comment.isPrivate ? '/icon/privateIcon.png' : '/Icon/publicIcon.png'} width={16} height={16} alt={comment.isPrivate ? '비공개' : '공개'} />
             </div>
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
