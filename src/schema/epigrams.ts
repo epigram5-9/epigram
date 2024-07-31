@@ -9,7 +9,7 @@ export const GetEpigramsParams = z.object({
 
 export const GetEpigramsResponse = z.object({
   totalCount: z.number(),
-  nextCursor: z.number(),
+  nextCursor: z.number().nullable(),
   list: z.array(
     z.object({
       likeCount: z.number(),
