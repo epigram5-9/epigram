@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
+import { textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import { CommentType } from '@/schema/comment';
 import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '@/components/epigram/DeleteAlertModal';
 import CommentTextarea from '@/components/epigram/Comment/CommentTextarea';
 import NONE_EPI from '../../../public/none-epi.svg';
+
+const sizeStyles = {
+  sm: 'w-[360px]',
+  md: 'md:w-[384px]',
+  lg: 'lg:w-[640px]',
+};
 
 interface MyCommentProps {
   comments: CommentType[];
@@ -63,10 +69,6 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
         return (
           <div
             key={comment.id}
-            onClick={() => handleCommentClick(comment.epigramId)}
-            onKeyDown={(event) => handleKeyDown(event, comment.epigramId)}
-            role='button'
-            tabIndex={0}
             className={`bg-background-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
           >
             <div className='justify-start items-start gap-4 inline-flex w-full'>
@@ -76,7 +78,7 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
                 </div>
               </div>
               {editingCommentId === comment.id ? (
-                <div className='w-full'>
+                <div className='w-full mb-4'>
                   <CommentTextarea epigramId={comment.epigramId} editingComment={comment} onEditComplete={handleEditComplete} />
                 </div>
               ) : (
@@ -110,6 +112,10 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
                     </div>
                   </div>
                   <div
+                    onClick={() => handleCommentClick(comment.epigramId)}
+                    onKeyDown={(event) => handleKeyDown(event, comment.epigramId)}
+                    role='button'
+                    tabIndex={0}
                     className={`w-full text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
                   >
                     {comment.content}
