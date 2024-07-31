@@ -1,23 +1,23 @@
 import { EmotionType } from '@/types/emotion';
 
-const emotionMap: Record<EmotionType, 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER'> = {
+const emotionMap: Record<EmotionType, 'MOVED' | 'HAPPY' | 'WORRIED' | 'SAD' | 'ANGRY'> = {
   감동: 'MOVED',
-  기쁨: 'JOY',
-  고민: 'WORRY',
-  슬픔: 'SADNESS',
-  분노: 'ANGER',
+  기쁨: 'HAPPY',
+  고민: 'WORRIED',
+  슬픔: 'SAD',
+  분노: 'ANGRY',
 };
 
-const reverseEmotionMap: Record<'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER', EmotionType> = {
+const reverseEmotionMap: Record<'MOVED' | 'HAPPY' | 'WORRIED' | 'SAD' | 'ANGRY', EmotionType> = {
   MOVED: '감동',
-  JOY: '기쁨',
-  WORRY: '고민',
-  SADNESS: '슬픔',
-  ANGER: '분노',
+  HAPPY: '기쁨',
+  WORRIED: '고민',
+  SAD: '슬픔',
+  ANGRY: '분노',
 };
 
-const translateEmotionToEnglish = (emotion: EmotionType): 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER' => emotionMap[emotion];
+const translateEmotionToEnglish = (emotion: EmotionType): 'MOVED' | 'HAPPY' | 'WORRIED' | 'SAD' | 'ANGRY' => emotionMap[emotion];
 
-const translateEmotionToKorean = (emotion: 'MOVED' | 'JOY' | 'WORRY' | 'SADNESS' | 'ANGER'): EmotionType => reverseEmotionMap[emotion];
+const translateEmotionToKorean = (emotion: 'MOVED' | 'HAPPY' | 'WORRIED' | 'SAD' | 'ANGRY'): EmotionType => reverseEmotionMap[emotion];
 
 export { translateEmotionToEnglish, translateEmotionToKorean };

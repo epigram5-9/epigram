@@ -3,7 +3,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import EmotionIconCard from '@/components/Emotion/EmotionCard';
 import { EmotionType, EmotionState } from '@/types/emotion';
 import usePostEmotion from '@/hooks/usePostEmotion';
-import useGetEmotion from '@/hooks/useGetEmotion';
+import { useGetEmotion } from '@/hooks/useGetEmotion';
 import EmotionSaveToast from './EmotionSaveToast';
 
 /**
