@@ -77,7 +77,7 @@ export default function SignIn() {
       </Form>
       <div className=' flex justify-end items-center gap-2 w-full lg:max-w-[640px] md:max-w-[384px] md:px-0 px-6 md:mb-[60px] mb-[50px]'>
         <h2 className=' text-blue-400 lg:text-xl md:text-base sm:text-sm'>회원이 아니신가요?</h2>
-        <Link href='/'>
+        <Link href='/auth/SignUp'>
           <Button type='button' variant='link' className='lg:text-xl md:text-base sm:text-sm p-0 underline'>
             가입하기
           </Button>
