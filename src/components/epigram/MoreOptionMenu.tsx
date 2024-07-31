@@ -33,7 +33,7 @@ function MoreOptionsMenu({ epigram }: MoreOptionsMenuProps) {
   });
 
   const handleEditClick = () => {
-    router.push(`/epigram/${epigram}/edit`);
+    router.push(`/epigrams/${epigram}/edit`);
   };
 
   const handleDeleteClick = () => {
