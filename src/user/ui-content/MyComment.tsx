@@ -48,8 +48,8 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad }: MyCommentProps) 
                     </div>
                   </div>
                   <div className='justify-start items-start gap-4 flex'>
-                    <div className={`text-neutral-700 underline leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>수정</div>
-                    <div className={`text-red-400 underline leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>삭제</div>
+                    <Button className={`text-neutral-700 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>수정</Button>
+                    <Button className={`text-red-400 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>삭제</Button>
                   </div>
                 </div>
                 <div
