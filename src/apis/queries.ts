@@ -3,10 +3,12 @@ import { GetUserRequestType } from '@/schema/user';
 import { EpigramRequestType } from '@/schema/epigram';
 import { CommentRequestType } from '@/schema/comment';
 import { GetMonthlyEmotionLogsRequestType } from '@/schema/emotion';
+import { GetEpigramsParamsType } from '@/schema/epigrams';
 import { getMe, getUser } from './user';
 import { getEpigram } from './epigram';
 import { getEpigramComments } from './epigramComment';
 import getMonthlyEmotionLogs from './emotion';
+import getEpigrams from './getEpigrams';
 
 const queries = createQueryKeyStore({
   user: {
@@ -42,6 +44,12 @@ const queries = createQueryKeyStore({
     getMonthlyEmotionLogs: (request: GetMonthlyEmotionLogsRequestType) => ({
       queryKey: ['getMonthlyEmotionLogs', request],
       queryFn: () => getMonthlyEmotionLogs(request),
+    }),
+  },
+  epigrams: {
+    getEpigrams: (request: GetEpigramsParamsType) => ({
+      queryKey: ['getEpigrams', request],
+      queryFn: () => getEpigrams(request),
     }),
   },
 });

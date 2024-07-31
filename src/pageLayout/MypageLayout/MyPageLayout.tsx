@@ -1,9 +1,10 @@
 import Header from '@/components/Header/Header';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 import UserInfo from '@/types/user';
-import EmotionMonthlyLogs from '@/user/ui-profile/EmotionMonthlyLogs';
+import EmotionMonthlyLogs from '@/pageLayout/MypageLayout/EmotionMonthlyLogs';
 import Profile from '@/user/ui-profile/Profile';
 import { useRouter } from 'next/navigation';
+import MyContent from './MyContent';
 
 export default function MyPageLayout() {
   const { data, isLoading, isError }: { data: UserInfo | undefined; isLoading: boolean; isError: boolean } = useMeQuery();
@@ -34,13 +35,7 @@ export default function MyPageLayout() {
         <EmotionMonthlyLogs userId={data.id} />
       </div>
       <div className='bg-background-100 flex flex-col items-center w-full py-[100px]'>
-        <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] gap-12'>
-          <div className='inline-flex gap-6'>
-            <p className='text-neutral-400 font-semibold text-2xl'>내 에피그램(19)</p>
-            <p className='text-black-600 font-semibold text-2xl'>내 댓글(110)</p>
-          </div>
-          <div className='w-full'>댓글 컴포넌트</div>
-        </div>
+        <MyContent userId={data.id} />
       </div>
     </div>
   );
