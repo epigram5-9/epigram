@@ -51,7 +51,7 @@ export default function MyContent({ user }: MyContentProps) {
     cursor: commentCursor,
     id: user.id,
   };
-  const { data: commentData, isLoading: isCommentsLoading, error: commentsError } = useCommentsHook(commentsRequest);
+  const { data: commentData, isLoading: isCommentsLoading, error: commentsError, refetch: refetchComments } = useCommentsHook(commentsRequest);
 
   // [내 에피그램] 탭 선택 시
   useEffect(() => {
@@ -125,6 +125,13 @@ export default function MyContent({ user }: MyContentProps) {
     }
   };
 
+  // 댓글 수정
+  const handleEditComment = () => {
+    setComments({ totalCount: 0, nextCursor: null, list: [] });
+    setCommentCursor(0);
+    refetchComments();
+  };
+
   // 로딩 중
   if ((isEpigramsLoading || isCommentsLoading) && !isLoadingMore) {
     return <Image src={spinner} alt='로딩중' width={200} height={200} />;
@@ -161,7 +168,9 @@ export default function MyContent({ user }: MyContentProps) {
       <div className='w-full py-[36px]'>
         <div className='flex flex-col gap-[48px]'>
           {selectedTab === 'epigrams' && <MyEpigrams epigrams={epigrams.list} totalCount={epigrams.totalCount} onMoreEpigramLoad={handleMoreLoad} />}
-          {selectedTab === 'comments' && <MyComment comments={comments.list} totalCount={comments.totalCount} onMoreEpigramLoad={handleMoreLoad} onDeleteComment={handleDeleteComment} />}
+          {selectedTab === 'comments' && (
+            <MyComment comments={comments.list} totalCount={comments.totalCount} onMoreEpigramLoad={handleMoreLoad} onDeleteComment={handleDeleteComment} onEditComment={handleEditComment} />
+          )}
           {isLoadingMore && (
             <div className='w-full flex items-center justify-center lg:mt-[70px] md:mt-[50px]'>
               <Image src={spinner} alt='로딩중' width={200} height={200} />

@@ -6,18 +6,23 @@ import { CommentType } from '@/schema/comment';
 import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '@/components/epigram/DeleteAlertModal';
 import NONE_EPI from '../../../public/none-epi.svg';
+import CommentTextarea from '@/components/epigram/Comment/CommentTextarea';
 
 interface MyCommentProps {
   comments: CommentType[];
   totalCount: number;
   onMoreEpigramLoad: () => void;
   onDeleteComment: (commentId: number) => void;
+  onEditComment: () => void;
 }
 
-function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment }: MyCommentProps) {
+function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, onEditComment }: MyCommentProps) {
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
+
+  // NOTE: 현재 수정 중인 댓글의 ID 상태
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 
   const handleMoveToMain = () => {
     router.push('/epigrams');
@@ -30,54 +35,72 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment }:
     }
   };
 
+  const handleEditComment = (comment: CommentType) => {
+    setEditingCommentId(comment.id);
+  };
+
+  const handleEditComplete = () => {
+    setEditingCommentId(null);
+    onEditComment();
+  };
+
   return totalCount > 0 ? (
     <div className='flex flex-col'>
       {comments.map((comment) => {
-        const formattedDate = new Date(comment.createdAt).toLocaleString(); // createdAt을 comment에서 가져옴
+        const formattedDate = new Date(comment.createdAt).toLocaleString();
 
         return (
           <div
             key={comment.id}
             className={`bg-background-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
           >
-            <div className='justify-start items-start gap-4 inline-flex'>
+            <div className='justify-start items-start gap-4 inline-flex w-full'>
               <div className='w-12 h-12 relative'>
                 <div className='w-12 h-12 bg-zinc-300 rounded-full overflow-hidden flex items-center justify-center relative'>
                   <Image src={comment.writer.image || '/ProfileTestImage.jpg'} alt='프로필 이미지' width={50} height={50} className='rounded-full' />
                 </div>
               </div>
-              <div
-                className={`flex-col justify-start items-start ${gapStyles.sm} ${gapStyles.md} ${gapStyles.lg} inline-flex ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
-              >
-                <div className='justify-between items-center w-full inline-flex'>
-                  <div className='justify-start items-start gap-2 flex'>
-                    <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>
-                      {comment.writer.nickname}
-                    </div>
-                    <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>
-                      {formattedDate} {/* 중괄호 추가 */}
-                    </div>
-                  </div>
-                  <div className='justify-start items-start gap-4 flex'>
-                    <Button className={`text-neutral-700 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}>수정</Button>
-                    <Button
-                      onClick={() => {
-                        setSelectedCommentId(comment.id);
-                        setIsDeleteModalOpen(true);
-                      }}
-                      type='button'
-                      className={`text-red-400 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
-                    >
-                      삭제
-                    </Button>
-                  </div>
+              {editingCommentId === comment.id ? (
+                <div className='w-full'>
+                  <CommentTextarea epigramId={comment.epigramId} editingComment={comment} onEditComplete={handleEditComplete} />
                 </div>
+              ) : (
                 <div
-                  className={`w-full text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
+                  className={`flex-col justify-start items-start ${gapStyles.sm} ${gapStyles.md} ${gapStyles.lg} inline-flex ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
                 >
-                  {comment.content}
+                  <div className='justify-between items-center w-full inline-flex'>
+                    <div className='justify-start items-start gap-2 flex'>
+                      <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>
+                        {comment.writer.nickname}
+                      </div>
+                      <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>{formattedDate}</div>
+                    </div>
+                    <div className='justify-start items-start gap-4 flex'>
+                      <Button
+                        onClick={() => handleEditComment(comment)}
+                        className={`text-neutral-700 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                      >
+                        수정
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setSelectedCommentId(comment.id);
+                          setIsDeleteModalOpen(true);
+                        }}
+                        type='button'
+                        className={`text-red-400 underline leading-[18px] cursor-pointer p-0 ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                      >
+                        삭제
+                      </Button>
+                    </div>
+                  </div>
+                  <div
+                    className={`w-full text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
+                  >
+                    {comment.content}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         );
