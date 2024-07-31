@@ -4,7 +4,7 @@ import { EpigramRequestType } from '@/schema/epigram';
 import { CommentRequestType } from '@/schema/comment';
 import { GetMonthlyEmotionLogsRequestType } from '@/schema/emotion';
 import { GetEpigramsParamsType } from '@/schema/epigrams';
-import { getMe, getUser } from './user';
+import { getMe, getUser, getMyContentCount } from './user';
 import { getEpigram } from './epigram';
 import { getEpigramComments, getMyEpigramComments } from './epigramComment';
 import getMonthlyEmotionLogs from './emotion';
@@ -19,6 +19,10 @@ const queries = createQueryKeyStore({
     getUser: (request: GetUserRequestType) => ({
       queryKey: [request],
       queryFn: () => getUser(request),
+    }),
+    getMyContentCount: (request: GetUserRequestType) => ({
+      queryKey: ['getMyContentCount', request],
+      queryFn: () => getMyContentCount(request),
     }),
   },
   // NOTE: Epigram 관련 query함수

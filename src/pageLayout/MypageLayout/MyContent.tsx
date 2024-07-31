@@ -6,6 +6,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { EpigramsResponse } from '@/types/epigram.types';
 import { CommentResponseType } from '@/schema/comment';
 import useCommentsHook from '@/hooks/useCommentsHook';
+import useGetMyContentHook from '@/hooks/useGetMyContentHook';
+import { GetMyContentCountType } from '@/schema/user';
 import spinner from '../../../public/spinner.svg';
 
 interface MyContentProps {
@@ -17,6 +19,14 @@ export default function MyContent({ userId }: MyContentProps) {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [selectedTab, setSelectedTab] = useState<'epigrams' | 'comments'>('epigrams');
   const { toast } = useToast();
+
+  const [totalCount, setTotalCount] = useState<GetMyContentCountType>({ epigramCount: 0, commentCount: 0 });
+  const { data: count } = useGetMyContentHook({ id: userId });
+  useEffect(() => {
+    if (count) {
+      setTotalCount({ epigramCount: count.epigramCount, commentCount: count.commentCount });
+    }
+  }, [count]);
 
   /** ************ 내 에피그램 조회 ************* */
   const [epigramCursor, setEpigramCursor] = useState<number>(0);
@@ -100,7 +110,7 @@ export default function MyContent({ userId }: MyContentProps) {
           onClick={() => selectedTab !== 'epigrams' && handleTabClick('epigrams')}
           disabled={selectedTab === 'epigrams'}
         >
-          내 에피그램({epigrams.totalCount})
+          내 에피그램({totalCount.epigramCount})
         </button>
         <button
           type='button'
@@ -108,7 +118,7 @@ export default function MyContent({ userId }: MyContentProps) {
           onClick={() => selectedTab !== 'comments' && handleTabClick('comments')}
           disabled={selectedTab === 'comments'}
         >
-          내 댓글({comments.totalCount})
+          내 댓글({totalCount.commentCount})
         </button>
       </div>
       <div className='w-full py-[36px]'>
@@ -123,7 +133,7 @@ export default function MyContent({ userId }: MyContentProps) {
               )}
             </>
           )}
-          {selectedTab === 'comments' && <div className='flex flex-col gap-[48px]'>내댓글목록</div>}
+          {selectedTab === 'comments' && <div className='flex flex-col gap-[48px]'>내댓글목록 {comments.totalCount}</div>}
         </div>
       </div>
     </div>
