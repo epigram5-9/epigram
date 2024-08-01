@@ -10,7 +10,12 @@ import EmotionSaveToast from './EmotionSaveToast';
  * EmotionSelector 컴포넌트는 여러 개의 EmotionIconCard를 관리하고
  * 사용자의 오늘의 감정을 선택하고 저장하고 출력합니다.
  */
-function EmotionSelector() {
+
+interface EmotionSelectorProps {
+  onEmotionSaved: () => void; // Callback for when the emotion is saved
+}
+
+function EmotionSelector({ onEmotionSaved }: EmotionSelectorProps) {
   // 반응형 디자인을 위한 미디어 쿼리 훅
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)');
   const isMobile = useMediaQuery('(max-width: 767px)');
@@ -72,6 +77,7 @@ function EmotionSelector() {
     postEmotionMutation.mutate(iconType, {
       onSuccess: (_, clickedIconType) => {
         setSelectedEmotion(clickedIconType);
+        onEmotionSaved();
       },
       onError: (error: unknown) => {
         // eslint-disable-next-line
