@@ -10,7 +10,7 @@ export const GetUserRequest = z.object({
   id: z.number(),
 });
 
-export const GetUserReponse = z.object({
+export const GetUserResponse = z.object({
   image: z.string(),
   updatedAt: z.coerce.date(),
   createdAt: z.coerce.date(),
@@ -30,9 +30,15 @@ export const PostPresignedUrlResponse = z.object({
   url: z.string().url(),
 });
 
-export type GetUserResponseType = z.infer<typeof GetUserReponse>;
+export const GetMyContentCount = z.object({
+  epigramCount: z.number(),
+  commentCount: z.number(),
+});
+
+export type GetUserResponseType = z.infer<typeof GetUserResponse>;
 export type GetUserRequestType = z.infer<typeof GetUserRequest>;
 export type PatchMeRequestType = z.infer<typeof PatchMeRequest>;
 
 export type PostPresignedUrlRequestType = z.infer<typeof PostPresignedUrlRequest>;
 export type PostPresignedUrlResponseType = z.infer<typeof PostPresignedUrlResponse>;
+export type GetMyContentCountType = z.infer<typeof GetMyContentCount>;

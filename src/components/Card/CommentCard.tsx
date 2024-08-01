@@ -13,7 +13,7 @@ function CommentCard({ writer, content, createdAt, status }: CommentCardProps) {
       <div className='justify-start items-start gap-4 inline-flex'>
         <div className='w-12 h-12 relative'>
           <div className='w-12 h-12 bg-zinc-300 rounded-full overflow-hidden flex items-center justify-center'>
-            <Image src='/ProfileTestImage.jpg' alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
+            <Image src={writer.image || '/ProfileTestImage.jpg'} alt={`${writer.nickname}의 프로필 이미지`} layout='fill' objectFit='cover' className='rounded-full' />{' '}
           </div>
         </div>
         <div className={`flex-col justify-start items-start ${gapStyles.sm} ${gapStyles.md} ${gapStyles.lg} inline-flex ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}>

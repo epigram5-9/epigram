@@ -100,7 +100,7 @@ function SearchLayout() {
 
   return (
     <>
-      <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />;
+      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />;
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
         <SearchBar onSearch={handleSearch} currentSearch={currentSearch} />
         <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />
