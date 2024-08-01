@@ -51,7 +51,13 @@ function SearchResults({ results, query, isLoading }: SearchResultsProps) {
   }, [results, query]);
 
   const filteredResults = useMemo(
-    () => sortedResults.filter((item) => item.content.includes(query) || item.author.includes(query) || item.tags.some((tag) => tag.name.includes(query))),
+    () =>
+      sortedResults.filter(
+        (item) =>
+          item.content.toLowerCase().includes(query.toLowerCase()) ||
+          item.author.toLowerCase().includes(query.toLowerCase()) ||
+          item.tags.some((tag) => tag.name.toLowerCase().includes(query.toLowerCase())),
+      ),
     [sortedResults, query],
   );
 
