@@ -60,12 +60,6 @@ const queries = createQueryKeyStore({
       queryFn: () => getEpigrams(request),
     }),
   },
-  emotion: {
-    getMonthlyEmotionLogs: (request: GetMonthlyEmotionLogsRequestType) => ({
-      queryKey: ['getMonthlyEmotionLogs', request],
-      queryFn: () => getMonthlyEmotionLogs(request),
-    }),
-  },
 });
 
 export default queries;
