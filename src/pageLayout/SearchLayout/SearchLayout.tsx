@@ -7,6 +7,8 @@ import SearchResults from '@/components/search/SearchResults';
 import useEpigrams from '@/hooks/useGetEpigramsHooks';
 import { GetEpigramsResponseType } from '@/schema/epigrams';
 
+// TODO 무한스크롤 오류
+
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
   const [currentSearch, setCurrentSearch] = useState<string>('');
@@ -14,6 +16,8 @@ function SearchLayout() {
   const [allResults, setAllResults] = useState<GetEpigramsResponseType['list']>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [limit] = useState(10);
+  const [writerId] = useState<number | undefined>(undefined);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
@@ -24,7 +28,7 @@ function SearchLayout() {
   const userId = isUserLoggedIn ? 'loggedInUser' : 'guest'; // 사용자 ID를 기반으로 저장 키 생성
   const recentSearchesKey = `recentSearches_${userId}`;
 
-  const { data: searchResults, isLoading } = useEpigrams(currentSearch, page);
+  const { data: searchResults, isLoading } = useEpigrams(currentSearch, page, limit, writerId);
 
   // 새로운 검색 결과를 allResults에 누적, 총 결과 개수와 다음 커서를 업데이트
   useEffect(() => {
@@ -32,6 +36,8 @@ function SearchLayout() {
       setAllResults((prevResults) => [...prevResults, ...searchResults.list]);
       setTotalCount(searchResults.totalCount);
       setNextCursor(searchResults.nextCursor);
+    } else {
+      setAllResults([]);
     }
   }, [searchResults]);
 
@@ -85,7 +91,7 @@ function SearchLayout() {
     setPage(0);
     setAllResults([]);
     setSearches((prevSearches) => {
-      const updatedSearches = [search, ...prevSearches.filter((item) => item !== search)].slice(0, 10);
+      const updatedSearches = [search, ...prevSearches.filter((item) => item !== search)].slice(0, 20);
       if (isBrowser) {
         localStorage.setItem(recentSearchesKey, JSON.stringify(updatedSearches));
       }
