@@ -7,9 +7,9 @@ import { EpigramsResponse } from '@/types/epigram.types';
 import { CommentResponseType } from '@/schema/comment';
 import useCommentsHook from '@/hooks/useCommentsHook';
 import useGetMyContentHook from '@/hooks/useGetMyContentHook';
-import { GetMyContentCountType } from '@/schema/user';
 import MyComment from '@/user/ui-content/MyComment';
 import UserInfo from '@/types/user';
+import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import spinner from '../../../public/spinner.svg';
 
 interface MyContentProps {
@@ -23,11 +23,13 @@ export default function MyContent({ user }: MyContentProps) {
   const { toast } = useToast();
 
   /** ************ 내 에피그램/댓글 카운트 조회 ************* */
-  const [totalCount, setTotalCount] = useState<GetMyContentCountType>({ epigramCount: 0, commentCount: 0 });
+  const [epigramCount, setEpigramCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
   const { data: count } = useGetMyContentHook({ id: user.id });
   useEffect(() => {
     if (count) {
-      setTotalCount({ epigramCount: count.epigramCount, commentCount: count.commentCount });
+      setEpigramCount(count.epigramCount);
+      setCommentCount(count.commentCount);
     }
   }, [count]);
 
@@ -49,7 +51,7 @@ export default function MyContent({ user }: MyContentProps) {
     cursor: commentCursor,
     id: user.id,
   };
-  const { data: commentData, isLoading: isCommentsLoading, error: commentsError } = useCommentsHook(commentsRequest);
+  const { data: commentData, isLoading: isCommentsLoading, error: commentsError, refetch: refetchComments } = useCommentsHook(commentsRequest);
 
   // [내 에피그램] 탭 선택 시
   useEffect(() => {
@@ -100,6 +102,36 @@ export default function MyContent({ user }: MyContentProps) {
     setIsLoadingMore(false);
   };
 
+  // 댓글 삭제
+  const deleteCommentMutation = useDeleteCommentMutation();
+  const handleDeleteComment = async (commentId: number) => {
+    try {
+      await deleteCommentMutation.mutateAsync(commentId);
+      setComments((prev) => ({
+        totalCount: prev.totalCount - 1,
+        nextCursor: prev.nextCursor,
+        list: prev.list.filter((comment) => comment.id !== commentId),
+      }));
+      setCommentCount((prev) => prev - 1);
+      toast({
+        title: '댓글이 삭제되었습니다.',
+        variant: 'destructive',
+      });
+    } catch (error) {
+      toast({
+        title: '댓글 삭제 실패했습니다.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // 댓글 수정
+  const handleEditComment = () => {
+    setComments({ totalCount: 0, nextCursor: null, list: [] });
+    setCommentCursor(0);
+    refetchComments();
+  };
+
   // 로딩 중
   if ((isEpigramsLoading || isCommentsLoading) && !isLoadingMore) {
     return <Image src={spinner} alt='로딩중' width={200} height={200} />;
@@ -122,7 +154,7 @@ export default function MyContent({ user }: MyContentProps) {
           onClick={() => selectedTab !== 'epigrams' && handleTabClick('epigrams')}
           disabled={selectedTab === 'epigrams'}
         >
-          내 에피그램({totalCount.epigramCount})
+          내 에피그램({epigramCount})
         </button>
         <button
           type='button'
@@ -130,13 +162,15 @@ export default function MyContent({ user }: MyContentProps) {
           onClick={() => selectedTab !== 'comments' && handleTabClick('comments')}
           disabled={selectedTab === 'comments'}
         >
-          내 댓글({totalCount.commentCount})
+          내 댓글({commentCount})
         </button>
       </div>
       <div className='w-full py-[36px]'>
         <div className='flex flex-col gap-[48px]'>
           {selectedTab === 'epigrams' && <MyEpigrams epigrams={epigrams.list} totalCount={epigrams.totalCount} onMoreEpigramLoad={handleMoreLoad} />}
-          {selectedTab === 'comments' && <MyComment comments={comments.list} totalCount={comments.totalCount} onMoreEpigramLoad={handleMoreLoad} />}
+          {selectedTab === 'comments' && (
+            <MyComment comments={comments.list} totalCount={comments.totalCount} onMoreEpigramLoad={handleMoreLoad} onDeleteComment={handleDeleteComment} onEditComment={handleEditComment} />
+          )}
           {isLoadingMore && (
             <div className='w-full flex items-center justify-center lg:mt-[70px] md:mt-[50px]'>
               <Image src={spinner} alt='로딩중' width={200} height={200} />
