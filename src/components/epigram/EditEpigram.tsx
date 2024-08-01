@@ -115,24 +115,13 @@ function EditEpigram({ epigram }: EditEpigramProps) {
   const handleAlertClose = () => {
     setIsAlertOpen(false);
     if (alertContent.title === '수정 완료') {
-      router.push(`/epigram/${epigram.id}`);
+      router.push(`/epigrams/${epigram.id}`);
     }
   };
 
   return (
     <>
-      <Header
-        icon='back'
-        routerPage={`/epigram/${epigram.id}`}
-        isLogo
-        insteadOfLogo='에피그램 수정'
-        isProfileIcon
-        isShareIcon={false}
-        isButton={false}
-        textInButton=''
-        disabled={false}
-        onClick={() => {}}
-      />
+      <Header icon='back' isLogo insteadOfLogo='에피그램 수정' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
