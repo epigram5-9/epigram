@@ -27,7 +27,7 @@ export default function MyPageLayout() {
 
   return (
     <div className='bg-background-100 w-full relative h-dvh'>
-      <Header icon='back' routerPage='/mypage' isLogo={false} insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <Header icon='back' isLogo={false} insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <div className='bg-background-100 w-full h-[200px]'></div>
       <div className='w-full flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
         <Profile image={data.image} nickname={data.nickname} />
