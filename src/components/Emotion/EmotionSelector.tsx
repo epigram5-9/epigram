@@ -31,6 +31,8 @@ function EmotionSelector({ onEmotionSaved }: EmotionSelectorProps) {
 
   // 현재 선택된 감정을 관리하는 useState 훅
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionType | null>(null);
+  const [showToast, setShowToast] = useState<boolean>(false); // State for controlling the toast
+
   // 오늘의 감정을 조회하기 위한 훅
   const { data: emotion, error: getError, isLoading: isGetLoading } = useGetEmotion();
   // 감정을 저장하기 위한 훅
@@ -54,7 +56,9 @@ function EmotionSelector({ onEmotionSaved }: EmotionSelectorProps) {
    * 감정을 서버에 저장합니다.
    * @param iconType - 클릭된 감정의 타입
    */
+
   const handleCardClick = async (iconType: EmotionType) => {
+    let emotionChanged = false;
     setStates((prevStates) => {
       const newStates = { ...prevStates };
 
@@ -68,6 +72,7 @@ function EmotionSelector({ onEmotionSaved }: EmotionSelectorProps) {
         Object.keys(newStates).forEach((key) => {
           newStates[key as EmotionType] = key === iconType ? 'Clicked' : 'Unclicked';
         });
+        emotionChanged = true;
       }
 
       return newStates;
@@ -76,8 +81,14 @@ function EmotionSelector({ onEmotionSaved }: EmotionSelectorProps) {
     // 오늘의 감정 저장
     postEmotionMutation.mutate(iconType, {
       onSuccess: (_, clickedIconType) => {
-        setSelectedEmotion(clickedIconType);
-        onEmotionSaved();
+        if (emotionChanged) {
+          setSelectedEmotion(clickedIconType);
+          setShowToast(true);
+          setTimeout(() => {
+            setShowToast(false);
+            onEmotionSaved();
+          }, 1000);
+        }
       },
       onError: (error: unknown) => {
         // eslint-disable-next-line
@@ -109,7 +120,7 @@ function EmotionSelector({ onEmotionSaved }: EmotionSelectorProps) {
         ))}
       </div>
       {/* 감정이 선택되었을 때 토스트 메시지 표시 */}
-      {selectedEmotion && <EmotionSaveToast iconType={selectedEmotion} />}
+      {showToast && selectedEmotion && <EmotionSaveToast iconType={selectedEmotion} />}
     </>
   );
 }

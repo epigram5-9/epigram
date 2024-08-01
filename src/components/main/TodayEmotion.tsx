@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import EmotionSelector from '../Emotion/EmotionSelector';
 
 function TodayEmotion() {
-  const [isEmotionSaved, setIsEmotionSaved] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const handleEmotionSaved = () => {
-    setTimeout(() => {
-      setIsEmotionSaved(true);
-    }, 1000);
+    setIsVisible(false);
   };
 
-  if (isEmotionSaved) return null;
+  if (!isVisible) return null;
 
   return (
     <div className='w-[312px] md:w-[384px] lg:w-[640px]'>
