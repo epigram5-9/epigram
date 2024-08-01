@@ -11,21 +11,20 @@ function RecentEpigrams() {
   const router = useRouter();
   const [epigrams, setEpigrams] = useState<RecentEpigramType[]>([]);
   const [cursor, setCursor] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(3); // Initial limit is 3
+  const [limit, setLimit] = useState<number>(3);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [shouldFetch, setShouldFetch] = useState<boolean>(true); // Trigger fetching manually
+  const [shouldFetch, setShouldFetch] = useState<boolean>(true);
 
   const { data, error, isLoading } = useGetRecentEpigrams({ cursor, limit, enabled: shouldFetch });
 
   useEffect(() => {
     if (data) {
-      setEpigrams((prevEpigrams) => [...prevEpigrams, ...data.list]); // Append new data to the existing list
+      setEpigrams((prevEpigrams) => [...prevEpigrams, ...data.list]);
       if (data.list.length > 0) {
-        // Update cursor to the ID of the last item in the current list
         setCursor(data.list[data.list.length - 1].id);
       }
-      setIsLoadingMore(false); // Ensure loading stops when data is fetched
-      setShouldFetch(false); // Reset fetch trigger after fetching
+      setIsLoadingMore(false);
+      setShouldFetch(false);
     }
   }, [data]);
 
@@ -34,9 +33,9 @@ function RecentEpigrams() {
   };
 
   const loadMore = () => {
-    setIsLoadingMore(true); // Set loading state
-    setLimit(5); // After initial load, always fetch 5 items
-    setShouldFetch(true); // Trigger fetch
+    setIsLoadingMore(true);
+    setLimit(5);
+    setShouldFetch(true);
   };
 
   if (isLoading && epigrams.length === 0) return <p>로딩 중...</p>;
