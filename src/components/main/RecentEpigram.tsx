@@ -28,6 +28,7 @@ function RecentEpigrams() {
     }
   }, [data]);
 
+
   const handleEpigramClick = (id: number) => {
     router.push(`/epigrams/${id}`);
   };
