@@ -1,15 +1,15 @@
-import postOauth from '@/apis/oauth';
+import postNaverOauth from '@/apis/postNaverOauth';
 import { toast } from '@/components/ui/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
 
-const useKakaoLogin = () => {
+const useNaverLogin = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async (code: string) => {
-      const result = await postOauth(code);
+    mutationFn: async ({ code, state }: { code: string; state: string }) => {
+      const result = await postNaverOauth(code, state);
       localStorage.setItem('accessToken', result.accessToken);
       localStorage.setItem('refreshToken', result.refreshToken);
       return result;
@@ -39,4 +39,4 @@ const useKakaoLogin = () => {
   });
 };
 
-export default useKakaoLogin;
+export default useNaverLogin;
