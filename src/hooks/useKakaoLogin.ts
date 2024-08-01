@@ -15,7 +15,7 @@ const useKakaoLogin = () => {
       return result;
     },
     onSuccess: () => {
-      router.push('/');
+      router.push('/epigrams');
     },
     onError: (error) => {
       if (isAxiosError(error)) {

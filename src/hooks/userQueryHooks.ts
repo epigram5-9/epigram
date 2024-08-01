@@ -1,12 +1,12 @@
-import quries from '@/apis/queries';
+import queries from '@/apis/queries';
 import { updateMe, createPresignedUrl } from '@/apis/user';
 import { GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
 import { MutationOptions } from '@/types/query';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useMeQuery = () => useQuery(quries.user.getMe());
+export const useMeQuery = () => useQuery(queries.user.getMe());
 
-export const useUserQuery = (requset: GetUserRequestType) => useQuery(quries.user.getUser(requset));
+export const useUserQuery = (request: GetUserRequestType) => useQuery(queries.user.getUser(request));
 
 export const useUpdateMe = (options: MutationOptions<PatchMeRequestType>) => {
   const queryClient = useQueryClient();
@@ -14,7 +14,7 @@ export const useUpdateMe = (options: MutationOptions<PatchMeRequestType>) => {
     mutationFn: (request: PatchMeRequestType) => updateMe(request),
     ...options,
     onSuccess: (...arg) => {
-      queryClient.invalidateQueries(quries.user.getMe());
+      queryClient.invalidateQueries(queries.user.getMe());
       if (options?.onSuccess) {
         options?.onSuccess(...arg);
       }
