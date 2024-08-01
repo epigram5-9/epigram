@@ -48,25 +48,6 @@ const queries = createQueryKeyStore({
       queryFn: () => getMyEpigramComments(request),
     }),
   },
-  // NOTE: Epigram 관련 query함수
-  epigram: {
-    getEpigram: (request: EpigramRequestType) => ({
-      queryKey: ['epigram', request.id, request],
-      queryFn: () => {
-        if (request.id === undefined) {
-          throw new Error('Epigram ID가 제공되지 않았습니다.');
-        }
-        return getEpigram(request);
-      },
-      enabled: request.id !== undefined,
-    }),
-  },
-  epigramComment: {
-    getComments: (request: CommentRequestType) => ({
-      queryKey: ['epigramComments', request],
-      queryFn: () => getEpigramComments(request),
-    }),
-  },
   emotion: {
     getMonthlyEmotionLogs: (request: GetMonthlyEmotionLogsRequestType) => ({
       queryKey: ['getMonthlyEmotionLogs', request],
