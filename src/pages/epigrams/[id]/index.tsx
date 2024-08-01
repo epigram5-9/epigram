@@ -22,7 +22,7 @@ function DetailPage() {
 
   return (
     <div className='flex flex-col min-h-screen '>
-      <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
       <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} userImage={userData?.image} />
     </div>
