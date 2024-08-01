@@ -1,8 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header/Header';
-import { Button } from '@/components/ui/button';
+import StartButton from './StartButton';
 
 function AboutLayout() {
   return (
@@ -19,11 +18,7 @@ function AboutLayout() {
               </div>
               <div className='text-center text-zinc-600 text-xl font-normal font-iropkeBatang leading-7'>다른 사람들과 감정을 공유해 보세요.</div>
             </div>
-            <Link href='/auth/SignIn'>
-              <Button type='button' className='w-[286px] h-16 px-4 bg-zinc-700 rounded-xl justify-center items-center gap-2 inline-flex'>
-                <div className='text-white text-xl font-semibold font-pretendard leading-loose'>시작하기</div>
-              </Button>
-            </Link>
+            <StartButton>시작하기</StartButton>
           </div>
           <div className='w-full h-[74px] absolute left-1/2 transform -translate-x-1/2 top-[742px] flex-col justify-between items-center inline-flex'>
             <div className='text-center text-slate-400 text-base font-semibold font-pretendard leading-relaxed'>더 알아보기</div>
@@ -83,11 +78,7 @@ function AboutLayout() {
             <div className='w-[184px] h-[105px] relative self-closing-comp'>
               <Image src='/AboutPage/Logo/LogoXL.svg' alt='Epigram Logo' layout='fill' />
             </div>
-            <Link href='/auth/SignIn'>
-              <Button type='button' className='w-[286px] h-16 px-4 bg-zinc-700 rounded-xl justify-center items-center gap-2 inline-flex'>
-                <div className='text-white text-xl font-semibold font-pretendard leading-loose'>시작하기</div>
-              </Button>
-            </Link>
+            <StartButton>시작하기</StartButton>
           </div>
         </div>
       </main>
