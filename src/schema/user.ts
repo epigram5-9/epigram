@@ -30,17 +30,9 @@ export const PostPresignedUrlResponse = z.object({
   url: z.string().url(),
 });
 
-
-export const GetMyContentCount = z.object({
-  epigramCount: z.number(),
-  commentCount: z.number(),
-});
-
 export type GetUserResponseType = z.infer<typeof GetUserResponse>;
 export type GetUserRequestType = z.infer<typeof GetUserRequest>;
 export type PatchMeRequestType = z.infer<typeof PatchMeRequest>;
 
 export type PostPresignedUrlRequestType = z.infer<typeof PostPresignedUrlRequest>;
 export type PostPresignedUrlResponseType = z.infer<typeof PostPresignedUrlResponse>;
-
-export type GetMyContentCountType = z.infer<typeof GetMyContentCount>;
