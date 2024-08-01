@@ -19,7 +19,7 @@ function EpigramComment({ epigramId, currentUserId, userImage }: EpigramCommentP
 
   return (
     // NOTE: 댓글부분 height 수정
-    <div className='bg-slate-100 flex justify-center'>
+    <div className='bg-slate-100 flex justify-center min-h-screen'>
       <div className='w-80 md:w-96 lg:w-[640px] pt-6 lg:pt-12'>
         <h3 className='text-base lg:text-xl font-semibold'>댓글 작성</h3>
         <div className={`flex flex-col gap-4 lg:gap-6 ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}>
