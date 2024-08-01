@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import useRegisterMutation from '@/hooks/useRegisterMutation';
 
 export default function SignUp() {
-  const mutationRegister = useRegisterMutation();
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const form = useForm<PostSignUpRequestType>({
     resolver: zodResolver(PostSignUpRequest),
@@ -22,8 +23,18 @@ export default function SignUp() {
     },
   });
 
+  const { setFocus, setValue, trigger } = form;
+
+  const handleFieldError = (field: 'email' | 'nickname') => {
+    setFocus(field);
+    setFocusedField(field);
+  };
+
+  const mutationRegister = useRegisterMutation(handleFieldError);
+
   const trimWhitespace = (fieldName: keyof PostSignUpRequestType, value: string) => {
-    form.setValue(fieldName, value.trim(), { shouldValidate: true, shouldDirty: true });
+    setValue(fieldName, value.trim(), { shouldValidate: true, shouldDirty: true });
+    trigger(fieldName);
   };
 
   return (
@@ -41,14 +52,20 @@ export default function SignUp() {
               name='email'
               render={({ field, fieldState }) => (
                 <FormItem className='flex flex-col w-full lg:max-w-[640px] md:max-w-[384px] space-y-0 md:mb-10 mb-5'>
-                  <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>이메일</FormLabel>
+                  <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid || focusedField === 'email' ? 'text-state-error' : 'text-blue-900'}`}>
+                    이메일
+                  </FormLabel>
                   <FormControl>
                     <Input
+                      {...field}
                       type='text'
                       placeholder='이메일'
-                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
-                      {...field}
-                      onBlur={(e) => trimWhitespace('email', e.target.value)}
+                      onBlur={(e) => {
+                        trimWhitespace('email', e.target.value);
+                      }}
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${
+                        fieldState.invalid || focusedField === 'email' ? 'border-2 border-state-error' : 'focus:border-blue-500'
+                      }`}
                     />
                   </FormControl>
                   <FormMessage className='flex justify-end text-[13px] text-state-error' />
@@ -63,11 +80,11 @@ export default function SignUp() {
                   <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>비밀번호</FormLabel>
                   <FormControl>
                     <Input
+                      {...field}
                       type='password'
                       placeholder='비밀번호'
-                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
-                      {...field}
                       onBlur={(e) => trimWhitespace('password', e.target.value)}
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
                     />
                   </FormControl>
                   <FormMessage className='flex justify-end text-[13px] text-state-error' />
@@ -81,11 +98,11 @@ export default function SignUp() {
                 <FormItem className='flex flex-col w-full lg:max-w-[640px] md:max-w-[384px] space-y-0 md:mb-10 mb-5'>
                   <FormControl>
                     <Input
+                      {...field}
                       type='password'
                       placeholder='비밀번호 확인'
-                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
-                      {...field}
                       onBlur={(e) => trimWhitespace('passwordConfirmation', e.target.value)}
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
                     />
                   </FormControl>
                   <FormMessage className='flex justify-end text-[13px] text-state-error' />
@@ -97,14 +114,16 @@ export default function SignUp() {
               name='nickname'
               render={({ field, fieldState }) => (
                 <FormItem className='flex flex-col w-full lg:max-w-[640px] md:max-w-[384px] md:mb-10 mb-[30px] space-y-0'>
-                  <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>닉네임</FormLabel>
+                  <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid || focusedField === 'nickname' ? 'text-state-error' : 'text-blue-900'}`}>
+                    닉네임
+                  </FormLabel>
                   <FormControl>
                     <Input
+                      {...field}
                       type='text'
                       placeholder='닉네임'
-                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
-                      {...field}
                       onBlur={(e) => trimWhitespace('nickname', e.target.value)}
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid || focusedField === 'nickname' ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
                     />
                   </FormControl>
                   <FormMessage className='flex justify-end text-[13px] text-state-error' />

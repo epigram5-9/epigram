@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { isAxiosError } from 'axios';
 
-const useRegisterMutation = () => {
+const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => void) => {
   const router = useRouter();
 
   return useMutation({
@@ -26,8 +26,9 @@ const useRegisterMutation = () => {
           if (errorMessage.includes('이미 사용중인 이메일')) {
             toast({
               description: '이미 사용중인 이메일입니다.',
-              className: 'border-state-error text-state-error font-semibold',
+              className: 'border-state-error text-state-error font-semibold right-0 top-0',
             });
+            onRegisterError('email');
             return;
           }
 
@@ -47,6 +48,7 @@ const useRegisterMutation = () => {
               description: '이미 존재하는 닉네임입니다.',
               className: 'border-state-error text-state-error font-semibold',
             });
+            onRegisterError('nickname');
             return;
           }
 
