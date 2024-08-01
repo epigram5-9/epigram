@@ -121,7 +121,7 @@ function AboutLayout() {
 
       <section className='w-full h-[1040px] left-0 top-[3300px] md:top-[3538px] lg:top-[4824px] absolute bg-stripes flex-col justify-start items-start gap-6 inline-flex'>
         <div className='absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col justify-start items-center gap-12 inline-flex'>
-          <div className='w-[184px] h-[105px] relative self-closing-comp'>
+          <div className='w-[122px] h-[70px] lg:w-[184px] lg:h-[105px] relative self-closing-comp'>
             <div className='block md:hidden lg:hidden'>
               <Image src='/AboutPage/Logo/LogoLG.svg' alt='Epigram Logo' layout='fill' />
             </div>
