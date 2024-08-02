@@ -35,8 +35,8 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
         <figcaption className='text-gray-400 text-right text-base lg:text-2xl font-normal'>-{epigram.author}-</figcaption>
         <div className='flex justify-center gap-4'>
           <Button type='button' onClick={handleLikeClick}>
-            <div className='p-4 w-20 lg:w-28 h-9 lg:h-11 flex items-center justify-center gap-2 text-white rounded-full bg-black'>
-              <Image src='/likeIcon.svg' alt='좋아요 아이콘' width={20} height={20} className='lg:w-9 lg:h-9' />
+            <div className='p-4 w-20 lg:w-28 h-9 lg:h-11 flex items-center justify-center gap-2 text-white rounded-full bg-black-300'>
+              <Image src={latestEpigram.isLiked ? '/likeIcon.svg' : '/unlikeIcon.svg'} alt='좋아요 아이콘' width={20} height={20} className='lg:w-9 lg:h-9' />
               <p className='text-sm lg:text-xl'>{latestEpigram.likeCount}</p>
             </div>
           </Button>
