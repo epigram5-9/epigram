@@ -61,7 +61,7 @@ function EpigramFeed() {
       <div className='w-full h-[26px] justify-between items-center inline-flex mt-[32px]'>
         <h1 className='text-[#373737] text-base font-semibold font-pretendard leading-relaxed'>피드</h1>
         <div className='w-6 h-6 relative' onClick={toggleLayout} onKeyPress={handleSortKeyPress} role='button' tabIndex={0} aria-label='Toggle layout'>
-          <Image src='/icon/sort-icon.svg' alt='sort' width={24} height={24} className='w-full h-full' />
+          <Image src={isSingleColumn ? '/icon/grid-icon.svg' : '/icon/sort-icon.svg'} alt={isSingleColumn ? 'grid layout' : 'sort layout'} width={24} height={24} className='w-full h-full' />
         </div>
       </div>
       <div className={`mt-[24px] lg:mt-[40px] mb-[10px] gap-x-[8px] gap-y-[16px] ${isSingleColumn ? 'grid grid-cols-1' : 'grid grid-cols-2'}`}>
