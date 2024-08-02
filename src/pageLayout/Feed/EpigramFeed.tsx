@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import useGetRecentEpigrams from '@/hooks/useGetRecentEpigrams';
 import { RecentEpigramType } from '@/schema/recentEpigram';
 import Image from 'next/image';
-import LoadMoreButton from '@/components/main/LoadMoreButton';
+import MoreEpigramButton from './MoreEpigramButton';
 import FeedCard from './FeedCard';
 import spinner from '../../../public/spinner.svg';
 
@@ -58,13 +58,13 @@ function EpigramFeed() {
 
   return (
     <div>
-      <div className='w-full h-[26px] justify-between items-center inline-flex mt-[32px]'>
-        <h1 className='text-[#373737] text-base font-semibold font-pretendard leading-relaxed'>피드</h1>
-        <div className='w-6 h-6 relative' onClick={toggleLayout} onKeyPress={handleSortKeyPress} role='button' tabIndex={0} aria-label='Toggle layout'>
+      <div className='w-full h-[26px] justify-between items-center inline-flex mt-[32px] lg:mt-[120px]'>
+        <h1 className='text-[#373737] text-base lg:text-2xl font-semibold font-pretendard leading-relaxed'>피드</h1>
+        <div className='w-6 h-6 relative block md:hidden' onClick={toggleLayout} onKeyPress={handleSortKeyPress} role='button' tabIndex={0} aria-label='Toggle layout'>
           <Image src={isSingleColumn ? '/icon/grid-icon.svg' : '/icon/sort-icon.svg'} alt={isSingleColumn ? 'grid layout' : 'sort layout'} width={24} height={24} className='w-full h-full' />
         </div>
       </div>
-      <div className={`mt-[24px] lg:mt-[40px] mb-[10px] gap-x-[8px] gap-y-[16px] ${isSingleColumn ? 'grid grid-cols-1' : 'grid grid-cols-2'}`}>
+      <div className={`mt-[24px] lg:mt-[40px] mb-[10px] gap-x-2 gap-y-4 md:gap-y-6 lg:gap-y-10 ${isSingleColumn ? 'grid grid-cols-1' : 'grid grid-cols-2'}`}>
         {epigrams.map((epigram: RecentEpigramType) => (
           <div
             key={epigram.id}
@@ -88,7 +88,7 @@ function EpigramFeed() {
       )}
       {!isLoadingMore && data?.nextCursor !== null && (
         <div className='mt-10 mb-14 w-full flex justify-center'>
-          <LoadMoreButton onClick={loadMore} />
+          <MoreEpigramButton onClick={loadMore} />
         </div>
       )}
     </div>
