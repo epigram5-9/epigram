@@ -12,7 +12,12 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      router.push('/');
+      router.push('/auth/SignIn');
+      toast({
+        title: '회원가입 성공!',
+        description: '로그인 후 이용해주세요.',
+        className: 'bg-illust-green text-white font-semibold',
+      });
     },
     onError: (error) => {
       if (isAxiosError(error)) {
@@ -26,7 +31,7 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
           if (errorMessage.includes('이미 사용중인 이메일')) {
             toast({
               description: '이미 사용중인 이메일입니다.',
-              className: 'border-state-error text-state-error font-semibold right-0 top-0',
+              className: 'border-state-error text-state-error font-semibold',
             });
             onRegisterError('email');
             return;
