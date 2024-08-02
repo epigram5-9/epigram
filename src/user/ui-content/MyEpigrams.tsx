@@ -37,7 +37,7 @@ function MyEpigrams({ epigrams, totalCount, onMoreEpigramLoad }: MyEpigramProps)
 
   // 에피그램 상세 페이지 이동
   const handleEpigramClick = (epigramId: number) => {
-    router.push(`/epigrams/${epigramId}`);
+    router.push(`/epigram/${epigramId}`);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, epigramId: number) => {

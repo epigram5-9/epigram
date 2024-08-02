@@ -35,7 +35,7 @@ export default function MyPageLayout() {
         <EmotionMonthlyLogs userId={data.id} />
       </div>
       <div className='bg-background-100 flex flex-col items-center w-full py-[100px]'>
-        <MyContent user={data} />
+        <MyContent userId={data.id} />
       </div>
     </div>
   );
