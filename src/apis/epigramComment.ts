@@ -30,14 +30,6 @@ export const getEpigramComments = async (params: CommentRequestType): Promise<Co
   }
 };
 
-export const getMyEpigramComments = async (params: CommentRequestType): Promise<CommentResponseType> => {
-  const { id, ...restParams } = params;
-  const response = await httpClient.get(`/users/${id}/comments`, {
-    params: restParams,
-  });
-  return response.data;
-};
-
 export const postComment = async (commentData: PostCommentRequest) => {
   const response = await httpClient.post('/comments', commentData);
   return response.data;
