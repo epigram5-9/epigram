@@ -32,7 +32,7 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
         if (errorMessage.includes('이미 사용중인 이메일')) {
           toast({
             description: '이미 사용중인 이메일입니다.',
-            className: 'border-state-error text-state-error font-semibold',
+            className: 'bg-state-error text-white font-semibold',
           });
           onRegisterError('email');
           return;
@@ -40,7 +40,7 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
 
         toast({
           description: errorMessage,
-          className: 'border-state-error text-state-error font-semibold',
+          className: 'bg-state-error text-white font-semibold',
         });
         return;
       }
@@ -52,7 +52,7 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
         if (errorMessage.includes('Internal Server Error')) {
           toast({
             description: '이미 존재하는 닉네임입니다.',
-            className: 'border-state-error text-state-error font-semibold',
+            className: 'bg-state-error text-white font-semibold',
           });
           onRegisterError('nickname');
           return;
@@ -60,7 +60,7 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
 
         toast({
           description: errorMessage,
-          className: 'border-state-error text-state-error font-semibold',
+          className: 'bg-state-error text-white font-semibold',
         });
         return;
       }
@@ -69,14 +69,14 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
       if (Number(status) >= 500) {
         toast({
           description: '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-          className: 'border-state-error text-state-error font-semibold',
+          className: 'bg-state-error text-white font-semibold',
         });
         return;
       }
 
       toast({
         description: '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-        className: 'border-state-error text-state-error font-semibold',
+        className: 'bg-state-error text-white font-semibold',
       });
     },
   });
