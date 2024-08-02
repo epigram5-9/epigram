@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '@/components/Header/Header';
 import FAB from '@/components/main/FAB';
 import EpigramFeed from './EpigramFeed';
+import AddEpigramFAB from './AddEpigramFAB';
 
 function FeedLayout() {
   return (
@@ -14,6 +15,7 @@ function FeedLayout() {
           </div>
         </div>
       </main>
+      <AddEpigramFAB />
       <FAB />
     </>
   );
