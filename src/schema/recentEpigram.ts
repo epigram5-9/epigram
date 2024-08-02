@@ -18,7 +18,7 @@ const RecentEpigramSchema = z.object({
 
 export const GetRecentEpigramsResponseSchema = z.object({
   totalCount: z.number(),
-  nextCursor: z.number(),
+  nextCursor: z.number().nullable(),
   list: z.array(RecentEpigramSchema),
 });
 
