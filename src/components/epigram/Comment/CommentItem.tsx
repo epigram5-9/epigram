@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
-import { sizeStyles, textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
+import { textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '../DeleteAlertModal';
+import CommentTextarea from './CommentTextarea';
 
 interface CommentItemProps {
   comment: CommentType;
   status?: 'view' | 'edit';
-  onEditComment: (id: number, content: string, isPrivate: boolean) => void;
+  onEditComment: (id: number) => void;
+  isEditing: boolean;
+  epigramId: number;
 }
 
-function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
+function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: CommentItemProps) {
   const deleteCommentMutation = useDeleteCommentMutation();
   const { toast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEditClick = () => {
-    onEditComment(comment.id, comment.content, comment.isPrivate);
+    onEditComment(comment.id);
   };
 
-  // NOTE: 댓글 삭제
+  // NOTE: 수정 중일 때(isEditing===true) CommentTextarea를 수정모드로 렌더링
+  if (isEditing) {
+    return <CommentTextarea epigramId={epigramId} editingComment={comment} onEditComplete={() => onEditComment(0)} />;
+  }
+
   const handleDeleteComment = async () => {
     try {
       await deleteCommentMutation.mutateAsync(comment.id);
@@ -42,9 +49,9 @@ function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
 
   return (
     <div
-      className={`bg-slate-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
+      className={`h-auto bg-slate-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex w-[360px] md:w-[384px] lg:w-[640px] ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
     >
-      <div className='justify-start items-start gap-4 inline-flex'>
+      <div className='h-full justify-start items-start gap-4 inline-flex'>
         <div className='w-12 h-12 relative'>
           <div className='w-12 h-12 bg-zinc-300 rounded-full overflow-hidden flex items-center justify-center'>
             <Image src={comment.writer.image || '/ProfileTestImage.jpg'} alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
@@ -79,7 +86,7 @@ function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
             )}
           </div>
           <div
-            className={`w-full text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
+            className={`w-full text-zinc-800 font-normal font-pretendard whitespace-pre ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
           >
             {comment.content}
           </div>
