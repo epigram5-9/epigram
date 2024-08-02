@@ -81,7 +81,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full relative'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`w-full relative ${editingComment ? 'py-6 border-slate-300 border-t' : ''}`}>
         <FormField
           control={form.control}
           name='content'
@@ -90,7 +90,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
               <FormControl>
                 <div className='relative'>
                   <Textarea
-                    className={`bg-slate-100 w-full text-base lg:text-xl text-black p-4 border-solid border-2 rounded-lg resize-none focus-visible:ring-0 ${
+                    className={`bg-slate-100 h-16 md:h-20 lg:h-28 w-full text-base lg:text-xl text-black p-2 lg:p-4 border-solid border-2 rounded-lg resize-none focus-visible:ring-0 ${
                       editingComment ? 'border-black' : 'border-line-200'
                     }`}
                     placeholder='100자 이내로 입력해 주세요.'
@@ -98,7 +98,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
                     {...field}
                   />
                   {editingComment && (
-                    <button type='button' onClick={handleCancel} className='absolute top-2 right-2'>
+                    <button type='button' onClick={handleCancel} className='absolute top-2 right-6'>
                       <Image src='/Icon/cancelIcon.svg' alt='취소' width={20} height={20} />
                     </button>
                   )}
