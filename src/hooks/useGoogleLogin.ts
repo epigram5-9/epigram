@@ -1,15 +1,15 @@
-import postOauth from '@/apis/oauth';
+import postGoogleOauth from '@/apis/postGoogleOauth';
 import { toast } from '@/components/ui/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
 
-const useKakaoLogin = () => {
+const useGoogleLogin = () => {
   const router = useRouter();
 
   return useMutation({
     mutationFn: async (code: string) => {
-      const result = await postOauth(code);
+      const result = await postGoogleOauth(code);
       localStorage.setItem('accessToken', result.accessToken);
       localStorage.setItem('refreshToken', result.refreshToken);
       return result;
@@ -33,10 +33,9 @@ const useKakaoLogin = () => {
           toast({ description: '서버에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.', className: 'bg-state-error text-white font-semibold' });
         }
       }
-
       toast({ description: '알 수 없는 에러가 발생했습니다.', className: 'bg-state-error text-white font-semibold' });
     },
   });
 };
 
-export default useKakaoLogin;
+export default useGoogleLogin;
