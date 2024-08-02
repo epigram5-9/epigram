@@ -67,6 +67,13 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      form.handleSubmit(onSubmit)();
+    }
+  };
+
   const handleCancel = () => {
     form.reset();
     onEditComplete();
@@ -87,6 +94,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
                       editingComment ? 'border-black' : 'border-line-200'
                     }`}
                     placeholder='100자 이내로 입력해 주세요.'
+                    onKeyDown={handleKeyDown}
                     {...field}
                   />
                   {editingComment && (
