@@ -7,23 +7,30 @@ import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '../DeleteAlertModal';
+import CommentTextarea from './CommentTextarea';
 
 interface CommentItemProps {
   comment: CommentType;
   status?: 'view' | 'edit';
-  onEditComment: (id: number, content: string, isPrivate: boolean) => void;
+  onEditComment: (id: number) => void;
+  isEditing: boolean;
+  epigramId: number;
 }
 
-function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
+function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: CommentItemProps) {
   const deleteCommentMutation = useDeleteCommentMutation();
   const { toast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleEditClick = () => {
-    onEditComment(comment.id, comment.content, comment.isPrivate);
+    onEditComment(comment.id);
   };
 
-  // NOTE: 댓글 삭제
+  // NOTE: 수정 중일 때(isEditing===true) CommentTextarea를 수정모드로 렌더링
+  if (isEditing) {
+    return <CommentTextarea epigramId={epigramId} editingComment={comment} onEditComplete={() => onEditComment(0)} />;
+  }
+
   const handleDeleteComment = async () => {
     try {
       await deleteCommentMutation.mutateAsync(comment.id);
@@ -79,7 +86,7 @@ function CommentItem({ comment, status, onEditComment }: CommentItemProps) {
             )}
           </div>
           <div
-            className={`w-full text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
+            className={`w-full h-auto text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
           >
             {comment.content}
           </div>
