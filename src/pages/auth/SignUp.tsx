@@ -151,15 +151,20 @@ export default function SignUp() {
           </div>
         </div>
         <div className='flex justify-center gap-4'>
-          <Button type='button' className='md:size-[60px] p-0'>
+          <Link
+            href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&state=${'test'}&redirect_uri=${process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI}`}
+          >
             <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
-          </Button>
-          <Button type='button' className='md:size-[60px] p-0'>
-            <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
-          </Button>
-          <Button type='button' className='md:size-[60px] p-0'>
+          </Link>
+          {/* // FIXME: 구글 간편 로그인 리다이렉트시 500에러가 발생하는 부분으로 주석 처리하였음  */}
+          {/* <Link
+          href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile`}
+        > */}
+          <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
+          {/* </Link> */}
+          <Link href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=code`}>
             <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
-          </Button>
+          </Link>
         </div>
       </div>
     </div>
