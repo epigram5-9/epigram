@@ -140,16 +140,27 @@ export default function SignUp() {
           </form>
         </Form>
       </div>
-      <div className='flex justify-center gap-4'>
-        <Button type='button' className='md:size-[60px] p-0'>
-          <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
-        <Button type='button' className='md:size-[60px] p-0'>
-          <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
-        <Button type='button' className='md:size-[60px] p-0'>
-          <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
-        </Button>
+      <div className='flex flex-col items-center w-full lg:gap-10 gap-6'>
+        <div className='flex justify-center items-center lg:gap-6 gap-[14px] w-full lg:max-w-[640px] md:max-w-[384px] lg:px-0 md:px-0 px-6'>
+          <div className='flex-grow'>
+            <Image src='/horizen.png' alt='horizen' width={180} height={0} className='w-full h-[2px]' />
+          </div>
+          <h3 className='lg:text-xl text-xs font-pretendard text-blue-400 whitespace-nowrap'>SNS 계정으로 로그인하기</h3>
+          <div className='flex-grow'>
+            <Image src='/horizen.png' alt='horizen' width={180} height={0} className='w-full h-[2px]' />
+          </div>
+        </div>
+        <div className='flex justify-center gap-4'>
+          <Button type='button' className='md:size-[60px] p-0'>
+            <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
+          </Button>
+          <Button type='button' className='md:size-[60px] p-0'>
+            <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
+          </Button>
+          <Button type='button' className='md:size-[60px] p-0'>
+            <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
+          </Button>
+        </div>
       </div>
     </div>
   );
