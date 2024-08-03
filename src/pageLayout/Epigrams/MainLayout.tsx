@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 import TodayEpigram from '@/components/main/TodayEpigram';
 import TodayEmotion from '@/components/main/TodayEmotion';
 import RecentEpigrams from '@/components/main/RecentEpigram';
@@ -9,7 +9,7 @@ import FAB from '@/components/main/FAB';
 function MainLayout() {
   return (
     <>
-      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <NewHeader />
       <main className='w-full min-h-screen bg-background-100 flex flex-col items-center'>
         <div className='w-[360px] flex flex-col items-center gap-6 mt-10 mb-40'>
           <section className='mt-10'>
