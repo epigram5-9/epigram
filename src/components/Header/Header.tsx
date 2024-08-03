@@ -68,7 +68,7 @@ function Header({ isLogo, icon, insteadOfLogo, isButton, isProfileIcon, isShareI
 
   return (
     <nav className='bg-white h-13 px-6 py-4 md:px-28 md:py-5 lg:px-30 lg:py-6'>
-      <div className='container flex justify-between items-center'>
+      <div className='container max-w-screen-xl mx-auto flex justify-between items-center'>
         <div className='flex items-center space-x-4'>
           {icon === 'back' && (
             <button className='w-5 h-5 lg:w-9 lg:h-9' type='button' onClick={handleBack} aria-label='뒤로가기 버튼'>
