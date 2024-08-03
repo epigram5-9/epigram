@@ -10,6 +10,7 @@ import useGetMyContentHook from '@/hooks/useGetMyContentHook';
 import MyComment from '@/user/ui-content/MyComment';
 import UserInfo from '@/types/user';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
+import { Button } from '@/components/ui/button';
 import spinner from '../../../public/spinner.svg';
 
 interface MyContentProps {
@@ -148,22 +149,20 @@ export default function MyContent({ user }: MyContentProps) {
   return (
     <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] gap-12'>
       <div className='inline-flex gap-6'>
-        <button
-          type='button'
-          className={`font-semibold text-2xl ${selectedTab === 'epigrams' ? 'cursor-default text-black-600 ' : 'cursor-pointer text-neutral-400 '}`}
+        <Button
+          className={`font-semibold text-2xl ${selectedTab === 'epigrams' ? 'cursor-default text-black-600 disabled:opacity-1 ' : 'cursor-pointer text-neutral-400'}`}
           onClick={() => selectedTab !== 'epigrams' && handleTabClick('epigrams')}
           disabled={selectedTab === 'epigrams'}
         >
           내 에피그램({epigramCount})
-        </button>
-        <button
-          type='button'
-          className={`font-semibold text-2xl ${selectedTab === 'comments' ? 'cursor-default text-black-600 ' : 'cursor-pointer text-neutral-400 '}`}
+        </Button>
+        <Button
+          className={`font-semibold text-2xl ${selectedTab === 'comments' ? 'cursor-default text-black-600 disabled:opacity-1 ' : 'cursor-pointer text-neutral-400'}`}
           onClick={() => selectedTab !== 'comments' && handleTabClick('comments')}
           disabled={selectedTab === 'comments'}
         >
           내 댓글({commentCount})
-        </button>
+        </Button>
       </div>
       <div className='w-full py-[36px]'>
         <div className='flex flex-col gap-[48px]'>
