@@ -11,8 +11,8 @@ const fetchEpigrams = async ({ pageParam = 0, queryKey }: QueryFunctionContext<E
   return response;
 };
 
-const useEpigrams = (currentSearch: string) => {
-  return useInfiniteQuery<GetEpigramsResponseType, Error>({
+const useEpigrams = (currentSearch: string) =>
+  useInfiniteQuery<GetEpigramsResponseType, Error>({
     queryKey: ['epigrams', currentSearch] as unknown as QueryKey,
     queryFn: fetchEpigrams as unknown as ({ pageParam, queryKey }: QueryFunctionContext<QueryKey>) => Promise<GetEpigramsResponseType>,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -20,6 +20,5 @@ const useEpigrams = (currentSearch: string) => {
     enabled: !!currentSearch,
     staleTime: 5 * 60 * 1000,
   });
-};
 
 export default useEpigrams;

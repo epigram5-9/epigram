@@ -25,10 +25,10 @@ function SearchLayout() {
   const handleObserver = useCallback(
     async (entries: IntersectionObserverEntry[]) => {
       if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-        scrollPositionRef.current = window.scrollY; // 스크롤 위치 저장
+        scrollPositionRef.current = window.scrollY;
         await fetchNextPage();
         requestAnimationFrame(() => {
-          window.scrollTo(0, scrollPositionRef.current); // 스크롤 위치 복원
+          window.scrollTo(0, scrollPositionRef.current);
         });
       }
     },
