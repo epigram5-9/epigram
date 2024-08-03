@@ -20,6 +20,10 @@ export default function SignIn() {
     },
   });
 
+  const trimWhitespace = (fieldName: keyof PostSigninRequestType, value: string) => {
+    form.setValue(fieldName, value.trim(), { shouldValidate: true, shouldDirty: true });
+  };
+
   // TODO: 나중에 컴포넌트 분리하기
   return (
     <div className='flex flex-col justify-center items-center bg-background-100 w-full h-screen'>
@@ -38,13 +42,16 @@ export default function SignIn() {
                 <FormItem className='w-full space-y-0'>
                   <FormControl>
                     <Input
+                      {...field}
                       type='text'
                       placeholder='이메일'
-                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
-                      {...field}
+                      onBlur={(e) => {
+                        trimWhitespace('email', e.target.value);
+                      }}
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base font-pretendard placeholder-blue-400 rounded-xl bg-blue-200 ${fieldState.invalid ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
                     />
                   </FormControl>
-                  <FormMessage className='flex justify-end text-[13px] text-state-error' />
+                  <FormMessage className='flex justify-end font-pretendard text-[13px] text-state-error' />
                 </FormItem>
               )}
             />
@@ -55,10 +62,13 @@ export default function SignIn() {
                 <FormItem className='w-full space-y-0'>
                   <FormControl>
                     <Input
+                      {...field}
                       type='password'
                       placeholder='비밀번호'
-                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 ${fieldState.invalid ? 'border-2 border-state-error' : ''}`}
-                      {...field}
+                      onBlur={(e) => {
+                        trimWhitespace('password', e.target.value);
+                      }}
+                      className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base font-pretendard placeholder-blue-400 rounded-xl bg-blue-200 ${fieldState.invalid ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
                     />
                   </FormControl>
                   <FormMessage className='flex justify-end font-pretendard text-[13px] text-state-error' />
@@ -69,16 +79,16 @@ export default function SignIn() {
           <Button
             type='submit'
             disabled={!form.formState.isValid}
-            className={`w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 h-11 bg-black-500 text-white lg:text-xl md:text-base rounded-xl md:mb-[10px] mb-[11px] ${!form.formState.isValid ? 'bg-blue-300' : 'bg-black-500'}`}
+            className={`w-full lg:max-w-[640px] md:max-w-[384px] lg:h-16 h-11 bg-black-500 font-pretendard text-white lg:text-xl md:text-base rounded-xl md:mb-[10px] mb-[11px] ${!form.formState.isValid ? 'bg-blue-300' : 'bg-black-500'}`}
           >
             로그인
           </Button>
         </form>
       </Form>
       <div className=' flex justify-end items-center gap-2 w-full lg:max-w-[640px] md:max-w-[384px] md:px-0 px-6 md:mb-[60px] mb-[50px]'>
-        <h2 className=' text-blue-400 lg:text-xl md:text-base sm:text-sm'>회원이 아니신가요?</h2>
+        <h2 className='font-pretendard text-blue-400 lg:text-xl md:text-base sm:text-sm'>회원이 아니신가요?</h2>
         <Link href='/auth/SignUp'>
-          <Button type='button' variant='link' className='lg:text-xl md:text-base sm:text-sm p-0 underline'>
+          <Button type='button' variant='link' className='lg:text-xl md:text-base sm:text-sm font-pretendard p-0 underline'>
             가입하기
           </Button>
         </Link>
