@@ -1,6 +1,6 @@
 import { EmotionLog, EmotionTypeEN } from '@/types/emotion';
 import Image from 'next/image';
-import { iconPaths } from '../utill/constants';
+import { iconPaths } from '../../user/utill/constants';
 
 interface ChartProps {
   monthlyEmotionLogs: EmotionLog[];

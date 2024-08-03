@@ -2,7 +2,7 @@ import NewHeader from '@/components/Header/NewHeader';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 import UserInfo from '@/types/user';
 import EmotionMonthlyLogs from '@/pageLayout/MypageLayout/EmotionMonthlyLogs';
-import Profile from '@/user/ui-profile/Profile';
+import Profile from '@/components/mypage/Profile';
 import { useRouter } from 'next/navigation';
 import TodayEmotion from '@/components/main/TodayEmotion';
 import MyContent from './MyContent';

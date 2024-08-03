@@ -10,7 +10,7 @@ import { Form, Formik, useFormik } from 'formik';
 import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
 import * as Yup from 'yup';
 import { AxiosError } from 'axios';
-import fileNameChange from '../utill/fileNameChange';
+import fileNameChange from '../../user/utill/fileNameChange';
 
 interface UserProfileEditProps {
   initialValues: {
