@@ -6,6 +6,7 @@ module.exports = {
       fontFamily: {
         pretendard: ['Pretendard'],
         iropkeBatang: ['IropkeBatang'],
+        montserrat: ['Montserrat']
       },
       colors: {
         'black-100': '#787878',
