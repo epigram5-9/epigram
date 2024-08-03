@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
@@ -6,9 +6,11 @@ import queries from '@/apis/queries';
 import LOGO_ICON from '../../../public/epigram-icon.png';
 import PROFILE_ICON from '../../../public/icon/user-icon.svg';
 import MENU_ICON from '../../../public/icon/menu-icon.svg';
+import Sidebar from './SideBar';
 
 export default function NewHeader() {
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery(queries.user.getMe());
 
@@ -31,7 +33,9 @@ export default function NewHeader() {
       <div className='flex justify-between items-center w-full md:w-[744px] lg:w-[1920px]'>
         <div className='flex items-center gap-3 md:gap-6 lg:gap-9'>
           <div className='flex items-center gap-3'>
-            <Image className='w-5 h-5 lg:w-9 lg:h-9 md:hidden' src={MENU_ICON} alt='logo' />
+            <button type='button' onClick={() => setIsSidebarOpen(!isSidebarOpen)} className='md:hidden'>
+              <Image className='w-5 h-5 lg:w-9 lg:h-9' src={MENU_ICON} alt='menu' />
+            </button>
             <button type='button' onClick={() => handleNavigateTo('/epigrams')} className='flex items-center gap-1'>
               <Image className='w-6 h-6 lg:w-9 lg:h-9' src={LOGO_ICON} alt='logo' />
               <span className='text-black-700 text-6 lg:text-[26px] font-montserrat leading-6 font-bold'>Epigram</span>
@@ -53,6 +57,7 @@ export default function NewHeader() {
           <div className='text-gray-300 text-[13px] lg:text-sm font-medium font-pretendard leading-snug'>{getNickName()}</div>
         </button>
       </div>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
     </div>
   );
 }
