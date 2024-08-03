@@ -61,16 +61,6 @@ function SearchResults({ results, query, isLoading }: SearchResultsProps) {
     [sortedResults, query],
   );
 
-  if (isLoading) {
-    return (
-      <div className='flex flex-col py-4 px-6 lg:p-6 gap-2 lg:gap-[16px]'>
-        <div className='flex flex-col gap-1 md:gap-2 lg:gap-6'>
-          <span className='text-black-600 font-iropkeBatang iropke-lg lg:iropke-xl'>검색 결과를 불러오는 중 입니다...</span>
-        </div>
-      </div>
-    );
-  }
-
   if (!results || filteredResults.length === 0) {
     return (
       <div className='flex flex-col py-4 px-6 lg:p-6 gap-2 lg:gap-[16px]'>
@@ -100,6 +90,7 @@ function SearchResults({ results, query, isLoading }: SearchResultsProps) {
           </div>
         </Link>
       ))}
+      {isLoading && <div className='flex justify-center py-4'>로딩 중...</div>}
     </div>
   );
 }
