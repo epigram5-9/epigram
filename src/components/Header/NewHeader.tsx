@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { useQuery } from '@tanstack/react-query'; // Use the correct version of react-query
+import { useQuery } from '@tanstack/react-query';
 import queries from '@/apis/queries';
 import LOGO_ICON from '../../../public/epigram-icon.png';
 import PROFILE_ICON from '../../../public/icon/user-icon.svg';
