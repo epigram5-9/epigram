@@ -83,21 +83,32 @@ export default function SignIn() {
           </Button>
         </Link>
       </div>
-      <div className='flex gap-4'>
-        <Link
-          href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&state=${'test'}&redirect_uri=${process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI}`}
-        >
-          <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
-        </Link>
-        {/* // FIXME: 구글 간편 로그인 리다이렉트시 500에러가 발생하는 부분으로 주석 처리하였음  */}
-        {/* <Link
+      <div className='flex flex-col items-center w-full lg:gap-10 gap-6'>
+        <div className='flex justify-center items-center lg:gap-6 gap-[14px] w-full lg:max-w-[640px] md:max-w-[384px] lg:px-0 md:px-0 px-6'>
+          <div className='flex-grow'>
+            <Image src='/horizen.png' alt='horizen' width={180} height={0} className='w-full h-[2px]' />
+          </div>
+          <h3 className='lg:text-xl text-xs font-pretendard text-blue-400 whitespace-nowrap'>SNS 계정으로 로그인하기</h3>
+          <div className='flex-grow'>
+            <Image src='/horizen.png' alt='horizen' width={180} height={0} className='w-full h-[2px]' />
+          </div>
+        </div>
+        <div className='flex justify-center gap-4'>
+          <Link
+            href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&state=${'test'}&redirect_uri=${process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI}`}
+          >
+            <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
+          </Link>
+          {/* // FIXME: 구글 간편 로그인 리다이렉트시 500에러가 발생하는 부분으로 주석 처리하였음  */}
+          {/* <Link
           href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile`}
         > */}
-        <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
-        {/* </Link> */}
-        <Link href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=code`}>
-          <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
-        </Link>
+          <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
+          {/* </Link> */}
+          <Link href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=code`}>
+            <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
+          </Link>
+        </div>
       </div>
     </div>
   );
