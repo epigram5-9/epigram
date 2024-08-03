@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-const PWD_VALIDATION_REGEX = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+const PWD_VALIDATION_REGEX = /^([a-z]|[A-Z]|[0-9]|[!@#$%^&])+$/;
 
 // NOTE: 회원가입 스키마
 export const PostSignUpRequest = z
