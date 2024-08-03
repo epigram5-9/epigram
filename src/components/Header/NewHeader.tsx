@@ -1,6 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query'; // Use the correct version of react-query
+import queries from '@/apis/queries';
 import LOGO_ICON from '../../../public/epigram-icon.png';
 import PROFILE_ICON from '../../../public/icon/user-icon.svg';
 import MENU_ICON from '../../../public/icon/menu-icon.svg';
@@ -8,8 +10,20 @@ import MENU_ICON from '../../../public/icon/menu-icon.svg';
 export default function NewHeader() {
   const router = useRouter();
 
+  const { data, isLoading, error } = useQuery(queries.user.getMe());
+
   const handleNavigateTo = (path: string) => {
     router.push(path);
+  };
+
+  const getNickName = () => {
+    if (isLoading) {
+      return '로딩 중...';
+    }
+    if (error) {
+      return '에러 발생';
+    }
+    return data?.nickname || '김코드';
   };
 
   return (
@@ -18,10 +32,10 @@ export default function NewHeader() {
         <div className='flex items-center gap-3 md:gap-6 lg:gap-9'>
           <div className='flex items-center gap-3'>
             <Image className='w-5 h-5 lg:w-9 lg:h-9 md:hidden' src={MENU_ICON} alt='logo' />
-            <div className='flex items-center gap-1'>
+            <button type='button' onClick={() => handleNavigateTo('/epigrams')} className='flex items-center gap-1'>
               <Image className='w-6 h-6 lg:w-9 lg:h-9' src={LOGO_ICON} alt='logo' />
               <span className='text-black-700 text-6 lg:text-[26px] font-montserrat leading-6 font-bold'>Epigram</span>
-            </div>
+            </button>
           </div>
           <div className='hidden md:flex items-center gap-6'>
             <button type='button' onClick={() => handleNavigateTo('/feed')}>
@@ -36,7 +50,7 @@ export default function NewHeader() {
           <div className='w-4 h-4 lg:w-6 lg:h-6 relative'>
             <Image src={PROFILE_ICON} alt='프로필 이미지' />
           </div>
-          <div className='text-gray-300 text-[13px] lg:text-sm font-medium font-pretendard leading-snug'>김코드</div>
+          <div className='text-gray-300 text-[13px] lg:text-sm font-medium font-pretendard leading-snug'>{getNickName()}</div>
         </button>
       </div>
     </div>
