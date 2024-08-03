@@ -43,6 +43,10 @@ const queries = createQueryKeyStore({
       queryKey: ['epigramComments', request],
       queryFn: () => getEpigramComments(request),
     }),
+    getCommentList: (request: CommentRequestType) => ({
+      queryKey: ['epigramComments', request] as const,
+      queryFn: ({ pageParam }: { pageParam: number | undefined }) => getEpigramComments({ ...request, cursor: pageParam }),
+    }),
   },
   emotion: {
     getMonthlyEmotionLogs: (request: GetMonthlyEmotionLogsRequestType) => ({
