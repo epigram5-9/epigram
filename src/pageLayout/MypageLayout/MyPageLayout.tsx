@@ -1,4 +1,4 @@
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 import { useMeQuery } from '@/hooks/userQueryHooks';
 import UserInfo from '@/types/user';
 import EmotionMonthlyLogs from '@/pageLayout/MypageLayout/EmotionMonthlyLogs';
@@ -27,7 +27,7 @@ export default function MyPageLayout() {
 
   return (
     <div className='bg-background-100 w-full relative h-dvh'>
-      <Header icon='back' isLogo={false} insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <NewHeader />
       <div className='bg-background-100 w-full h-[200px]'></div>
       <div className='w-full flex flex-col items-center bg-blue-100 rounded-3xl relative shadow-3xl'>
         <Profile image={data.image} nickname={data.nickname} />
