@@ -1,7 +1,13 @@
+/*
+  1개의 감정 아이콘 카드를 랜더링 합니다.
+  아이콘의 타입, 상태, 크기, 클릭 이벤트를 관리합니다.
+  아이콘 타입과 상태에 따라 아이콘의 모양과 스타일을 조정합니다.
+ */
+
 import React from 'react';
 import cn from '@/lib/utils';
 import Image from 'next/image';
-import { EmotionIconCardProps } from '@/types/EmotionTypes';
+import { EmotionIconCardProps } from '@/types/emotion';
 
 // 아이콘 파일 경로 매핑
 const iconPaths = {
@@ -103,12 +109,5 @@ function EmotionIconCard({ iconType = '감동', state = 'Default', size = 'sm', 
     </div>
   );
 }
-
-EmotionIconCard.displayName = 'EmotionIconCard';
-
-// 기본 props 설정
-EmotionIconCard.defaultProps = {
-  onClick: () => {},
-};
 
 export default EmotionIconCard;
