@@ -10,8 +10,8 @@ import useGetMyContentHook from '@/hooks/useGetMyContentHook';
 import MyComment from '@/user/ui-content/MyComment';
 import UserInfo from '@/types/user';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
-import spinner from '../../../public/spinner.svg';
 import { Button } from '@/components/ui/button';
+import spinner from '../../../public/spinner.svg';
 
 interface MyContentProps {
   user: UserInfo;
