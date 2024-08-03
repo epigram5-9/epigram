@@ -5,7 +5,7 @@ import { CommentRequestType } from '@/schema/comment';
 import { GetMonthlyEmotionLogsRequestType } from '@/schema/emotion';
 import { GetEpigramsParamsType } from '@/schema/epigrams';
 import { getMe, getUser } from './user';
-import { getEpigram } from './epigram';
+import { getEpigram, toggleEpigramLike } from './epigram';
 import { getEpigramComments } from './epigramComment';
 import getMonthlyEmotionLogs from './emotion';
 import getEpigrams from './getEpigrams';
@@ -33,11 +33,19 @@ const queries = createQueryKeyStore({
       },
       enabled: request.id !== undefined,
     }),
+    toggleLike: (request: EpigramRequestType) => ({
+      queryKey: ['toggleEpigramLike', request.id],
+      mutationFn: (variables: EpigramRequestType) => toggleEpigramLike(variables),
+    }),
   },
   epigramComment: {
     getComments: (request: CommentRequestType) => ({
       queryKey: ['epigramComments', request],
       queryFn: () => getEpigramComments(request),
+    }),
+    getCommentList: (request: CommentRequestType) => ({
+      queryKey: ['epigramComments', request] as const,
+      queryFn: ({ pageParam }: { pageParam: number | undefined }) => getEpigramComments({ ...request, cursor: pageParam }),
     }),
   },
   emotion: {
