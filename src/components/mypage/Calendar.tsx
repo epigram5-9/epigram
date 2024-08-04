@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { subMonths } from 'date-fns';
 import { EmotionLog, EmotionTypeEN } from '@/types/emotion';
 import useCalendar from '../../hooks/useCalendar';
-import { DAY_LIST, DATE_MONTH_FIXER, iconPaths } from '../utill/constants';
+import { DAY_LIST, DATE_MONTH_FIXER, iconPaths } from '../../user/utill/constants';
 import CalendarHeader from './CalendarHeader';
 
 interface CalendarProps {

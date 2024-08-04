@@ -5,7 +5,7 @@ import { EmotionTypeEN } from '@/types/emotion';
 import ARROW_BOTTOM_ICON from '../../../public/icon/arrow-bottom-icon.svg';
 import ARROW_RIGHT_ICON from '../../../public/icon/arrow-right-icon.svg';
 import ARROW_LEFT_ICON from '../../../public/icon/arrow-left-icon.svg';
-import { iconPaths } from '../utill/constants';
+import { iconPaths } from '../../user/utill/constants';
 
 interface CalendarHeaderProps {
   currentDate: Date;
