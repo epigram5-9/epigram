@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,6 +12,14 @@ import useRegisterMutation from '@/hooks/useRegisterMutation';
 
 export default function SignUp() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      router.push('/epigrams');
+    }
+  }, [router]);
 
   const form = useForm<PostSignUpRequestType>({
     resolver: zodResolver(PostSignUpRequest),
