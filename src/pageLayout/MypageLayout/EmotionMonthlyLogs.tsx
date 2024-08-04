@@ -1,8 +1,8 @@
 import { useMonthlyEmotionLogs } from '@/hooks/useGetEmotion';
 import { Emotion } from '@/types/emotion';
 import { useEffect, useState } from 'react';
-import Calendar from '../../user/ui-calendar/Calendar';
-import Chart from '../../user/ui-chart/Chart';
+import Calendar from '../../components/mypage/Calendar';
+import Chart from '../../components/mypage/Chart';
 
 interface EmotionMonthlyLogsProps {
   userId: number;
