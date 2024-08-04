@@ -6,7 +6,7 @@ import StartButton from './StartButton';
 function AboutLayout() {
   return (
     <>
-      <Header icon='' isLogo insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <main className='w-full h-[3000px] lg:h-[5000px] relative bg-slate-100'>
         <section className='absolute w-full h-[676px] lg:h-[900px] left-0  bg-stripes'>
           <div className='absolute left-1/2 transform -translate-x-1/2 top-[200px] lg:top-[320px] flex-col justify-start items-center gap-12 inline-flex'>
