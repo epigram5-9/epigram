@@ -8,13 +8,27 @@ const httpClient = axios.create({
 });
 
 // NOTE: eslint-disable no-param-reassign 미해결로 인한 설정
-httpClient.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem('accessToken');
-  /* eslint-disable no-param-reassign */
-  if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-  /* eslint-enable no-param-reassign */
-  return config;
-});
+httpClient.interceptors.request.use(
+  (config) => {
+    // 로컬 스토리지에서 accessToken과 idToken을 가져옵니다
+    const accessToken = localStorage.getItem('accessToken');
+    const idToken = localStorage.getItem('idToken');
+
+    // 구글 간편 로그인 관련 요청에는 idToken을 사용
+    if (idToken && config.url?.includes('/google')) {
+      /* eslint-disable no-param-reassign */
+      config.headers.Authorization = `Bearer ${idToken}`;
+    }
+    // 다른 API 요청에는 accessToken을 사용
+    else if (accessToken) {
+      /* eslint-disable no-param-reassign */
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
 httpClient.interceptors.response.use(
   (response) => response,

@@ -7,9 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { PostSigninRequest, PostSigninRequestType } from '@/schema/auth';
 import useSigninMutation from '@/hooks/useSignInMutation';
+import { useRouter } from 'next/router';
 
 export default function SignIn() {
   const mutationSignin = useSigninMutation();
+  const router = useRouter();
+
   // 폼 정의
   const form = useForm<PostSigninRequestType>({
     resolver: zodResolver(PostSigninRequest),
@@ -24,7 +27,19 @@ export default function SignIn() {
     form.setValue(fieldName, value.trim(), { shouldValidate: true, shouldDirty: true });
   };
 
-  // TODO: 나중에 컴포넌트 분리하기
+  const handleSubmit = async (values: PostSigninRequestType) => {
+    try {
+      const result = await mutationSignin.mutateAsync(values);
+      localStorage.setItem('accessToken', result.accessToken);
+      localStorage.setItem('refreshToken', result.refreshToken);
+      router.push('/epigrams'); // 로그인 성공 후 이동할 페이지
+    } catch (error) {
+      // 로그인 실패 처리
+      /* eslint-disable no-console */
+      console.error('로그인 실패:', error);
+    }
+  };
+
   return (
     <div className='flex flex-col justify-center items-center bg-background-100 w-full h-screen'>
       <header className='mb-[50px] md:mb-[60px]'>
@@ -33,7 +48,7 @@ export default function SignIn() {
         </Link>
       </header>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((values: PostSigninRequestType) => mutationSignin.mutate(values))} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col items-center lg:gap-6 gap-5 w-full px-6'>
           <div className='flex flex-col items-center lg:gap-4 gap-[10px] w-full lg:max-w-[640px] md:max-w-[384px]'>
             <FormField
               control={form.control}
@@ -109,12 +124,11 @@ export default function SignIn() {
           >
             <Image src='/logo-naver.svg' alt='logo-naver' width={60} height={60} className='md:size-[60px] size-10' />
           </Link>
-          {/* // FIXME: 구글 간편 로그인 리다이렉트시 500에러가 발생하는 부분으로 주석 처리하였음  */}
-          {/* <Link
-          href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile`}
-        > */}
-          <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
-          {/* </Link> */}
+          <Link
+            href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID_TEST}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI_TEST}&response_type=code&scope=openid%20profile%20email`}
+          >
+            <Image src='/logo-google.svg' alt='logo-google' width={60} height={60} className='md:size-[60px] size-10' />
+          </Link>
           <Link href={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=code`}>
             <Image src='/logo-kakao.svg' alt='logo-kakao' width={60} height={60} className='md:size-[60px] size-10' />
           </Link>
