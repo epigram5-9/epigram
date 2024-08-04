@@ -43,13 +43,9 @@ const queries = createQueryKeyStore({
     }),
   },
   epigramComment: {
-    getComments: (request: CommentRequestType) => ({
-      queryKey: ['epigramComments', request],
-      queryFn: () => getEpigramComments(request),
-    }),
-    getCommentList: (request: CommentRequestType) => ({
-      queryKey: ['epigramComments', request] as const,
-      queryFn: ({ pageParam }: { pageParam: number | undefined }) => getEpigramComments({ ...request, cursor: pageParam }),
+    getComments: (epigramId: number) => ({
+      queryKey: ['epigramComments', epigramId],
+      queryFn: ({ pageParam }: { pageParam?: number }) => getEpigramComments({ id: epigramId, limit: 3, cursor: pageParam }),
     }),
     getMyComments: (request: CommentRequestType) => ({
       queryKey: ['myEpigramComments', request],
