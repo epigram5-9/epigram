@@ -1,17 +1,12 @@
-// hooks/useEpigramCommentHook.ts
-
-import { useInfiniteQuery } from '@tanstack/react-query';
-import queries from '@/apis/queries';
+import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 import { CommentResponseType } from '@/schema/comment';
+import queries from '@/apis/queries';
 
-const useEpigramCommentsQuery = (epigramId: number) => {
-  const query = queries.epigramComment.getCommentList({ id: epigramId, limit: 3 });
-
-  return useInfiniteQuery({
-    ...query,
+const useEpigramCommentsQuery = (epigramId: number) =>
+  useInfiniteQuery<CommentResponseType, Error, InfiniteData<CommentResponseType>>({
+    ...queries.epigramComment.getComments(epigramId),
     initialPageParam: undefined,
-    getNextPageParam: (lastPage: CommentResponseType) => lastPage.nextCursor ?? undefined,
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
   });
-};
 
 export default useEpigramCommentsQuery;
