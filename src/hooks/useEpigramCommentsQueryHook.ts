@@ -1,14 +1,17 @@
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
-import { CommentResponseType } from '@/schema/comment';
-import { getEpigramComments } from '@/apis/epigramComment';
+// hooks/useEpigramCommentHook.ts
 
-const useEpigramCommentsQuery = (epigramId: number) =>
-  // NOTE: 순서대로 API응답타입, 에러타입, 반환되는데이터타입, 쿼리 키 타입, 페이지 파라미터의 타입
-  useInfiniteQuery<CommentResponseType, Error, InfiniteData<CommentResponseType>, [string, number], number | undefined>({
-    queryKey: ['epigramComments', epigramId],
-    queryFn: ({ pageParam }) => getEpigramComments({ id: epigramId, limit: 3, cursor: pageParam }),
+import { useInfiniteQuery } from '@tanstack/react-query';
+import queries from '@/apis/queries';
+import { CommentResponseType } from '@/schema/comment';
+
+const useEpigramCommentsQuery = (epigramId: number) => {
+  const query = queries.epigramComment.getCommentList({ id: epigramId, limit: 3 });
+
+  return useInfiniteQuery({
+    ...query,
     initialPageParam: undefined,
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    getNextPageParam: (lastPage: CommentResponseType) => lastPage.nextCursor ?? undefined,
   });
+};
 
 export default useEpigramCommentsQuery;

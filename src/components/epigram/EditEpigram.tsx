@@ -13,8 +13,8 @@ import useTagManagement from '@/hooks/useTagManagementHook';
 import { GetEpigramResponseType } from '@/schema/epigram';
 import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
 import { AxiosError } from 'axios';
-import Header from '../Header/Header';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import NewHeader from '../Header/NewHeader';
 
 interface EditEpigramProps {
   epigram: GetEpigramResponseType;
@@ -121,7 +121,7 @@ function EditEpigram({ epigram }: EditEpigramProps) {
 
   return (
     <>
-      <Header icon='back' isLogo insteadOfLogo='에피그램 수정' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <NewHeader />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>

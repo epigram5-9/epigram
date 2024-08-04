@@ -1,43 +1,59 @@
-import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toggleEpigramLike } from '@/apis/epigram';
 import { GetEpigramResponseType, EpigramRequestType } from '@/schema/epigram';
 import { toast } from '@/components/ui/use-toast';
+import queries from '@/apis/queries';
+import { toggleEpigramLike } from '@/apis/epigram';
+
+type MutationContext = {
+  previousEpigram: GetEpigramResponseType | undefined;
+};
 
 const useEpigramLike = (epigram: GetEpigramResponseType) => {
-  const [isLiked, setIsLiked] = useState(epigram.isLiked || false);
-  const [likeCount, setLikeCount] = useState(epigram.likeCount);
   const queryClient = useQueryClient();
 
-  const { mutate: toggleLike, isPending } = useMutation({
-    mutationFn: (request: EpigramRequestType) => toggleEpigramLike(request),
-    onSuccess: (updatedEpigram) => {
-      setIsLiked(!isLiked);
-      setLikeCount(updatedEpigram.likeCount);
-      queryClient.setQueryData(['epigram', epigram.id], updatedEpigram);
+  const { mutate: toggleLike } = useMutation<GetEpigramResponseType, Error, EpigramRequestType, MutationContext>({
+    mutationFn: toggleEpigramLike,
+    onMutate: async (): Promise<MutationContext> => {
+      await queryClient.cancelQueries({ queryKey: queries.epigram.getEpigram({ id: epigram.id }).queryKey });
+
+      const previousEpigram = queryClient.getQueryData<GetEpigramResponseType>(queries.epigram.getEpigram({ id: epigram.id }).queryKey);
+
+      if (previousEpigram) {
+        const updatedEpigram = {
+          ...previousEpigram,
+          isLiked: !previousEpigram.isLiked,
+          likeCount: previousEpigram.isLiked ? previousEpigram.likeCount - 1 : previousEpigram.likeCount + 1,
+        };
+        queryClient.setQueryData(queries.epigram.getEpigram({ id: epigram.id }).queryKey, updatedEpigram);
+      }
+
+      return { previousEpigram };
     },
-    onError: () => {
+    onError: (err, _, context) => {
+      if (context?.previousEpigram) {
+        queryClient.setQueryData(queries.epigram.getEpigram({ id: epigram.id }).queryKey, context.previousEpigram);
+      }
       toast({
         title: '좋아요 오류',
         description: '잠시 후 다시 시도해 주세요.',
         variant: 'destructive',
       });
+      // eslint-disable-next-line no-console
+      console.error('좋아요 오류:', err);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(queries.epigram.getEpigram({ id: epigram.id }).queryKey, data);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queries.epigram.getEpigram({ id: epigram.id }).queryKey });
     },
   });
 
   const handleLikeClick = () => {
-    if (!isPending) {
-      toggleLike({ id: epigram.id });
-    } else {
-      toast({
-        title: '처리 중',
-        description: '이전 요청이 처리되고 있습니다. 잠시만 기다려 주세요.',
-        variant: 'default',
-      });
-    }
+    toggleLike({ id: epigram.id });
   };
 
-  return { likeCount, handleLikeClick, isPending };
+  return { handleLikeClick };
 };
 
 export default useEpigramLike;
