@@ -1,15 +1,13 @@
 import Image from 'next/image';
-import { UserProfileProps } from '@/types/user';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import Label from '@/components/ui/label';
 import { DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { useToast } from '@/components/ui/use-toast';
-import { useEffect, useRef } from 'react';
-import { Form, Formik, useFormik } from 'formik';
-import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
-import * as Yup from 'yup';
-import { AxiosError } from 'axios';
+import { useRef } from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useCreatePresignedUrl } from '@/hooks/userQueryHooks';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { PatchMeRequestType, PatchMeRequest } from '@/schema/user';
 import fileNameChange from '../../user/utill/fileNameChange';
 
 interface UserProfileEditProps {
@@ -20,56 +18,16 @@ interface UserProfileEditProps {
   onModalClose: () => void;
 }
 
-const validationSchema = Yup.object().shape({
-  nickname: Yup.string().min(1, '닉네임은 1자 이상 30자 이하여야 합니다.').max(30, '닉네임은 1자 이상 30자 이하여야 합니다.').required('닉네임은 필수 항목입니다.'),
-});
-
 export default function ProfileEdit({ initialValues, onModalClose }: UserProfileEditProps) {
   const createPresignedUrl = useCreatePresignedUrl();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const { toast } = useToast();
-
-  const handleSubmit = async () => {
-    await formik.submitForm(); // Formik의 submitForm 함수 호출
-  };
-
-  const { mutate: updateMe } = useUpdateMe({
-    onSuccess: () => {
-      onModalClose();
-      toast({
-        description: '프로필 수정이 완료되었습니다.',
-      });
-    },
-    onError: () => {
-      toast({
-        description: '프로필 수정 실패',
-      });
-    },
+  const form = useForm<PatchMeRequestType>({
+    resolver: zodResolver(PatchMeRequest),
+    mode: 'onBlur',
+    defaultValues: initialValues,
   });
 
-  const formik = useFormik<UserProfileProps>({
-    initialValues: {
-      image: '',
-      nickname: '',
-    },
-    validationSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      try {
-        // 프로필 업데이트
-        await updateProfile(values);
-        setSubmitting(false);
-      } catch (error) {
-        // 에러 처리
-      } finally {
-        setSubmitting(false);
-      }
-    },
-  });
-
-  const updateProfile = (values: UserProfileProps) => {
-    updateMe(values);
-  };
+  const { setValue, getValues } = form;
 
   // 프로필 사진 변경 클릭
   const handleImageEditClick = () => {
@@ -81,60 +39,65 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
   // 이미지 변경 시
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>): Promise<void> {
     const { files } = e.currentTarget;
+
     if (files && files.length > 0) {
       const file = files[0];
 
-      try {
-        // 중복된 파일명 및 한글파일이 저장되지 않도록 파일이름 포멧 변경
-        const newFileName = fileNameChange();
-        const newFile = new File([file], `${newFileName}.${file.name.split('.').pop()}`, { type: file.type });
+      // 중복된 파일명 및 한글파일이 저장되지 않도록 파일이름 포멧 변경
+      const newFileName = fileNameChange();
+      const newFile = new File([file], `${newFileName}.${file.name.split('.').pop()}`, { type: file.type });
 
-        // presignedUrl 구하는 함수 (s3 업로드까지 같이)
-        const { url } = await createPresignedUrl.mutateAsync({ image: newFile });
-        formik.setFieldValue('image', url);
-      } catch (error) {
-        // 에러 처리: 실패 시 토스트 메시지
-        const axiosError = error as AxiosError;
-
-        onModalClose();
-        const errorMessage = `(error: ${axiosError.response?.status}) 잘못 된 요청입니다. 관리자에게 문의해주세요`;
-
-        toast({
-          description: errorMessage,
-          className: 'bg-red-400 text-white',
-        });
-      }
+      createPresignedUrl.mutate(
+        { image: newFile },
+        {
+          onSuccess: (data) => {
+            setValue('image', data.url);
+            onModalClose();
+          },
+        },
+      );
     }
   }
 
-  useEffect(() => {
-    formik.setValues(initialValues);
-  }, [initialValues]);
-
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {({ isSubmitting }) => (
-        <Form>
-          <DialogHeader>
-            <DialogTitle>프로필 수정</DialogTitle>
-            <div className='flex flex-col justify-center items-center pt-8'>
-              <div className='w-[200px] h-[200px] rounded-full overflow-hidden cursor-pointer border border-gray-300 shadow-sm'>
-                <Image src={formik.values.image || initialValues.image} alt='유저 프로필' className='w-full h-full object-cover' width={200} height={200} priority onClick={handleImageEditClick} />
-                <Input type='file' accept='image/*' name='image' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
-              </div>
-              <div className='mt-10 flex flex-col items-start gap-4'>
-                <Label htmlFor='name'>닉네임</Label>
-                <Input type='text' name='nickname' value={formik.values.nickname} className='text-lg p-3' onChange={formik.handleChange} />
-              </div>
+    <Form {...form}>
+      <form>
+        <DialogHeader>
+          <DialogTitle>프로필 수정</DialogTitle>
+          <div className='flex flex-col justify-center items-center pt-8'>
+            <div className='w-[200px] h-[200px] rounded-full overflow-hidden cursor-pointer border border-gray-300 shadow-sm'>
+              <Image src={getValues('image') || initialValues.image} alt='유저 프로필' className='w-full h-full object-cover' width={200} height={200} priority onClick={handleImageEditClick} />
+              <Input type='file' accept='image/*' name='image' onChange={(e) => handleImageChange(e)} className='hidden' ref={fileInputRef} />
             </div>
-            <DialogFooter>
-              <Button type='submit' className='bg-slate-600 text-white' disabled={!formik.isValid || isSubmitting}>
-                수정하기
-              </Button>
-            </DialogFooter>
-          </DialogHeader>
-        </Form>
-      )}
-    </Formik>
+            <div className='mt-10 flex flex-col items-start gap-4'>
+              <FormField
+                control={form.control}
+                name='nickname'
+                render={({ field, fieldState }) => (
+                  <FormItem className='flex flex-col w-full lg:max-w-[640px] md:max-w-[384px] space-y-0 md:mb-10 mb-5'>
+                    <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>닉네임</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type='text'
+                        placeholder='닉네임'
+                        onBlur={(e) => setValue('nickname', e.target.value.trim())}
+                        className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
+                      />
+                    </FormControl>
+                    <FormMessage className='flex justify-end text-[13px] text-state-error' />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type='submit' className='bg-slate-600 text-white' disabled={!form.formState.isValid}>
+              수정하기
+            </Button>
+          </DialogFooter>
+        </DialogHeader>
+      </form>
+    </Form>
   );
 }
