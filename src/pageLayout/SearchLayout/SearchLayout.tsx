@@ -1,62 +1,61 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import NewHeader from '@/components/Header/NewHeader';
 import SearchBar from '@/components/search/SearchBar';
 import RecentSearches from '@/components/search/RecentSearches';
 import SearchResults from '@/components/search/SearchResults';
 import useEpigrams from '@/hooks/useGetEpigramsHooks';
-import { GetEpigramsResponseType } from '@/schema/epigrams';
 
 function SearchLayout() {
   const [searches, setSearches] = useState<string[]>([]);
   const [currentSearch, setCurrentSearch] = useState<string>('');
-  const [page, setPage] = useState(0);
-  const [allResults, setAllResults] = useState<GetEpigramsResponseType['list']>([]);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [nextCursor, setNextCursor] = useState<number | null>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const scrollPositionRef = useRef<number>(0);
   const router = useRouter();
 
-  const isBrowser = typeof window !== 'undefined'; // 브라우저 환경에서만 localStorage에 접근
+  const isBrowser = typeof window !== 'undefined';
   const accessToken = isBrowser ? localStorage.getItem('accessToken') : null;
   const isUserLoggedIn = !!accessToken;
-  const userId = isUserLoggedIn ? 'loggedInUser' : 'guest'; // 사용자 ID를 기반으로 저장 키 생성
+  const userId = isUserLoggedIn ? 'loggedInUser' : 'guest';
   const recentSearchesKey = `recentSearches_${userId}`;
 
-  const { data: searchResults, isLoading } = useEpigrams(currentSearch, page);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useEpigrams(currentSearch);
 
-  // 새로운 검색 결과를 allResults에 누적, 총 결과 개수와 다음 커서를 업데이트
-  useEffect(() => {
-    if (searchResults?.list) {
-      setAllResults((prevResults) => [...prevResults, ...searchResults.list]);
-      setTotalCount(searchResults.totalCount);
-      setNextCursor(searchResults.nextCursor);
-    }
-  }, [searchResults]);
+  const handleObserver = useCallback(
+    async (entries: IntersectionObserverEntry[]) => {
+      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        scrollPositionRef.current = window.scrollY;
+        await fetchNextPage();
+        requestAnimationFrame(() => {
+          window.scrollTo(0, scrollPositionRef.current);
+        });
+      }
+    },
+    [hasNextPage, isFetchingNextPage, fetchNextPage],
+  );
 
   // observerRef가 화면에 나타날 때 페이지 증가,추가 데이터 로드
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
 
-    observerRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !isLoading && nextCursor !== null) {
-        setPage((prevPage) => prevPage + 1);
-      }
-    });
+    observerRef.current = new IntersectionObserver(handleObserver, { rootMargin: '200px' });
 
-    if (loadMoreRef.current) {
-      observerRef.current.observe(loadMoreRef.current);
-    }
+    const currentObserver = observerRef.current;
+    if (loadMoreRef.current) currentObserver.observe(loadMoreRef.current);
 
-    // 옵저버 클린업 (메모리 누수 방지)
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
+      if (currentObserver && loadMoreRef.current) {
+        currentObserver.unobserve(loadMoreRef.current);
       }
     };
-  }, [allResults.length, isLoading, nextCursor]);
+  }, [handleObserver]);
+
+  // 최근 검색어 초기화
+  const handleClearAll = () => {
+    setSearches([]);
+    if (isBrowser) localStorage.removeItem(recentSearchesKey);
+  };
 
   // 컴포넌트가 처음 렌더링 될 때 저장된 최근 검색어 불러오기, 로그인된 사용자 별로 최근 검색어를 구분하여 URL에 데이터 저장
   useEffect(() => {
@@ -72,30 +71,15 @@ function SearchLayout() {
     }
   }, [recentSearchesKey]);
 
-  // 모두지우기 클릭 시 저장된 최근 검색어 삭제
-  const handleClearAll = () => {
-    setSearches([]);
-    if (isBrowser) {
-      localStorage.removeItem(recentSearchesKey);
-    }
-  };
-
   // 검색어가 제출될 때 작동
   const handleSearch = (search: string) => {
-    setPage(0);
-    setAllResults([]);
-    setSearches((prevSearches) => {
-      const updatedSearches = [search, ...prevSearches.filter((item) => item !== search)].slice(0, 10);
-      if (isBrowser) {
-        localStorage.setItem(recentSearchesKey, JSON.stringify(updatedSearches));
-      }
-      return updatedSearches;
-    });
     setCurrentSearch(search);
-
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set('q', search);
-    router.push(`/search?${searchParams.toString()}`);
+    setSearches((prev) => {
+      const updated = [search, ...prev.filter((s) => s !== search)].slice(0, 20);
+      if (isBrowser) localStorage.setItem(recentSearchesKey, JSON.stringify(updated));
+      return updated;
+    });
+    router.push(`/search?q=${search}`);
   };
 
   return (
@@ -104,7 +88,17 @@ function SearchLayout() {
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
         <SearchBar onSearch={handleSearch} currentSearch={currentSearch} />
         <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />
-        {currentSearch && <SearchResults results={{ totalCount, nextCursor: nextCursor ?? 0, list: allResults }} query={currentSearch} isLoading={isLoading} />}
+        {currentSearch && (
+          <SearchResults
+            results={{
+              totalCount: data?.pages?.[0]?.totalCount || 0,
+              nextCursor: data?.pages?.[data.pages.length - 1]?.nextCursor || null,
+              list: data?.pages?.flatMap((page) => page.list) || [],
+            }}
+            query={currentSearch}
+            isLoading={isFetchingNextPage}
+          />
+        )}
         <div ref={loadMoreRef} />
       </div>
     </>
