@@ -1,8 +1,8 @@
 import { useMonthlyEmotionLogs } from '@/hooks/useGetEmotion';
 import { Emotion } from '@/types/emotion';
 import { useEffect, useState } from 'react';
-import Calendar from '../../user/ui-calendar/Calendar';
-import Chart from '../../user/ui-chart/Chart';
+import Calendar from './Calendar';
+import Chart from './Chart';
 
 interface EmotionMonthlyLogsProps {
   userId: number;
@@ -32,9 +32,9 @@ export default function EmotionMonthlyLogs({ userId }: EmotionMonthlyLogsProps) 
   const { data: monthlyEmotionLogs = [] } = useMonthlyEmotionLogs(emotionRequest);
 
   return (
-    <div className='pb-[110px]'>
+    <>
       <Calendar currentDate={currentDate} setCurrentDate={setCurrentDate} monthlyEmotionLogs={monthlyEmotionLogs} />
       <Chart monthlyEmotionLogs={monthlyEmotionLogs} />
-    </div>
+    </>
   );
 }
