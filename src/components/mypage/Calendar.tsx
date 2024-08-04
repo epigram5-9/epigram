@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { subMonths } from 'date-fns';
+import { subMonths, isSameMonth, isSameDay } from 'date-fns';
 import { EmotionLog, EmotionTypeEN } from '@/types/emotion';
 import useCalendar from '../../hooks/useCalendar';
 import { DAY_LIST, DATE_MONTH_FIXER, iconPaths } from '../../user/utill/constants';
@@ -64,11 +64,21 @@ export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLo
           // eslint-disable-next-line react/no-array-index-key
           <div key={weekIndex} className='flex'>
             {week.map((day, dayIndex) => {
-              // 현재 날짜와 비교
-              const isToday = day === currentDate.getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
+              const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
               const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-              const emotion: EmotionTypeEN = filteredEmotionMap[dateString]; // 날짜에 해당하는 감정 가져오기
+
+              // 현재 월의 날짜인지 확인
+              const isDateInCurrentMonth = isSameMonth(date, currentDate);
+
+              // 첫 주에 7보다 큰 날짜 또는 마지막 주에 7보다 작은 날짜는 감정 출력하지 않음
+              const isFirstWeek = weekIndex === 0 && day > 7;
+              const isLastWeek = weekIndex === weekCalendarList.length - 1 && day < 7;
+
+              const emotion = isDateInCurrentMonth && !isFirstWeek && !isLastWeek ? filteredEmotionMap[dateString] : undefined;
               const iconPath = emotion && iconPaths[emotion] ? iconPaths[emotion].path : '/icon/BW/SmileFaceBWIcon.svg';
+
+              // 오늘 날짜 체크
+              const isToday = isSameDay(date, new Date());
 
               return (
                 <div
