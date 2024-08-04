@@ -10,7 +10,6 @@ const usePatchCommentMutation = () => {
   return useMutation({
     mutationFn: ({ commentId, ...commentData }: { commentId: number } & PatchCommentRequest) => patchComment(commentId, commentData),
     onSuccess: (updatedComment) => {
-      //NOTE: 쿼리를 무효화하면서 바로 캐시를 업데이트
       queryClient.invalidateQueries({
         queryKey: queries.epigramComment.getComments(updatedComment.epigramId).queryKey,
       });

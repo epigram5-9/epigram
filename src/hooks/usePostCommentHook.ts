@@ -10,7 +10,6 @@ const usePostCommentMutation = () => {
   return useMutation({
     mutationFn: (commentData: PostCommentRequest) => postComment(commentData),
     onSuccess: (variables) => {
-      //NOTE: 댓글이 추가된 에피그램의 댓글 쿼리를 무효화
       queryClient.invalidateQueries({
         queryKey: queries.epigramComment.getComments(variables.epigramId).queryKey,
       });
