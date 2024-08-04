@@ -6,7 +6,7 @@ const useEpigramCommentsQuery = (epigramId: number) =>
   useInfiniteQuery<CommentResponseType, Error, InfiniteData<CommentResponseType>>({
     ...queries.epigramComment.getComments(epigramId),
     initialPageParam: undefined,
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    getNextPageParam: (lastPage: CommentResponseType) => lastPage.nextCursor ?? undefined,
   });
 
 export default useEpigramCommentsQuery;
