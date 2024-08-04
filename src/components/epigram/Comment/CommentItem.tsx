@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
-import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
+import useEpigramCommentDelete from '@/hooks/useEpigramCommentDeleteHook';
 import DeleteAlertModal from '../DeleteAlertModal';
 import CommentTextarea from './CommentTextarea';
 
@@ -18,7 +18,7 @@ interface CommentItemProps {
 }
 
 function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: CommentItemProps) {
-  const deleteCommentMutation = useDeleteCommentMutation();
+  const deleteCommentMutation = useEpigramCommentDelete();
   const { toast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -33,7 +33,7 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
 
   const handleDeleteComment = async () => {
     try {
-      await deleteCommentMutation.mutateAsync(comment.id);
+      await deleteCommentMutation.mutateAsync({ commentId: comment.id, epigramId });
       setIsDeleteModalOpen(false);
       toast({
         title: '댓글이 삭제되었습니다.',
