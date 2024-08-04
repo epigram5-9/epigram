@@ -47,6 +47,10 @@ const queries = createQueryKeyStore({
       queryKey: ['epigramComments', epigramId],
       queryFn: ({ pageParam }: { pageParam?: number }) => getEpigramComments({ id: epigramId, limit: 3, cursor: pageParam }),
     }),
+    getCommentList: (request: CommentRequestType) => ({
+      queryKey: ['epigramComments', request] as const,
+      queryFn: ({ pageParam }: { pageParam: number | undefined }) => getEpigramComments({ ...request, cursor: pageParam }),
+    }),
     getMyComments: (request: CommentRequestType) => ({
       queryKey: ['myEpigramComments', request],
       queryFn: () => getMyEpigramComments(request),
