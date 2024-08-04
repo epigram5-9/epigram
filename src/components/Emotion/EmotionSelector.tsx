@@ -10,7 +10,12 @@ import EmotionSaveToast from './EmotionSaveToast';
  * EmotionSelector 컴포넌트는 여러 개의 EmotionIconCard를 관리하고
  * 사용자의 오늘의 감정을 선택하고 저장하고 출력합니다.
  */
-function EmotionSelector() {
+
+interface EmotionSelectorProps {
+  onEmotionSaved: () => void; // Callback for when the emotion is saved
+}
+
+function EmotionSelector({ onEmotionSaved }: EmotionSelectorProps) {
   // 반응형 디자인을 위한 미디어 쿼리 훅
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)');
   const isMobile = useMediaQuery('(max-width: 767px)');
@@ -26,6 +31,8 @@ function EmotionSelector() {
 
   // 현재 선택된 감정을 관리하는 useState 훅
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionType | null>(null);
+  const [showToast, setShowToast] = useState<boolean>(false); // State for controlling the toast
+
   // 오늘의 감정을 조회하기 위한 훅
   const { data: emotion, error: getError, isLoading: isGetLoading } = useGetEmotion();
   // 감정을 저장하기 위한 훅
@@ -49,7 +56,9 @@ function EmotionSelector() {
    * 감정을 서버에 저장합니다.
    * @param iconType - 클릭된 감정의 타입
    */
+
   const handleCardClick = async (iconType: EmotionType) => {
+    let emotionChanged = false;
     setStates((prevStates) => {
       const newStates = { ...prevStates };
 
@@ -63,6 +72,7 @@ function EmotionSelector() {
         Object.keys(newStates).forEach((key) => {
           newStates[key as EmotionType] = key === iconType ? 'Clicked' : 'Unclicked';
         });
+        emotionChanged = true;
       }
 
       return newStates;
@@ -71,7 +81,14 @@ function EmotionSelector() {
     // 오늘의 감정 저장
     postEmotionMutation.mutate(iconType, {
       onSuccess: (_, clickedIconType) => {
-        setSelectedEmotion(clickedIconType);
+        if (emotionChanged) {
+          setSelectedEmotion(clickedIconType);
+          setShowToast(true);
+          setTimeout(() => {
+            setShowToast(false);
+            onEmotionSaved();
+          }, 1000);
+        }
       },
       onError: (error: unknown) => {
         // eslint-disable-next-line
@@ -103,7 +120,7 @@ function EmotionSelector() {
         ))}
       </div>
       {/* 감정이 선택되었을 때 토스트 메시지 표시 */}
-      {selectedEmotion && <EmotionSaveToast iconType={selectedEmotion} />}
+      {showToast && selectedEmotion && <EmotionSaveToast iconType={selectedEmotion} />}
     </>
   );
 }

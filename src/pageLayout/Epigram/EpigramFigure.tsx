@@ -4,10 +4,17 @@ import { EpigramFigureProps } from '@/types/epigram.types';
 import useEpigramLike from '@/hooks/useEpigramLike';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import queries from '@/apis/queries';
 
 function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
   const isAuthor = currentUserId === epigram.writerId;
-  const { likeCount, handleLikeClick, isPending } = useEpigramLike(epigram);
+  const { handleLikeClick } = useEpigramLike(epigram);
+
+  const { data: latestEpigram } = useQuery({
+    ...queries.epigram.getEpigram({ id: epigram.id }),
+    initialData: epigram,
+  });
 
   return (
     <div className='bg-[length:100%_2.5em] bg-[linear-gradient(#eee_.1em,transparent_.1em)] w-full flex justify-center py-6'>
@@ -27,10 +34,10 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
         </blockquote>
         <figcaption className='text-gray-400 text-right text-base lg:text-2xl font-normal'>-{epigram.author}-</figcaption>
         <div className='flex justify-center gap-4'>
-          <Button type='button' onClick={handleLikeClick} disabled={isPending}>
-            <div className='p-4 w-20 lg:w-28 h-9 lg:h-11 flex items-center justify-center gap-2 text-white rounded-full bg-black'>
-              <Image src='/likeIcon.svg' alt='좋아요 아이콘' width={20} height={20} className='lg:w-9 lg:h-9' />
-              <p className='text-sm lg:text-xl'>{likeCount}</p>
+          <Button type='button' onClick={handleLikeClick}>
+            <div className='p-4 w-20 lg:w-28 h-9 lg:h-11 flex items-center justify-center gap-2 text-white rounded-full bg-black-300'>
+              <Image src={latestEpigram.isLiked ? '/likeIcon.svg' : '/unlikeIcon.svg'} alt='좋아요 아이콘' width={20} height={20} className='lg:w-9 lg:h-9' />
+              <p className='text-sm lg:text-xl'>{latestEpigram.likeCount}</p>
             </div>
           </Button>
           {epigram.referenceTitle && (
