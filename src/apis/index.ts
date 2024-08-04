@@ -10,21 +10,22 @@ const httpClient = axios.create({
 // NOTE: eslint-disable no-param-reassign 미해결로 인한 설정
 httpClient.interceptors.request.use(
   (config) => {
-    // 로컬 스토리지에서 accessToken과 idToken을 가져옵니다
     const accessToken = localStorage.getItem('accessToken');
     const idToken = localStorage.getItem('idToken');
 
-    // 구글 간편 로그인 관련 요청에는 idToken을 사용
+    // NOTE: 일반 API 요청에는 accessToken을 사용
+    if (accessToken) {
+      /* eslint-disable no-param-reassign */
+      config.headers.Authorization = `Bearer ${accessToken}`;
+      /* eslint-enable no-param-reassign */
+    }
+
+    // NOTE: 구글 간편 로그인 관련 요청에는 idToken을 사용
     if (idToken && config.url?.includes('/google')) {
       /* eslint-disable no-param-reassign */
       config.headers.Authorization = `Bearer ${idToken}`;
       /* eslint-enable no-param-reassign */
-    }
-    // 다른 API 요청에는 accessToken을 사용
-    else if (accessToken) {
-      /* eslint-disable no-param-reassign */
-      config.headers.Authorization = `Bearer ${accessToken}`;
-      /* eslint-enable no-param-reassign */
+      return config;
     }
 
     return config;

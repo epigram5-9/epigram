@@ -9,13 +9,12 @@ const useGoogleLogin = () => {
 
   return useMutation({
     mutationFn: async (code: string) => {
-      // Google OAuth로부터 ID 토큰을 가져옵니다
       const idToken = await postGoogleOauth(code);
-      localStorage.setItem('idToken', idToken);
+      localStorage.setItem('accessToken', idToken.accessToken);
+      localStorage.setItem('refreshToken', idToken.refreshToken);
       return { idToken };
     },
     onSuccess: () => {
-      // 로그인 성공 후 /epigrams으로 리다이렉션
       router.push('/epigrams');
     },
     onError: (error) => {
@@ -36,7 +35,6 @@ const useGoogleLogin = () => {
         className: 'bg-state-error text-white font-semibold',
       });
 
-      // 에러 발생 시 /auth/SignIn으로 리다이렉션
       router.push('/auth/SignIn');
     },
   });
