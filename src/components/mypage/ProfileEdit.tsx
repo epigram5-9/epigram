@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useCreatePresignedUrl } from '@/hooks/userQueryHooks';
+import { useCreatePresignedUrl, useUpdateMe } from '@/hooks/userQueryHooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { PatchMeRequestType, PatchMeRequest } from '@/schema/user';
@@ -19,15 +19,29 @@ interface UserProfileEditProps {
 }
 
 export default function ProfileEdit({ initialValues, onModalClose }: UserProfileEditProps) {
+  // 이미지 업로드 훅
   const createPresignedUrl = useCreatePresignedUrl();
+  // 닉네임 중복 처리를 위한 변수
+  const [focusedField, setFocusedField] = useState<boolean>(false);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   const form = useForm<PatchMeRequestType>({
     resolver: zodResolver(PatchMeRequest),
     mode: 'onBlur',
     defaultValues: initialValues,
   });
 
-  const { setValue, getValues } = form;
+  const { setValue, getValues, setFocus } = form;
+
+  // error 반환 시 닉네임 focus를 위한 함수
+  const handleFieldError = () => {
+    setFocus('nickname');
+    setFocusedField(true);
+  };
+
+  // 회원정보 수정 훅
+  const updateMe = useUpdateMe(handleFieldError, onModalClose);
 
   // 프로필 사진 변경 클릭
   const handleImageEditClick = () => {
@@ -52,7 +66,6 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
         {
           onSuccess: (data) => {
             setValue('image', data.url);
-            onModalClose();
           },
         },
       );
@@ -61,7 +74,7 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
 
   return (
     <Form {...form}>
-      <form>
+      <form onSubmit={form.handleSubmit((values: PatchMeRequestType) => updateMe.mutate(values))}>
         <DialogHeader>
           <DialogTitle>프로필 수정</DialogTitle>
           <div className='flex flex-col justify-center items-center pt-8'>
@@ -75,14 +88,16 @@ export default function ProfileEdit({ initialValues, onModalClose }: UserProfile
                 name='nickname'
                 render={({ field, fieldState }) => (
                   <FormItem className='flex flex-col w-full lg:max-w-[640px] md:max-w-[384px] space-y-0 md:mb-10 mb-5'>
-                    <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid ? 'text-state-error' : 'text-blue-900'}`}>닉네임</FormLabel>
+                    <FormLabel className={`md:mb-5 mb-4 font-pretendard lg:text-xl md:text-base sm:text-sm ${fieldState.invalid || focusedField ? 'text-state-error' : 'text-blue-900'}`}>
+                      닉네임
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         type='text'
                         placeholder='닉네임'
                         onBlur={(e) => setValue('nickname', e.target.value.trim())}
-                        className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
+                        className={`lg:h-16 h-11 px-4 lg:text-xl md:text-base placeholder-blue-400 rounded-xl bg-blue-200 font-pretendard ${fieldState.invalid || focusedField ? 'border-2 border-state-error' : 'focus:border-blue-500'}`}
                       />
                     </FormControl>
                     <FormMessage className='flex justify-end text-[13px] text-state-error' />
