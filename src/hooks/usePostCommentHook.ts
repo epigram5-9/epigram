@@ -2,17 +2,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postComment } from '@/apis/epigramComment';
 import { PostCommentRequest } from '@/types/epigram.types';
 import { toast } from '@/components/ui/use-toast';
+import queries from '@/apis/queries';
 
 const usePostCommentMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (commentData: PostCommentRequest) => postComment(commentData),
-    onSuccess: () => {
-      // 댓글 목록 쿼리 무효화
-      queryClient.invalidateQueries({ queryKey: ['epigramComments'] });
-
-      // 성공 메시지 표시
+    onSuccess: (variables) => {
+      queryClient.invalidateQueries({
+        queryKey: queries.epigramComment.getComments(variables.epigramId).queryKey,
+      });
       toast({
         className: 'bg-white',
         title: '댓글 등록 성공',
@@ -20,7 +20,6 @@ const usePostCommentMutation = () => {
       });
     },
     onError: (error) => {
-      // 에러 메시지 표시
       toast({
         className: 'bg-white',
         title: '댓글 등록 실패',

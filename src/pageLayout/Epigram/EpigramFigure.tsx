@@ -43,8 +43,8 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
           {epigram.referenceTitle && (
             <Button type='button'>
               <Link href={`${epigram.referenceUrl}`} target='_blank'>
-                <div className='p-4 w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
-                  <p className='text-gray-300 text-sm lg:text-xl truncate ...'>{epigram.referenceTitle}</p>
+                <div className='p-2 lg:p-4 w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-around rounded-full bg-line-100'>
+                  <p className='w-full text-gray-300 text-sm lg:text-xl truncate ...'>{epigram.referenceTitle}</p>
                   <Image src='/placeLink.svg' alt='링크 이미지' width={20} height={20} className='lg:w-9 lg:h-9' />
                 </div>
               </Link>
