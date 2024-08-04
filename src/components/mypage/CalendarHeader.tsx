@@ -16,6 +16,9 @@ interface CalendarHeaderProps {
 }
 
 export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth, onEmotionSelect, selectEmotion }: CalendarHeaderProps) {
+  // 드롭다운 버튼 텍스트 설정
+  const filterText = selectEmotion ? `필터: ${iconPaths[selectEmotion]?.name}` : '필터: 없음';
+
   return (
     <div className='w-full flex justify-between items-center'>
       <div className='flex w-full h-[52px] justify-between items-center'>
@@ -23,7 +26,7 @@ export default function CalendarHeader({ currentDate, onPrevMonth, onNextMonth, 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='flex items-center gap-1 bg-slate-100 rounded-[14px] text-center text-stone-300 text-xl'>
-              필터: 감동
+              {filterText}
               <div className='w-9 h-9 relative'>
                 <Image src={ARROW_BOTTOM_ICON} alt='필터 선택' width={36} height={36} />
               </div>
