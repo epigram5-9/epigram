@@ -4,7 +4,7 @@ import EpigramComment from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
 import { useRouter } from 'next/router';
 import { useMeQuery } from '@/hooks/userQueryHooks';
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 
 function DetailPage() {
   const router = useRouter();
@@ -22,7 +22,7 @@ function DetailPage() {
 
   return (
     <div className='flex flex-col min-h-screen '>
-      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <NewHeader />
       <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
       <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} userImage={userData?.image} />
     </div>
