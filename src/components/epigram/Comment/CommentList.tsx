@@ -5,16 +5,16 @@ import NoComment from './NoComment';
 import CommentItem from './CommentItem';
 
 interface CommentListProps extends Omit<EpigramCommentProps, 'userImage'> {
-  onEditComment: (id: number, content: string, isPrivate: boolean) => void;
+  onEditComment: (id: number) => void;
+  editingCommentId: number | null;
 }
 
-function CommentList({ epigramId, currentUserId, onEditComment }: CommentListProps) {
+function CommentList({ epigramId, currentUserId, onEditComment, editingCommentId }: CommentListProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useEpigramCommentsQuery(epigramId);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastCommentRef = useRef<HTMLDivElement | null>(null);
 
-  // NOTE: Observer 콜백: 마지막 요소가 화면에 보이면 다음 페이지(댓글 최대3개를 묶어 1페이지 취급) 로드
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [target] = entries;
@@ -39,7 +39,6 @@ function CommentList({ epigramId, currentUserId, onEditComment }: CommentListPro
     }
 
     return () => {
-      // NOTE: effect가 실행되기전에 호출해서 메모리 누수를 방지해줌
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
@@ -58,7 +57,14 @@ function CommentList({ epigramId, currentUserId, onEditComment }: CommentListPro
       {allComments.length > 0 ? (
         <>
           {allComments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} status={comment.writer.id === currentUserId ? 'edit' : 'view'} onEditComment={onEditComment} />
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              status={comment.writer.id === currentUserId ? 'edit' : 'view'}
+              onEditComment={onEditComment}
+              isEditing={editingCommentId === comment.id}
+              epigramId={epigramId}
+            />
           ))}
           <div ref={lastCommentRef}>{isFetchingNextPage && <div>더 많은 댓글을 불러오는 중...</div>}</div>
         </>
