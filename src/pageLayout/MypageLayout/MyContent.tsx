@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import useGetEpigrams from '@/hooks/useGetEpigrams';
-import MyEpigrams from '@/user/ui-content/MyEpigrams';
+import MyEpigrams from '@/components/mypage/MyEpigrams';
 import Image from 'next/image';
 import { useToast } from '@/components/ui/use-toast';
 import { EpigramsResponse } from '@/types/epigram.types';
 import { CommentResponseType } from '@/schema/comment';
 import useCommentsHook from '@/hooks/useCommentsHook';
 import useGetMyContentHook from '@/hooks/useGetMyContentHook';
-import MyComment from '@/user/ui-content/MyComment';
+import MyComment from '@/components/mypage/MyComment';
 import UserInfo from '@/types/user';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import { Button } from '@/components/ui/button';
