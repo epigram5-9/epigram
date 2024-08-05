@@ -14,7 +14,6 @@ const useDeleteCommentMutation = (options?: { onSuccess?: (variables: DeleteComm
   return useMutation<unknown, Error, DeleteCommentVariables>({
     mutationFn: ({ commentId }) => deleteComment(commentId),
     onSuccess: (_, variables) => {
-      //NOTE:
       if (variables.epigramId) {
         queryClient.invalidateQueries({
           queryKey: queries.epigramComment.getComments(variables.epigramId).queryKey,
