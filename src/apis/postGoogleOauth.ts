@@ -5,9 +5,9 @@ import httpClient from '.';
 const getGoogleIdToken = async (code: string) => {
   const response = await axios.post('https://oauth2.googleapis.com/token', {
     code,
-    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID_TEST,
-    client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET_TEST,
-    redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI_TEST,
+    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+    redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
     grant_type: 'authorization_code',
   });
 
@@ -19,7 +19,7 @@ const postGoogleOauth = async (code: string) => {
   const idToken = tokenResponse.id_token;
 
   const response = await httpClient.post('/auth/signIn/GOOGLE', {
-    redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI_TEST,
+    redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
     token: idToken,
   });
 

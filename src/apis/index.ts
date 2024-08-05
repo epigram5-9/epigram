@@ -67,3 +67,10 @@ httpClient.interceptors.response.use(
 );
 
 export default httpClient;
+
+export const logout = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+
+  window.location.href = '/auth/SignIn';
+};

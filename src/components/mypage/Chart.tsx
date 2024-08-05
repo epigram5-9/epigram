@@ -1,4 +1,5 @@
 import { EmotionLog, EmotionTypeEN } from '@/types/emotion';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import Image from 'next/image';
 import { iconPaths } from '../../user/utill/constants';
 
@@ -22,52 +23,51 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
   // 감정 종류 및 총 감정 수 계산
   const TOTAL_COUNT = monthlyEmotionLogs.length;
   const EMOTIONS: EmotionTypeEN[] = ['MOVED', 'HAPPY', 'WORRIED', 'SAD', 'ANGRY'];
-  const RADIUS = 90; // 원의 반지름
-  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
   // 가장 많이 나타나는 감정 찾기
   const maxEmotion = EMOTIONS.reduce((max, emotion) => (emotionCounts[emotion] > emotionCounts[max] ? emotion : max), EMOTIONS[0]);
 
-  // 원형 차트의 각 감정에 대한 strokeDasharray와 strokeDashoffset 계산
-  let offset = 0;
+  // 원형 차트 데이터 생성 및 정렬 (가장 많은 감정부터)
+  const chartData = EMOTIONS.map((emotion) => ({
+    name: emotion,
+    value: emotionCounts[emotion] || 0,
+  })).sort((a, b) => b.value - a.value);
+
+  // 감정 색상 설정
+  const COLORS = {
+    MOVED: '#48BB98',
+    HAPPY: '#FBC85B',
+    WORRIED: '#C7D1E0',
+    SAD: '#E3E9F1',
+    ANGRY: '#EFF3F8',
+  };
 
   return (
     <div className='flex flex-col w-full lg:max-w-[640px] md:max-w-[640px] mt-[160px] space-y-0 md:mb-10 mb-5 gap-[48px]'>
       <h2 className='text-neutral-700 text-2xl font-semibold leading-loose'>감정 차트</h2>
       <div className='flex justify-between items-center px-[112px]'>
         <div className='w-[200px] h-[200px] relative'>
-          <svg viewBox='0 0 200 200'>
-            <circle cx='100' cy='100' r={RADIUS} fill='none' stroke='beige' strokeWidth='20' />
-            {EMOTIONS.map((emotion) => {
-              const count = emotionCounts[emotion] || 0;
-              const percentage = TOTAL_COUNT > 0 ? count / TOTAL_COUNT : 0; // 0으로 나누기 방지
-              const strokeDasharray = `${CIRCUMFERENCE * percentage} ${CIRCUMFERENCE * (1 - percentage)}`;
-
-              // 색상 설정
-              let strokeColor;
-              switch (emotion) {
-                case 'HAPPY':
-                  strokeColor = '#FBC85B';
-                  break;
-                case 'SAD':
-                  strokeColor = '#E3E9F1';
-                  break;
-                case 'WORRIED':
-                  strokeColor = '#C7D1E0';
-                  break;
-                case 'ANGRY':
-                  strokeColor = '#EFF3F8';
-                  break;
-                default:
-                  strokeColor = '#48BB98';
-              }
-
-              const circle = <circle key={emotion} cx='100' cy='100' r={RADIUS} fill='none' stroke={strokeColor} strokeWidth='20' strokeDasharray={strokeDasharray} strokeDashoffset={offset} />;
-
-              offset += CIRCUMFERENCE * percentage; // 다음 원을 위한 offset 업데이트
-              return circle;
-            })}
-          </svg>
+          <ResponsiveContainer width='100%' height='100%'>
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey='value'
+                cx='50%'
+                cy='50%'
+                outerRadius={90}
+                innerRadius={70} // 도넛 차트를 위해 innerRadius 설정
+                startAngle={90} // 12시 방향에서 시작
+                endAngle={-270} // 시계 방향으로 회전
+                fill='#8884d8'
+              >
+                {chartData.map((emotion, index) => (
+                  // TODO: index 값 Lint error. 임시로 주석 사용. 추후 수정 예정
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Cell key={`cell-${index}`} fill={COLORS[emotion.name]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
           {/* 중앙에 가장 많이 나타나는 감정 출력 */}
           <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-3'>
             <Image src={iconPaths[maxEmotion].path} alt='감정' width={40} height={40} />
@@ -76,14 +76,13 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
         </div>
         <div>
           <div className='flex flex-col gap-4'>
-            {EMOTIONS.map((emotion) => {
-              const count = emotionCounts[emotion] || 0;
-              const percentage = TOTAL_COUNT > 0 ? Math.floor((count / TOTAL_COUNT) * 100) : 0; // 퍼센트 계산 및 소수점 버리기
+            {chartData.map((emotion) => {
+              const percentage = TOTAL_COUNT > 0 ? Math.floor((emotion.value / TOTAL_COUNT) * 100) : 0;
 
               return (
-                <div key={emotion} className='flex items-center gap-3'>
-                  <p className={`${iconPaths[emotion].color} w-[16px] h-[16px]`}></p>
-                  <Image src={iconPaths[emotion].path} alt='감정' width={24} height={24} />
+                <div key={emotion.name} className='flex items-center gap-3'>
+                  <div style={{ backgroundColor: COLORS[emotion.name], width: '16px', height: '16px' }}></div>
+                  <Image src={iconPaths[emotion.name].path} alt='감정' width={24} height={24} />
                   <p>{percentage}%</p>
                 </div>
               );
