@@ -3,9 +3,8 @@ import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
-import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import useEpigramCommentDelete from '@/hooks/useEpigramCommentDeleteHook';
+import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import DeleteAlertModal from '../DeleteAlertModal';
 import CommentTextarea from './CommentTextarea';
 
@@ -18,9 +17,16 @@ interface CommentItemProps {
 }
 
 function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: CommentItemProps) {
-  const deleteCommentMutation = useEpigramCommentDelete();
-  const { toast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const deleteCommentMutation = useDeleteCommentMutation({
+    onSuccess: () => {
+      setIsDeleteModalOpen(false);
+    },
+  });
+
+  const handleDeleteComment = async () => {
+    deleteCommentMutation.mutate({ commentId: comment.id, epigramId });
+  };
 
   const handleEditClick = () => {
     onEditComment(comment.id);
@@ -30,22 +36,6 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
   if (isEditing) {
     return <CommentTextarea epigramId={epigramId} editingComment={comment} onEditComplete={() => onEditComment(0)} />;
   }
-
-  const handleDeleteComment = async () => {
-    try {
-      await deleteCommentMutation.mutateAsync({ commentId: comment.id, epigramId });
-      setIsDeleteModalOpen(false);
-      toast({
-        title: '댓글이 삭제되었습니다.',
-        variant: 'destructive',
-      });
-    } catch (error) {
-      toast({
-        title: '댓글 삭제 실패했습니다.',
-        variant: 'destructive',
-      });
-    }
-  };
 
   return (
     <div
