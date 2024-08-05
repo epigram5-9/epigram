@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog_dim';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface UserProfileModalProps {
@@ -13,9 +13,6 @@ function UserProfileModal({ username, profileImage, children }: UserProfileModal
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='sm:max-w-[425px] bg-white'>
-        <DialogHeader>
-          <DialogTitle>User Profile</DialogTitle>
-        </DialogHeader>
         <div className='flex items-center space-x-4 p-6'>
           <Avatar className='h-12 w-12'>
             <AvatarImage src={profileImage} alt={username} />

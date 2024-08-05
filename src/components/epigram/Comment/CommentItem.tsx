@@ -5,9 +5,9 @@ import { textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/
 import getCustomRelativeTime from '@/lib/dateUtils';
 import { Button } from '@/components/ui/button';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
+import UserProfileModal from '@/components/Card/UserProfileModal';
 import DeleteAlertModal from '../DeleteAlertModal';
 import CommentTextarea from './CommentTextarea';
-import UserProfileModal from '@/components/Card/UserProfileModal';
 
 interface CommentItemProps {
   comment: CommentType;
@@ -62,14 +62,14 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
                 <Button
-                  className={`w-3 text-neutral-700 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                  className={`h-5 p-0 text-neutral-700 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
                   onClick={handleEditClick}
                   type='button'
                 >
                   수정
                 </Button>
                 <Button
-                  className={`w-3 text-red-400 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                  className={`h-5 p-0 text-red-400 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
                   onClick={() => setIsDeleteModalOpen(true)}
                   type='button'
                 >
