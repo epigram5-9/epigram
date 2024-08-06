@@ -9,17 +9,21 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import useRegisterMutation from '@/hooks/useRegisterMutation';
+import useRefreshToken from '@/hooks/useRefreshToken';
 
 export default function SignUp() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const { mutate: refreshAccessToken } = useRefreshToken();
   const router = useRouter();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
+    const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
+
+    if (refreshToken) {
+      refreshAccessToken({ refreshToken });
       router.push('/epigrams');
     }
-  }, [router]);
+  }, [refreshAccessToken]);
 
   const form = useForm<PostSignUpRequestType>({
     resolver: zodResolver(PostSignUpRequest),

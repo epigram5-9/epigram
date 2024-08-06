@@ -9,17 +9,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { PostSigninRequest, PostSigninRequestType } from '@/schema/auth';
 import useSigninMutation from '@/hooks/useSignInMutation';
+import useRefreshToken from '@/hooks/useRefreshToken';
 
 export default function SignIn() {
   const mutationSignin = useSigninMutation();
+  const { mutate: refreshAccessToken } = useRefreshToken();
   const router = useRouter();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
+    const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
+
+    if (refreshToken) {
+      refreshAccessToken({ refreshToken });
       router.push('/epigrams');
     }
-  }, [router]);
+  }, [refreshAccessToken]);
 
   // 폼 정의
   const form = useForm<PostSigninRequestType>({
