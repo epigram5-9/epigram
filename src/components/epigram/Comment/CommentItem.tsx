@@ -52,12 +52,12 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
         </UserProfileModal>
         <div className={`flex-col justify-start items-start ${gapStyles.sm} ${gapStyles.md} ${gapStyles.lg} inline-flex ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}>
           <div className='justify-between items-center w-full inline-flex'>
-            <div className='justify-start items-start gap-2 flex'>
+            <div className='justify-start items-center gap-2 flex'>
               <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>{comment.writer.nickname}</div>
               <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>
                 {getCustomRelativeTime(comment.createdAt)}
               </div>
-              <Image src={comment.isPrivate ? '/icon/privateIcon.png' : '/Icon/publicIcon.png'} width={16} height={16} alt={comment.isPrivate ? '비공개' : '공개'} />
+              {comment.isPrivate && <Image src='/icon/privateIcon.png' width={16} height={16} alt='비공개' />}
             </div>
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
