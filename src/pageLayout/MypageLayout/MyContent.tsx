@@ -78,6 +78,12 @@ export default function MyContent({ user }: MyContentProps) {
     }
   }, [commentData, selectedTab]);
 
+  useEffect(() => {
+    if (selectedTab === 'comments') {
+      refetchComments();
+    }
+  }, [commentCursor, selectedTab]);
+
   // 더보기 버튼 클릭 시
   const handleMoreLoad = () => {
     if (selectedTab === 'epigrams' && epigrams.nextCursor) {
@@ -121,8 +127,6 @@ export default function MyContent({ user }: MyContentProps) {
 
   // 댓글 수정
   const handleEditComment = () => {
-    setComments({ totalCount: 0, nextCursor: null, list: [] });
-    setCommentCursor(0);
     refetchComments();
   };
 
