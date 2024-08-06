@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import DeleteAlertModal from '@/components/epigram/DeleteAlertModal';
 import CommentTextarea from '@/components/epigram/Comment/CommentTextarea';
 import NONE_EPI from '../../../public/none-epi.svg';
+import getCustomRelativeTime from '@/lib/dateUtils';
 
 const sizeStyles = {
   sm: 'w-[360px]',
@@ -64,8 +65,6 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
   return totalCount > 0 ? (
     <div className='flex flex-col'>
       {comments.map((comment) => {
-        const formattedDate = new Date(comment.createdAt).toLocaleString();
-
         return (
           <div
             key={comment.id}
@@ -90,7 +89,9 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
                       <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.name} ${textSizeStyles.md.name} ${textSizeStyles.lg.name}`}>
                         {comment.writer.nickname}
                       </div>
-                      <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>{formattedDate}</div>
+                      <div className={`text-zinc-600 font-normal font-pretendard leading-normal ${textSizeStyles.sm.time} ${textSizeStyles.md.time} ${textSizeStyles.lg.time}`}>
+                        {getCustomRelativeTime(comment.createdAt)}
+                      </div>
                     </div>
                     <div className='justify-start items-start gap-4 flex'>
                       <Button
