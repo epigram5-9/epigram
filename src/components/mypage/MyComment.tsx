@@ -64,7 +64,7 @@ function MyComment({ comments, totalCount, onMoreEpigramLoad, onDeleteComment, o
 
   return totalCount > 0 ? (
     <div className='flex flex-col'>
-      {comments.map((comment) => (
+{comments.map((comment) => (
         <div
           key={comment.id}
           className={`bg-background-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex ${sizeStyles.sm} ${sizeStyles.md} ${sizeStyles.lg} ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
