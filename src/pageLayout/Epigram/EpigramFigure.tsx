@@ -22,14 +22,14 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
         <div className='flex justify-between'>
           <div className='flex gap-2'>
             {epigram.tags.map((tag) => (
-              <p key={tag.id} className='text-gray-400 text-base lg:text-xl font-normal'>
-                #{tag.name}
-              </p>
+              <Link key={tag.id} href={`/search?q=${tag.name}`} passHref>
+                <span className='text-gray-400 text-base lg:text-xl font-normal cursor-pointer hover:underline'>#{tag.name}</span>
+              </Link>
             ))}
           </div>
           {isAuthor && <MoreOptionsMenu epigram={epigram.id} />}
         </div>
-        <blockquote className=''>
+        <blockquote>
           <p className='text-2xl lg:text-3xl font-normal'>{epigram.content}</p>
         </blockquote>
         <figcaption className='text-gray-400 text-right text-base lg:text-2xl font-normal'>-{epigram.author}-</figcaption>
@@ -43,8 +43,8 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
           {epigram.referenceTitle && (
             <Button type='button'>
               <Link href={`${epigram.referenceUrl}`} target='_blank'>
-                <div className='p-4 w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-center rounded-full bg-line-100'>
-                  <p className='text-gray-300 text-sm lg:text-xl truncate ...'>{epigram.referenceTitle}</p>
+                <div className='p-2 lg:p-4 w-32 lg:w-44 h-9 lg:h-11 flex items-center justify-around rounded-full bg-line-100'>
+                  <p className='w-full text-gray-300 text-sm lg:text-xl truncate ...'>{epigram.referenceTitle}</p>
                   <Image src='/placeLink.svg' alt='링크 이미지' width={20} height={20} className='lg:w-9 lg:h-9' />
                 </div>
               </Link>

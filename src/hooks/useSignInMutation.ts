@@ -24,7 +24,7 @@ const useSigninMutation = () => {
       if (status === 500) {
         toast({
           description: '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-          className: 'border-state-error text-state-error font-semibold',
+          className: 'bg-state-error text-white font-semibold',
         });
         return;
       }
@@ -33,14 +33,14 @@ const useSigninMutation = () => {
       if (Number(status) >= 500) {
         toast({
           description: '서버에서 예상치 못한 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
-          className: 'border-state-error text-state-error font-semibold',
+          className: 'bg-state-error text-white font-semibold',
         });
         return;
       }
 
       toast({
         description: '이메일 혹은 비밀번호를 확인해주세요.',
-        className: 'border-state-error text-state-error font-semibold',
+        className: 'bg-state-error text-white font-semibold',
       });
     },
   });

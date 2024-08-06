@@ -4,9 +4,9 @@ import { EpigramRequestType } from '@/schema/epigram';
 import { CommentRequestType } from '@/schema/comment';
 import { GetMonthlyEmotionLogsRequestType } from '@/schema/emotion';
 import { GetEpigramsParamsType } from '@/schema/epigrams';
-import { getMe, getUser } from './user';
+import { getMe, getUser, getMyContentCount } from './user';
 import { getEpigram, toggleEpigramLike } from './epigram';
-import { getEpigramComments } from './epigramComment';
+import { getEpigramComments, getMyEpigramComments } from './epigramComment';
 import getMonthlyEmotionLogs from './emotion';
 import getEpigrams from './getEpigrams';
 
@@ -19,6 +19,10 @@ const queries = createQueryKeyStore({
     getUser: (request: GetUserRequestType) => ({
       queryKey: [request],
       queryFn: () => getUser(request),
+    }),
+    getMyContentCount: (request: GetUserRequestType) => ({
+      queryKey: ['getMyContentCount', request],
+      queryFn: () => getMyContentCount(request),
     }),
   },
   // NOTE: Epigram 관련 query함수
@@ -39,13 +43,13 @@ const queries = createQueryKeyStore({
     }),
   },
   epigramComment: {
-    getComments: (request: CommentRequestType) => ({
-      queryKey: ['epigramComments', request],
-      queryFn: () => getEpigramComments(request),
+    getComments: (epigramId: number) => ({
+      queryKey: ['epigramComments', epigramId],
+      queryFn: ({ pageParam }: { pageParam?: number }) => getEpigramComments({ id: epigramId, limit: 3, cursor: pageParam }),
     }),
-    getCommentList: (request: CommentRequestType) => ({
-      queryKey: ['epigramComments', request] as const,
-      queryFn: ({ pageParam }: { pageParam: number | undefined }) => getEpigramComments({ ...request, cursor: pageParam }),
+    getMyComments: (request: CommentRequestType) => ({
+      queryKey: ['myEpigramComments', request],
+      queryFn: () => getMyEpigramComments(request),
     }),
   },
   emotion: {

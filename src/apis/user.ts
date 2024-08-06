@@ -1,4 +1,4 @@
-import type { GetUserResponseType, GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType } from '@/schema/user';
+import type { GetUserResponseType, GetUserRequestType, PatchMeRequestType, PostPresignedUrlRequestType, PostPresignedUrlResponseType, GetMyContentCountType } from '@/schema/user';
 import httpClient from '.';
 
 export const getMe = async (): Promise<GetUserResponseType> => {
@@ -22,4 +22,20 @@ export const createPresignedUrl = async (request: PostPresignedUrlRequestType): 
   formData.append('image', request.image);
   const response = await httpClient.post('/images/upload', formData);
   return response.data;
+};
+
+export const getMyContentCount = async (request: GetUserRequestType): Promise<GetMyContentCountType> => {
+  const { id } = request;
+
+  // Promise.all을 사용하여 병렬 요청 실행
+  const [epigramResponse, commentResponse] = await Promise.all([
+    httpClient.get(`/epigrams`, { params: { limit: 1, cursor: 0, writerId: id } }),
+    httpClient.get(`/users/${id}/comments`, { params: { limit: 1, cursor: 0 } }),
+  ]);
+
+  // 결과
+  const epigramCount = epigramResponse.data.totalCount;
+  const commentCount = commentResponse.data.totalCount;
+
+  return { epigramCount, commentCount };
 };
