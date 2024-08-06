@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import queries from '@/apis/queries';
+import { logout } from '@/apis';
 import LOGO_ICON from '../../../public/epigram-icon.png';
 import PROFILE_ICON from '../../../public/icon/user-icon.svg';
 import MENU_ICON from '../../../public/icon/menu-icon.svg';
@@ -50,12 +51,17 @@ export default function NewHeader() {
             </button>
           </div>
         </div>
-        <button type='button' onClick={() => handleNavigateTo('/mypage')} className='flex items-center gap-1.5'>
-          <div className='w-4 h-4 lg:w-6 lg:h-6 relative'>
-            <Image src={PROFILE_ICON} alt='프로필 이미지' />
-          </div>
-          <div className='text-gray-300 text-[13px] lg:text-sm font-medium font-pretendard leading-snug'>{getNickName()}</div>
-        </button>
+        <div className='flex gap-3 items-center justify-center'>
+          <button type='button' onClick={() => handleNavigateTo('/mypage')} className='flex items-center gap-1.5'>
+            <div className='w-4 h-4 lg:w-6 lg:h-6 relative'>
+              <Image src={PROFILE_ICON} alt='프로필 이미지' />
+            </div>
+            <div className='text-gray-300 text-[13px] lg:text-sm font-medium font-pretendard leading-snug'>{getNickName()}</div>
+          </button>
+          <button type='button' onClick={logout} className='text-gray-200 text-[13px] lg:text-sm font-medium font-pretendard leading-snug border bg-background-100 rounded-lg py-1.5 px-3'>
+            로그아웃
+          </button>
+        </div>
       </div>
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(false)} />
     </div>

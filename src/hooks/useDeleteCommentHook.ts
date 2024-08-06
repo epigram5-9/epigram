@@ -6,6 +6,7 @@ import queries from '@/apis/queries';
 interface DeleteCommentVariables {
   commentId: number;
   epigramId?: number;
+  userId?: number;
 }
 
 const useDeleteCommentMutation = (options?: { onSuccess?: (variables: DeleteCommentVariables) => void }) => {
@@ -19,6 +20,17 @@ const useDeleteCommentMutation = (options?: { onSuccess?: (variables: DeleteComm
           queryKey: queries.epigramComment.getComments(variables.epigramId).queryKey,
         });
       }
+
+      if (variables.userId) {
+        queryClient.invalidateQueries({
+          queryKey: queries.epigramComment.getMyComments({
+            id: variables.userId,
+            limit: 3,
+            cursor: 0,
+          }).queryKey,
+        });
+      }
+
       toast({
         title: '댓글이 삭제되었습니다.',
         variant: 'destructive',
