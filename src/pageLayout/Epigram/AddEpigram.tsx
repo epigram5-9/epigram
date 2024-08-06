@@ -19,7 +19,7 @@ function AddEpigram() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [textCount, setTextCount] = useState(0);
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
     defaultValues: {
@@ -50,6 +50,15 @@ function AddEpigram() {
     const subscription = form.watch(watchForm);
     return () => subscription.unsubscribe();
   }, [form, watchForm]);
+
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'content') {
+        setTextCount(value.content?.length || 0);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement({
     setValue: form.setValue,
@@ -120,7 +129,16 @@ function AddEpigram() {
                     <span className='text-state-error'>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2' id='content' placeholder='500자 이내로 입력해주세요.' {...field} />
+                    <div className='relative'>
+                      <Textarea
+                        className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2'
+                        id='content'
+                        placeholder='500자 이내로 입력해주세요.'
+                        {...field}
+                        maxLength={500}
+                      />
+                      <div className={`absolute bottom-2 right-6 text-sm ${textCount === 500 ? 'text-state-error' : 'text-gray-500'}`}>{textCount}/500</div>
+                    </div>
                   </FormControl>
                   <FormMessage className='text-state-error text-right' />
                 </FormItem>
