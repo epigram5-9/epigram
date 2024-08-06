@@ -66,7 +66,7 @@ export default function MyContent({ user }: MyContentProps) {
       setComments((prev) => ({
         totalCount: commentData.totalCount,
         nextCursor: commentData.nextCursor,
-        list: [...prev.list, ...commentData.list],
+        list: [...prev.list.filter((comment) => !commentData.list.some((newComment) => newComment.id === comment.id)), ...commentData.list],
       }));
       setIsLoadingMore(false);
     }
@@ -106,6 +106,7 @@ export default function MyContent({ user }: MyContentProps) {
   // 댓글 삭제 훅
   const deleteCommentMutation = useDeleteCommentMutation({
     onSuccess: ({ commentId }) => {
+      // 댓글 삭제 후 상태 업데이트
       setComments((prev) => ({
         totalCount: prev.totalCount - 1,
         nextCursor: prev.nextCursor,
@@ -117,7 +118,7 @@ export default function MyContent({ user }: MyContentProps) {
 
   // 댓글 삭제 훅 호출
   const handleDeleteComment = async (commentId: number) => {
-    deleteCommentMutation.mutate({ commentId });
+    await deleteCommentMutation.mutateAsync({ commentId, userId: user.id });
   };
 
   // 댓글 수정
