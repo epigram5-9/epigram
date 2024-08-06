@@ -27,13 +27,15 @@ export const createPresignedUrl = async (request: PostPresignedUrlRequestType): 
 export const getMyContentCount = async (request: GetUserRequestType): Promise<GetMyContentCountType> => {
   const { id } = request;
 
-  // 에피그램 카운트
-  const epigram = await httpClient.get(`/epigrams`, { params: { limit: 1, cursor: 0, writerId: id } });
+  // Promise.all을 사용하여 병렬 요청 실행
+  const [epigramResponse, commentResponse] = await Promise.all([
+    httpClient.get(`/epigrams`, { params: { limit: 1, cursor: 0, writerId: id } }),
+    httpClient.get(`/users/${id}/comments`, { params: { limit: 1, cursor: 0 } }),
+  ]);
 
-  // 댓글 카운트
-  const comment = await httpClient.get(`/users/${id}/comments`, { params: { limit: 1, cursor: 0 } });
+  // 결과
+  const epigramCount = epigramResponse.data.totalCount;
+  const commentCount = commentResponse.data.totalCount;
 
-  const response = { epigramCount: epigram.data.totalCount, commentCount: comment.data.totalCount };
-
-  return response;
+  return { epigramCount, commentCount };
 };
