@@ -41,9 +41,20 @@ export const PostAuthResponse = z.object({
   user: User,
 });
 
+export const PostRefreshTokenRequest = z.object({
+  refreshToken: z.string(),
+});
+
+export const PostRefreshTokenResponse = z.object({
+  accessToken: z.string(),
+});
+
 // NOTE: 회원가입 타입
 export type PostSignUpRequestType = z.infer<typeof PostSignUpRequest>;
 export type PostSignUpResponseType = z.infer<typeof PostAuthResponse>;
 // NOTE: 로그인 타입
 export type PostSigninRequestType = z.infer<typeof PostSigninRequest>;
 export type PostSigninResponseType = z.infer<typeof PostAuthResponse>;
+// NOTE: 리프레시 토큰
+export type PostRefreshTokenRequestType = z.infer<typeof PostRefreshTokenRequest>;
+export type PostRefreshTokenResponseType = z.infer<typeof PostRefreshTokenResponse>;
