@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { CommentType } from '@/schema/comment';
 import { textSizeStyles, gapStyles, paddingStyles, contentWidthStyles } from '@/styles/CommentCardStyles';
 import getCustomRelativeTime from '@/lib/dateUtils';
-import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
-import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
+import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
+import UserProfileModal from '@/components/Card/UserProfileModal';
 import DeleteAlertModal from '../DeleteAlertModal';
 import CommentTextarea from './CommentTextarea';
 
@@ -18,9 +18,16 @@ interface CommentItemProps {
 }
 
 function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: CommentItemProps) {
-  const deleteCommentMutation = useDeleteCommentMutation();
-  const { toast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const deleteCommentMutation = useDeleteCommentMutation({
+    onSuccess: () => {
+      setIsDeleteModalOpen(false);
+    },
+  });
+
+  const handleDeleteComment = async () => {
+    deleteCommentMutation.mutate({ commentId: comment.id, epigramId });
+  };
 
   const handleEditClick = () => {
     onEditComment(comment.id);
@@ -31,32 +38,18 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
     return <CommentTextarea epigramId={epigramId} editingComment={comment} onEditComplete={() => onEditComment(0)} />;
   }
 
-  const handleDeleteComment = async () => {
-    try {
-      await deleteCommentMutation.mutateAsync(comment.id);
-      setIsDeleteModalOpen(false);
-      toast({
-        title: '댓글이 삭제되었습니다.',
-        variant: 'destructive',
-      });
-    } catch (error) {
-      toast({
-        title: '댓글 삭제 실패했습니다.',
-        variant: 'destructive',
-      });
-    }
-  };
-
   return (
     <div
       className={`h-auto bg-slate-100 border-t border-slate-300 flex-col justify-start items-start gap-2.5 inline-flex w-[360px] md:w-[384px] lg:w-[640px] ${paddingStyles.sm} ${paddingStyles.md} ${paddingStyles.lg}`}
     >
       <div className='h-full justify-start items-start gap-4 inline-flex'>
-        <div className='w-12 h-12 relative'>
-          <div className='w-12 h-12 bg-zinc-300 rounded-full overflow-hidden flex items-center justify-center'>
-            <Image src={comment.writer.image || '/ProfileTestImage.jpg'} alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
+        <UserProfileModal username={comment.writer.nickname} profileImage={comment.writer.image || '/ProfileTestImage.jpg'}>
+          <div className='w-12 h-12 relative cursor-pointer rounded-full'>
+            <div>
+              <Image src={comment.writer.image || '/ProfileTestImage.jpg'} alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
+            </div>
           </div>
-        </div>
+        </UserProfileModal>
         <div className={`flex-col justify-start items-start ${gapStyles.sm} ${gapStyles.md} ${gapStyles.lg} inline-flex ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}>
           <div className='justify-between items-center w-full inline-flex'>
             <div className='justify-start items-start gap-2 flex'>
@@ -69,14 +62,14 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
             {status === 'edit' && (
               <div className='justify-start items-start gap-4 flex'>
                 <Button
-                  className={`w-3 text-neutral-700 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                  className={`h-5 p-0 text-neutral-700 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
                   onClick={handleEditClick}
                   type='button'
                 >
                   수정
                 </Button>
                 <Button
-                  className={`w-3 text-red-400 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
+                  className={`h-5 p-0 text-red-400 leading-[18px] cursor-pointer ${textSizeStyles.sm.action} ${textSizeStyles.md.action} ${textSizeStyles.lg.action}`}
                   onClick={() => setIsDeleteModalOpen(true)}
                   type='button'
                 >
