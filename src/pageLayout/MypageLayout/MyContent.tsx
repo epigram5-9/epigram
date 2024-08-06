@@ -104,26 +104,19 @@ export default function MyContent({ user }: MyContentProps) {
   };
 
   // 댓글 삭제
-  const deleteCommentMutation = useDeleteCommentMutation();
-  const handleDeleteComment = async (commentId: number) => {
-    try {
-      await deleteCommentMutation.mutateAsync(commentId);
+  const deleteCommentMutation = useDeleteCommentMutation({
+    onSuccess: ({ commentId }) => {
       setComments((prev) => ({
         totalCount: prev.totalCount - 1,
         nextCursor: prev.nextCursor,
         list: prev.list.filter((comment) => comment.id !== commentId),
       }));
       setCommentCount((prev) => prev - 1);
-      toast({
-        title: '댓글이 삭제되었습니다.',
-        variant: 'destructive',
-      });
-    } catch (error) {
-      toast({
-        title: '댓글 삭제 실패했습니다.',
-        variant: 'destructive',
-      });
-    }
+    },
+  });
+
+  const handleDeleteComment = async (commentId: number) => {
+    deleteCommentMutation.mutate({ commentId });
   };
 
   // 댓글 수정
