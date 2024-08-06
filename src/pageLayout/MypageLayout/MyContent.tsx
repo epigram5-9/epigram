@@ -103,7 +103,6 @@ export default function MyContent({ user }: MyContentProps) {
     }
   };
 
-
   // 댓글 삭제 훅
   const deleteCommentMutation = useDeleteCommentMutation({
     onSuccess: ({ commentId }) => {
@@ -116,7 +115,6 @@ export default function MyContent({ user }: MyContentProps) {
       setCommentCount((prev) => prev - 1);
     },
   });
-
 
   // 댓글 삭제 훅 호출
   const handleDeleteComment = async (commentId: number) => {
