@@ -22,14 +22,14 @@ function EpigramFigure({ epigram, currentUserId }: EpigramFigureProps) {
         <div className='flex justify-between'>
           <div className='flex gap-2'>
             {epigram.tags.map((tag) => (
-              <p key={tag.id} className='text-gray-400 text-base lg:text-xl font-normal'>
-                #{tag.name}
-              </p>
+              <Link key={tag.id} href={`/search?q=${tag.name}`} passHref>
+                <span className='text-gray-400 text-base lg:text-xl font-normal cursor-pointer hover:underline'>#{tag.name}</span>
+              </Link>
             ))}
           </div>
           {isAuthor && <MoreOptionsMenu epigram={epigram.id} />}
         </div>
-        <blockquote className=''>
+        <blockquote>
           <p className='text-2xl lg:text-3xl font-normal'>{epigram.content}</p>
         </blockquote>
         <figcaption className='text-gray-400 text-right text-base lg:text-2xl font-normal'>-{epigram.author}-</figcaption>
