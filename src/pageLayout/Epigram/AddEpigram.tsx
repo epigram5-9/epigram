@@ -250,7 +250,7 @@ function AddEpigram() {
                       type='button'
                       className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3 bg-blue-500 text-white rounded'
                       onClick={handleAddTag}
-                      disabled={field.value.length >= 3 || currentTag.length === 0}
+                      disabled={currentTag.length === 0}
                     >
                       저장
                     </Button>
