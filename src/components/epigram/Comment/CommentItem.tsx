@@ -6,6 +6,7 @@ import getCustomRelativeTime from '@/lib/dateUtils';
 import { Button } from '@/components/ui/button';
 import useDeleteCommentMutation from '@/hooks/useDeleteCommentHook';
 import UserProfileModal from '@/components/Card/UserProfileModal';
+import { sampleImage } from '@/user/utill/constants';
 import DeleteAlertModal from '../DeleteAlertModal';
 import CommentTextarea from './CommentTextarea';
 
@@ -46,7 +47,7 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
         <UserProfileModal username={comment.writer.nickname} profileImage={comment.writer.image || '/ProfileTestImage.jpg'}>
           <div className='w-12 h-12 relative cursor-pointer rounded-full'>
             <div>
-              <Image src={comment.writer.image || '/ProfileTestImage.jpg'} alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
+              <Image src={comment.writer.image || sampleImage} alt='프로필 이미지' layout='fill' objectFit='cover' className='rounded-full' />
             </div>
           </div>
         </UserProfileModal>
