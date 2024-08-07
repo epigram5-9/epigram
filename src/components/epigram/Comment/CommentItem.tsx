@@ -79,7 +79,7 @@ function CommentItem({ comment, status, onEditComment, isEditing, epigramId }: C
             )}
           </div>
           <div
-            className={`w-full text-zinc-800 font-normal font-pretendard whitespace-pre ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
+            className={`w-full text-zinc-800 font-normal font-pretendard ${textSizeStyles.sm.content} ${textSizeStyles.md.content} ${textSizeStyles.lg.content} ${contentWidthStyles.sm} ${contentWidthStyles.md} ${contentWidthStyles.lg}`}
           >
             {comment.content}
           </div>
