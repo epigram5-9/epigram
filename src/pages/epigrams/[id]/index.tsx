@@ -4,7 +4,7 @@ import EpigramComment from '@/pageLayout/Epigram/EpigramComment';
 import EpigramFigure from '@/pageLayout/Epigram/EpigramFigure';
 import { useRouter } from 'next/router';
 import { useMeQuery } from '@/hooks/userQueryHooks';
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 
 function DetailPage() {
   const router = useRouter();
@@ -21,8 +21,8 @@ function DetailPage() {
   if (!epigram) return <div>Epigram을 찾을 수 없습니다.</div>;
 
   return (
-    <div className='flex flex-col '>
-      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+    <div className='flex flex-col min-h-screen '>
+      <NewHeader />
       <EpigramFigure epigram={epigram} currentUserId={userData?.id} />
       <EpigramComment epigramId={epigram.id} currentUserId={userData?.id} userImage={userData?.image} />
     </div>

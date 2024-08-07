@@ -3,7 +3,7 @@ import { MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from '@/user/utill/constants';
 
 export const PatchMeRequest = z.object({
   image: z.string().url(),
-  nickname: z.string(),
+  nickname: z.string().min(1, { message: '닉네임은 필수 입력입니다.' }).max(20, { message: '닉네임은 최대 20자까지 가능합니다.' }),
 });
 
 export const GetUserRequest = z.object({
@@ -41,4 +41,5 @@ export type PatchMeRequestType = z.infer<typeof PatchMeRequest>;
 
 export type PostPresignedUrlRequestType = z.infer<typeof PostPresignedUrlRequest>;
 export type PostPresignedUrlResponseType = z.infer<typeof PostPresignedUrlResponse>;
+
 export type GetMyContentCountType = z.infer<typeof GetMyContentCount>;

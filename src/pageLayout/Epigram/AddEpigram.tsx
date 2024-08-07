@@ -1,18 +1,18 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
-import useAddEpigram from '@/hooks/epigramQueryHook';
 import { useRouter } from 'next/router';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import useTagManagement from '@/hooks/useTagManagementHook';
 import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
+import useAddEpigram from '@/hooks/useAddEpigramHook';
 
 function AddEpigram() {
   const router = useRouter();
@@ -106,7 +106,7 @@ function AddEpigram() {
 
   return (
     <>
-      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <NewHeader />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
@@ -259,7 +259,6 @@ function AddEpigram() {
           </form>
         </Form>
       </div>
-
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
         <AlertDialogContent className='bg-white'>
           <AlertDialogHeader>

@@ -3,7 +3,7 @@ import { UserProfileProps } from '@/types/user';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
-import { sampleImage } from '../utill/constants';
+import { sampleImage } from '../../user/utill/constants';
 import ProfileEdit from './ProfileEdit';
 
 export default function Profile({ image, nickname }: UserProfileProps) {

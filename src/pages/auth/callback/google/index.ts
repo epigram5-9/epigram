@@ -12,10 +12,7 @@ export default function Google() {
       login(code);
     } else {
       /* eslint-disable no-console */
-      console.log(code); // code가 없을 때 콘솔에 출력
+      console.log('No code found in URL parameters'); // code가 없을 때 콘솔에 출력
     }
   }, [code, login]);
 }
-
-// code가 없는 경우의 예시 http://localhost:3000/auth/redirect/kakao
-// 토스트로 에러 메시지 띄우고, 로그인 페이지로 리다이렉트
