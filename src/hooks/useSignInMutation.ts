@@ -12,7 +12,7 @@ const useSigninMutation = () => {
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      router.replace('/epigrams');
+      router.push('/epigrams');
     },
     onError: (error) => {
       if (!isAxiosError(error)) {
