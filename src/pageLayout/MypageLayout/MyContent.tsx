@@ -19,6 +19,7 @@ export default function MyContent({ user }: MyContentProps) {
 
   const deleteCommentMutation = useDeleteCommentMutation({
     onSuccess: ({ commentId }) => {
+      // 댓글 삭제 후 상태 업데이트
       setComments((prev) => ({
         totalCount: prev.totalCount - 1,
         nextCursor: prev.nextCursor,
@@ -27,6 +28,7 @@ export default function MyContent({ user }: MyContentProps) {
     },
   });
 
+  // 댓글 삭제 훅 호출
   const handleDeleteComment = async (commentId: number) => {
     await deleteCommentMutation.mutateAsync({ commentId, userId: user.id });
   };
@@ -35,6 +37,7 @@ export default function MyContent({ user }: MyContentProps) {
     refetchComments();
   };
 
+  // 에러 처리
   const handleError = (error: Error | null) => {
     if (error) {
       toast({
@@ -47,6 +50,7 @@ export default function MyContent({ user }: MyContentProps) {
   handleError(epigramsError);
   handleError(commentsError);
 
+  // 로딩상태
   if ((isEpigramsLoading || isCommentsLoading) && !isLoadingMore) {
     return <Image src={spinner} alt='로딩중' width={200} height={200} />;
   }
