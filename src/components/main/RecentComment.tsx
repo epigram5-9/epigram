@@ -17,7 +17,7 @@ function RecentComments() {
 
   useEffect(() => {
     if (data) {
-      setComments((prevComments) => [...prevComments, ...data.list]);
+      setComments((prevComments) => [...prevComments.filter((comment) => !data.list.some((newComment) => newComment.id === comment.id)), ...data.list]);
       if (data.list.length > 0) {
         setCursor(data.list[data.list.length - 1].id);
       }
@@ -43,7 +43,7 @@ function RecentComments() {
           <CommentCard key={comment.id} writer={comment.writer} content={comment.content} createdAt={new Date(comment.createdAt)} status='view' />
         ))}
         {isLoadingMore && (
-          <div className='w-full flex items-center justify-center lg:mt-[70px] md:mt-[50px]'>
+          <div className='w-full flex items-center justify-center bg-transparent lg:mt-[70px] md:mt-[50px]'>
             <Image src={spinner} alt='로딩중' width={50} height={50} />
           </div>
         )}

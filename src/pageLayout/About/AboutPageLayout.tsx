@@ -6,9 +6,9 @@ import StartButton from './StartButton';
 function AboutLayout() {
   return (
     <>
-      <Header icon='' isLogo insteadOfLogo='' isProfileIcon={false} isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
       <main className='w-full h-[3000px] lg:h-[5000px] relative bg-slate-100'>
-        <section className='absolute w-full h-[676px] lg:h-[900px] left-0  bg-stripes'>
+        <section className='absolute w-full h-[676px] lg:h-[900px] left-0 top-[1px] bg-stripes'>
           <div className='absolute left-1/2 transform -translate-x-1/2 top-[200px] lg:top-[320px] flex-col justify-start items-center gap-12 inline-flex'>
             <div className='flex-col justify-start items-center gap-[8px] md:gap-[24px] lg:gap-[40px] flex'>
               <div className='text-center text-zinc-700 text-[24px] md:text-[32px] lg:text-[40px] font-normal font-iropkeBatang leading-[40px] md:leading-[48px] lg:leading-[64px]'>
@@ -75,12 +75,12 @@ function AboutLayout() {
           </div>
         </section>
 
-        <section className='absolute w-[312px] md:w-[385px] lg:w-[1195px] left-1/2 transform -translate-x-1/2 top-[1938px] md:top-[2031px] lg:top-[2825px] justify-center items-end gap-[40px] lg:gap-[80px] inline-flex'>
+        <section className='absolute w-[312px] md:w-[385px] lg:w-[1188px] flex-col lg:flex-row left-1/2 transform -translate-x-1/2 top-[1938px] md:top-[2031px] lg:top-[2825px] justify-center lg:items-end gap-[40px] lg:gap-[80px] inline-flex'>
           <div className='block md:hidden lg:hidden'>
-            <Image src='/AboutPage/Mobile/AboutEpigram3.png' alt='Epigram Mobile' width={312} height={210} />
+            <Image className='w-[312px] h-[210px]' src='/AboutPage/Mobile/AboutEpigram3.png' alt='Epigram Mobile' width={312} height={210} />
           </div>
           <div className='hidden md:block lg:hidden'>
-            <Image src='/AboutPage/Tablet/AboutEpigram3.png' alt='Epigram Tablet' width={384} height={240} />
+            <Image className='w-[384px] h-[240px]' src='/AboutPage/Tablet/AboutEpigram3.png' alt='Epigram Tablet' width={384} height={240} />
           </div>
           <div className='hidden md:hidden lg:block'>
             <Image className='w-[744px] h-[388px]' src='/AboutPage/Desktop/AboutEpigram3.png' alt='Epigram Desktop' width={744} height={388} />

@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
+import { useEmotionContext } from '@/context/EmotionContext';
 import EmotionSelector from '../Emotion/EmotionSelector';
 
-function TodayEmotion() {
+interface TodayEmotionProps {
+  isMyPage?: boolean;
+}
+
+function TodayEmotion({ isMyPage = false }: TodayEmotionProps) {
   const [isVisible, setIsVisible] = useState<boolean>(true);
+  // NOTE: 오늘의 감정 선택 시 감정 달력 및 감정 차트 동기화를 위한 context 추가
+  const { setShouldRefetch } = useEmotionContext();
 
   const handleEmotionSaved = () => {
-    setIsVisible(false);
+    if (isMyPage) setShouldRefetch(true);
+    else setIsVisible(false);
   };
 
   if (!isVisible) return null;

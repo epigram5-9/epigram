@@ -7,13 +7,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
-import { CommentFormSchema, CommentFormValues } from '@/schema/comment';
+import { CommentFormSchema, CommentFormValues, CommentType } from '@/schema/comment';
 import usePostCommentMutation from '@/hooks/usePostCommentHook';
 import usePatchCommentMutation from '@/hooks/usePatchCommentHook';
 
 interface CommentTextareaProps {
   epigramId: number;
-  editingComment: { id: number; content: string; isPrivate: boolean } | null;
+  editingComment?: CommentType;
   onEditComplete: () => void;
 }
 
@@ -29,9 +29,8 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
     },
   });
 
-  // NOTE: 수정중인지 새댓글작성중인지의 상태가 변활때 폼 초기화
   useEffect(() => {
-    if (editingComment !== null) {
+    if (editingComment) {
       form.reset({
         content: editingComment.content,
         isPrivate: editingComment.isPrivate,
@@ -46,7 +45,6 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
 
   const onSubmit = (values: CommentFormValues) => {
     if (editingComment) {
-      // NOTE: 댓글 수정 시
       patchCommentMutation.mutate(
         { commentId: editingComment.id, ...values },
         {
@@ -57,7 +55,6 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
         },
       );
     } else {
-      // NOTE: 새 댓글 작성 시
       const commentData = {
         epigramId,
         ...values,
@@ -70,7 +67,13 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
     }
   };
 
-  // NOTE: 수정 취소
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      form.handleSubmit(onSubmit)();
+    }
+  };
+
   const handleCancel = () => {
     form.reset();
     onEditComplete();
@@ -78,7 +81,7 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full relative'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`w-full relative ${editingComment ? 'py-6 border-slate-300 border-t' : ''}`}>
         <FormField
           control={form.control}
           name='content'
@@ -87,14 +90,15 @@ function CommentTextarea({ epigramId, editingComment, onEditComplete }: CommentT
               <FormControl>
                 <div className='relative'>
                   <Textarea
-                    className={`bg-slate-100 w-full text-base lg:text-xl text-black p-4 border-solid border-2 rounded-lg resize-none focus-visible:ring-0 ${
+                    className={`bg-slate-100 h-16 md:h-20 lg:h-28 w-full text-base lg:text-xl text-black p-2 lg:p-4 border-solid border-2 rounded-lg resize-none focus-visible:ring-0 ${
                       editingComment ? 'border-black' : 'border-line-200'
                     }`}
                     placeholder='100자 이내로 입력해 주세요.'
+                    onKeyDown={handleKeyDown}
                     {...field}
                   />
                   {editingComment && (
-                    <button type='button' onClick={handleCancel} className='absolute top-2 right-2'>
+                    <button type='button' onClick={handleCancel} className='absolute top-2 right-6'>
                       <Image src='/Icon/cancelIcon.svg' alt='취소' width={20} height={20} />
                     </button>
                   )}

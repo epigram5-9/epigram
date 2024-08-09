@@ -21,7 +21,7 @@ function MoreOptionsMenu({ epigram }: MoreOptionsMenuProps) {
         title: '삭제 완료',
         description: `에피그램 ${data.id}가 성공적으로 삭제되었습니다.`,
       });
-      router.push('/');
+      router.push('/epigrams');
     },
     onError: () => {
       toast({
