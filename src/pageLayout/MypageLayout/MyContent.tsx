@@ -27,8 +27,8 @@ export default function MyContent({ user }: MyContentProps) {
     commentsError,
     handleMoreLoad,
     handleTabClick,
-    setComments, // 상태 업데이트 함수 가져오기
-    setCommentCount, // 상태 업데이트 함수 가져오기
+    setComments,
+    setCommentCount,
     refetchComments,
   } = useMyContentState(user);
 

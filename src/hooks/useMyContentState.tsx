@@ -95,8 +95,8 @@ export default function useMyContentState(user: UserInfo) {
     commentsError,
     handleMoreLoad,
     handleTabClick,
-    setCommentCount, // 추가
-    setComments, // 추가
+    setCommentCount,
+    setComments,
     refetchComments,
   };
 }
