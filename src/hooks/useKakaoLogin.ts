@@ -1,4 +1,4 @@
-import postOauth from '@/apis/oauth';
+import postKakaoOauth from '@/apis/postKakaoOauth';
 import { toast } from '@/components/ui/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
@@ -9,13 +9,13 @@ const useKakaoLogin = () => {
 
   return useMutation({
     mutationFn: async (code: string) => {
-      const result = await postOauth(code);
+      const result = await postKakaoOauth(code);
       localStorage.setItem('accessToken', result.accessToken);
       localStorage.setItem('refreshToken', result.refreshToken);
       return result;
     },
     onSuccess: () => {
-      router.push('/');
+      router.push('/epigrams');
     },
     onError: (error) => {
       if (isAxiosError(error)) {

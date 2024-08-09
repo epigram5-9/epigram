@@ -6,6 +6,7 @@ module.exports = {
       fontFamily: {
         pretendard: ['Pretendard'],
         iropkeBatang: ['IropkeBatang'],
+        montserrat: ['Montserrat']
       },
       colors: {
         'black-100': '#787878',
@@ -49,9 +50,6 @@ module.exports = {
         'sub-gray_1': '#C7D1E0',
         'sub-gray_2': '#E3E9F1',
         'sub-gray_3': '#EFF3F8',
-      },
-      boxShadow: {
-        '3xl': '0px 0px 36px 0px rgba(0, 0, 0, 0.05)',
       },
       screens: {
         sm: '640px',

@@ -1,27 +1,25 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
-import useAddEpigram from '@/hooks/epigramQueryHook';
 import { useRouter } from 'next/router';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import useTagManagement from '@/hooks/useTagManagementHook';
-import { useMeQuery } from '@/hooks/userQueryHooks';
+import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
+import useAddEpigram from '@/hooks/useAddEpigramHook';
 
 function AddEpigram() {
   const router = useRouter();
-  const { data: userData, isPending, isError } = useMeQuery();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
-  const [selectedAuthorOption, setSelectedAuthorOption] = useState('directly'); // 기본값을 'directly'로 설정
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [textCount, setTextCount] = useState(0);
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
     defaultValues: {
@@ -31,6 +29,10 @@ function AddEpigram() {
       referenceUrl: '',
       tags: [],
     },
+  });
+
+  const { selectedAuthorOption, handleAuthorChange, AUTHOR_OPTIONS } = useAuthorSelection({
+    setValue: form.setValue,
   });
 
   // NOTE: 필수항목들에 값이 들어있는지 확인 함수
@@ -48,6 +50,15 @@ function AddEpigram() {
     const subscription = form.watch(watchForm);
     return () => subscription.unsubscribe();
   }, [form, watchForm]);
+
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'content') {
+        setTextCount(value.content?.length || 0);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement({
     setValue: form.setValue,
@@ -75,51 +86,12 @@ function AddEpigram() {
   const handleAlertClose = () => {
     setIsAlertOpen(false);
     if (alertContent.title === '등록 완료') {
-      router.push(`/epigram/${addEpigramMutation.data?.id}`);
+      router.push(`/epigrams/${addEpigramMutation.data?.id}`);
     }
   };
 
-  const AUTHOR_OPTIONS = [
-    { value: 'directly', label: '직접 입력' },
-    { value: 'unknown', label: '알 수 없음' },
-    { value: 'me', label: '본인' },
-  ];
-
-  // NOTE: default를 직접 입력으로 설정
-  // NOTE: 본인을 선택 시 유저의 nickname이 들어감
-  const handleAuthorChange = async (value: string) => {
-    setSelectedAuthorOption(value);
-    let authorValue: string;
-
-    switch (value) {
-      case 'unknown':
-        authorValue = '알 수 없음';
-        break;
-      case 'me':
-        if (isPending) {
-          authorValue = '로딩 중...';
-        } else if (userData) {
-          authorValue = userData.nickname;
-        } else {
-          authorValue = '본인 (정보 없음)';
-        }
-        break;
-      default:
-        authorValue = '';
-    }
-    form.setValue('author', authorValue);
-  };
-
-  if (isPending) {
-    return <div>사용자 정보를 불러오는 중...</div>;
-  }
-
-  if (isError) {
-    return <div>사용자 정보를 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.</div>;
-  }
-
-  // NOTE: 태그를 저장하려고 할때 enter키를 누르면 폼제출이 되는걸 방지
-  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+  // NOTE: handleKeyUp을 사용했더니 폼제출이 먼저 실행돼서 다시 handleKeyDown으로 수정
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddTag();
@@ -143,7 +115,7 @@ function AddEpigram() {
 
   return (
     <>
-      <Header icon='search' routerPage='/search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <NewHeader />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
@@ -157,7 +129,16 @@ function AddEpigram() {
                     <span className='text-state-error'>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2' id='content' placeholder='500자 이내로 입력해주세요.' {...field} />
+                    <div className='relative'>
+                      <Textarea
+                        className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2'
+                        id='content'
+                        placeholder='500자 이내로 입력해주세요.'
+                        {...field}
+                        maxLength={500}
+                      />
+                      <div className={`absolute bottom-2 right-6 text-sm ${textCount === 500 ? 'text-state-error' : 'text-gray-500'}`}>{textCount}/500</div>
+                    </div>
                   </FormControl>
                   <FormMessage className='text-state-error text-right' />
                 </FormItem>
@@ -262,15 +243,14 @@ function AddEpigram() {
                         setCurrentTag(e.target.value);
                         form.clearErrors('tags');
                       }}
-                      onKeyUp={handleKeyUp}
+                      onKeyDown={handleKeyDown}
                       maxLength={10}
                     />
-
                     <Button
                       type='button'
                       className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3 bg-blue-500 text-white rounded'
                       onClick={handleAddTag}
-                      disabled={field.value.length >= 3 || currentTag.length === 0}
+                      disabled={currentTag.length === 0}
                     >
                       저장
                     </Button>
@@ -297,7 +277,6 @@ function AddEpigram() {
           </form>
         </Form>
       </div>
-
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
         <AlertDialogContent className='bg-white'>
           <AlertDialogHeader>

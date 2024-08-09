@@ -18,7 +18,28 @@ export interface PostCommentRequest {
   content: string;
 }
 
+export interface DeleteEpigramType {
+  id: number;
+}
+
 export interface PatchCommentRequest {
   isPrivate: boolean;
   content: string;
+}
+
+export interface Epigram {
+  writerId: number;
+  id: number;
+  likeCount: number;
+  tags: { id: number; name: string }[];
+  referenceUrl: string | null;
+  referenceTitle: string | null;
+  author: string;
+  content: string;
+}
+
+export interface EpigramsResponse {
+  totalCount: number;
+  nextCursor: number | null;
+  list: Epigram[];
 }
