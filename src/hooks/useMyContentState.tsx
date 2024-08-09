@@ -11,14 +11,13 @@ export default function useMyContentState(user: UserInfo) {
   const limit = 3;
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [selectedTab, setSelectedTab] = useState<'epigrams' | 'comments'>('epigrams');
-  const [epigramCount, setEpigramCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(0);
+
   const [epigramCursor, setEpigramCursor] = useState<number>(0);
   const [commentCursor, setCommentCursor] = useState<number>(0);
   const [epigrams, setEpigrams] = useState<EpigramsResponse>({ totalCount: 0, nextCursor: null, list: [] });
   const [comments, setComments] = useState<CommentResponseType>({ totalCount: 0, nextCursor: null, list: [] });
 
-  const { data: count } = useGetMyContentHook({ id: user.id });
+  const { data: countData } = useGetMyContentHook({ id: user.id });
   const epigramsRequest = { limit, cursor: epigramCursor, writerId: user.id };
   const commentsRequest = { limit, cursor: commentCursor, id: user.id };
 
@@ -26,11 +25,17 @@ export default function useMyContentState(user: UserInfo) {
   const { data: commentData, isLoading: isCommentsLoading, error: commentsError, refetch: refetchComments } = useCommentsHook(commentsRequest);
 
   useEffect(() => {
-    if (count) {
-      setEpigramCount(count.epigramCount);
-      setCommentCount(count.commentCount);
+    if (countData) {
+      setEpigrams((prev) => ({
+        ...prev,
+        totalCount: countData.epigramCount,
+      }));
+      setComments((prev) => ({
+        ...prev,
+        totalCount: countData.commentCount,
+      }));
     }
-  }, [count]);
+  }, [countData]);
 
   useEffect(() => {
     if (selectedTab === 'epigrams' && epigramsData) {
@@ -85,8 +90,6 @@ export default function useMyContentState(user: UserInfo) {
   return {
     isLoadingMore,
     selectedTab,
-    epigramCount,
-    commentCount,
     epigrams,
     comments,
     isEpigramsLoading,
@@ -95,7 +98,6 @@ export default function useMyContentState(user: UserInfo) {
     commentsError,
     handleMoreLoad,
     handleTabClick,
-    setCommentCount,
     setComments,
     refetchComments,
   };

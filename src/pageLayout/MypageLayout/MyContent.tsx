@@ -14,23 +14,8 @@ interface MyContentProps {
 
 export default function MyContent({ user }: MyContentProps) {
   const { toast } = useToast();
-  const {
-    isLoadingMore,
-    selectedTab,
-    epigramCount,
-    commentCount,
-    epigrams,
-    comments,
-    isEpigramsLoading,
-    isCommentsLoading,
-    epigramsError,
-    commentsError,
-    handleMoreLoad,
-    handleTabClick,
-    setComments,
-    setCommentCount,
-    refetchComments,
-  } = useMyContentState(user);
+  const { isLoadingMore, selectedTab, epigrams, comments, isEpigramsLoading, isCommentsLoading, epigramsError, commentsError, handleMoreLoad, handleTabClick, setComments, refetchComments } =
+    useMyContentState(user);
 
   const deleteCommentMutation = useDeleteCommentMutation({
     onSuccess: ({ commentId }) => {
@@ -39,7 +24,6 @@ export default function MyContent({ user }: MyContentProps) {
         nextCursor: prev.nextCursor,
         list: prev.list.filter((comment) => comment.id !== commentId),
       }));
-      setCommentCount((prev) => prev - 1);
     },
   });
 
@@ -75,14 +59,14 @@ export default function MyContent({ user }: MyContentProps) {
           onClick={() => selectedTab !== 'epigrams' && handleTabClick('epigrams')}
           disabled={selectedTab === 'epigrams'}
         >
-          내 에피그램({epigramCount})
+          내 에피그램({epigrams.totalCount})
         </Button>
         <Button
           className={`font-semibold text-2xl ${selectedTab === 'comments' ? 'cursor-default text-black-600 disabled:opacity-1 ' : 'cursor-pointer text-neutral-400'}`}
           onClick={() => selectedTab !== 'comments' && handleTabClick('comments')}
           disabled={selectedTab === 'comments'}
         >
-          내 댓글({commentCount})
+          내 댓글({comments.totalCount})
         </Button>
       </div>
       <div className='w-full py-[36px]'>
