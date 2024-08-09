@@ -13,7 +13,6 @@ export default function Profile({ image, nickname }: UserProfileProps) {
     setIsModalOpen(false);
   };
 
-  // TODO: 여러개의 샘플 이미지 랜덤하게 뜨도록 추가 할 예정
   const profileImage = image || sampleImage;
 
   return (

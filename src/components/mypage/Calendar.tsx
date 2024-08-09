@@ -60,7 +60,6 @@ export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLo
           ))}
         </div>
         {weekCalendarList.map((week, weekIndex) => (
-          // TODO: index 값 Lint error. 임시로 주석 사용. 추후 수정 예정
           // eslint-disable-next-line react/no-array-index-key
           <div key={weekIndex} className='flex'>
             {week.map((day, dayIndex) => {
@@ -82,7 +81,6 @@ export default function Calendar({ currentDate, setCurrentDate, monthlyEmotionLo
 
               return (
                 <div
-                  // TODO: index 값 Lint error. 임시로 주석 사용. 추후 수정 예정
                   // eslint-disable-next-line react/no-array-index-key
                   key={dayIndex}
                   className={`w-[91px] h-[91px] font-semibold flex items-center justify-center ${isToday ? 'border-4 border-red-400 text-red-400 rounded-[3px]' : 'border-b border-gray-100 text-stone-300'}`}
