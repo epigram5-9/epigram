@@ -19,7 +19,7 @@ function RecentEpigrams() {
 
   useEffect(() => {
     if (data) {
-      setEpigrams((prevEpigrams) => [...prevEpigrams, ...data.list]);
+      setEpigrams((prevEpigrams) => [...prevEpigrams.filter((epigram) => !data.list.some((newEpigram) => newEpigram.id === epigram.id)), ...data.list]);
       if (data.list.length > 0) {
         setCursor(data.list[data.list.length - 1].id);
       }
