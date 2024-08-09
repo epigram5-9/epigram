@@ -12,10 +12,9 @@ const useRegisterMutation = (onRegisterError: (field: 'email' | 'nickname') => v
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      router.push('/auth/SignIn');
+      router.push('/epigrams');
       toast({
         title: '회원가입 성공!',
-        description: '로그인 후 이용해주세요.',
         className: 'bg-illust-green text-white font-semibold',
       });
     },
