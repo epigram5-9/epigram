@@ -37,7 +37,7 @@ export default function useMyContentState(user: UserInfo) {
       setEpigrams((prev) => ({
         totalCount: epigramsData.totalCount,
         nextCursor: epigramsData.nextCursor,
-        list: [...prev.list, ...epigramsData.list],
+        list: [...prev.list.filter((epigram) => !epigramsData.list.some((newEpigram) => newEpigram.id === epigram.id)), ...epigramsData.list],
       }));
       setIsLoadingMore(false);
     }
