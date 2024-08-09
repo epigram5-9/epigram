@@ -13,17 +13,26 @@ import useRefreshToken from '@/hooks/useRefreshToken';
 
 export default function SignIn() {
   const mutationSignin = useSigninMutation();
-  const { mutate: refreshAccessToken } = useRefreshToken();
+  const { mutateAsync: refreshAccessToken } = useRefreshToken();
   const router = useRouter();
 
   useEffect(() => {
     const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
 
     if (refreshToken) {
-      refreshAccessToken({ refreshToken });
-      router.push('/epigrams');
+      const handleTokenRefresh = async () => {
+        try {
+          await refreshAccessToken({ refreshToken });
+          router.push('/epigrams'); // 토큰 갱신 후 리디렉션
+        } catch {
+          localStorage.removeItem('refreshToken');
+          router.push('/auth/SignIn');
+        }
+      };
+
+      handleTokenRefresh();
     }
-  }, [refreshAccessToken]);
+  }, [refreshAccessToken, router]);
 
   // 폼 정의
   const form = useForm<PostSigninRequestType>({
