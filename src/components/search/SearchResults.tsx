@@ -2,8 +2,6 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { GetEpigramsResponseType } from '@/schema/epigrams';
 
-// TODO highlightedSections의 key 설정 부분에 더 나은 방법이 생각나면 변경
-
 interface SearchResultsProps {
   results: GetEpigramsResponseType | null;
   query: string;

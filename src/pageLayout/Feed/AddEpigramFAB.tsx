@@ -15,7 +15,7 @@ function AddEpigramFAB() {
       variant='default'
       size='lg'
       onClick={handleAddEpigramClick}
-      className='z-10 h-12 lg:h-16 px-3.5 lg:px-5 py-3 lg:py-4 bg-[#2c394d] text-white rounded-[100px] shadow-lg justify-center items-center gap-1 inline-flex fixed bottom-40 right-6 cursor-pointer'
+      className='z-10 bottom-[140px] md:bottom-[160px] right-6 h-12 lg:h-16 px-3.5 lg:px-5 py-3 lg:py-4 bg-[#2c394d] text-white rounded-[100px] shadow-lg justify-center items-center gap-1 inline-flex fixed cursor-pointer'
       role='button'
       aria-label='Add Epigram'
       tabIndex={0}
