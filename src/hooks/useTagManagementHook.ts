@@ -21,6 +21,7 @@ const useTagManagement = ({
     const currentTags = getValues('tags') || [];
 
     if (currentTags.length >= 3) {
+      setError('tags', { type: 'manual', message: '태그는 3개까지 저장할 수 있습니다.' });
       return;
     }
     if (currentTags.includes(currentTag)) {
