@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import SEARCH_ICON from '../../../public/md.svg';
 
-// TODO react-hook-form 사용
-
 interface SearchBarProps {
   onSearch: (search: string) => void;
   currentSearch: string;
