@@ -3,7 +3,7 @@ import { UserProfileProps } from '@/types/user';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
-import { sampleImage } from '../utill/constants';
+import { sampleImage } from '../../user/utill/constants';
 import ProfileEdit from './ProfileEdit';
 
 export default function Profile({ image, nickname }: UserProfileProps) {
@@ -13,7 +13,6 @@ export default function Profile({ image, nickname }: UserProfileProps) {
     setIsModalOpen(false);
   };
 
-  // TODO: 여러개의 샘플 이미지 랜덤하게 뜨도록 추가 할 예정
   const profileImage = image || sampleImage;
 
   return (

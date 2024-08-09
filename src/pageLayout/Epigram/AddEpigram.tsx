@@ -1,25 +1,25 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { AddEpigramFormSchema, AddEpigramFormType } from '@/schema/addEpigram';
-import useAddEpigram from '@/hooks/epigramQueryHook';
 import { useRouter } from 'next/router';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import useTagManagement from '@/hooks/useTagManagementHook';
 import { useAuthorSelection } from '@/hooks/useAuthorSelectionHook';
+import useAddEpigram from '@/hooks/useAddEpigramHook';
 
 function AddEpigram() {
   const router = useRouter();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertContent, setAlertContent] = useState({ title: '', description: '' });
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [textCount, setTextCount] = useState(0);
   const form = useForm<AddEpigramFormType>({
     resolver: zodResolver(AddEpigramFormSchema),
     defaultValues: {
@@ -50,6 +50,15 @@ function AddEpigram() {
     const subscription = form.watch(watchForm);
     return () => subscription.unsubscribe();
   }, [form, watchForm]);
+
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'content') {
+        setTextCount(value.content?.length || 0);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const { currentTag, setCurrentTag, handleAddTag, handleRemoveTag } = useTagManagement({
     setValue: form.setValue,
@@ -106,7 +115,7 @@ function AddEpigram() {
 
   return (
     <>
-      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />
+      <NewHeader />
       <div className='border-t-2 w-full flex flex-col justify-center items-center'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='flex flex-col justify-center item-center gap-6 lg:gap-8 w-[312px] md:w-[384px] lg:w-[640px] py-6'>
@@ -120,7 +129,16 @@ function AddEpigram() {
                     <span className='text-state-error'>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2' id='content' placeholder='500자 이내로 입력해주세요.' {...field} />
+                    <div className='relative'>
+                      <Textarea
+                        className='h-[132px] lg:h-[148px] lg:text-xl border-blue-300 border-2 rounded-xl resize-none p-2'
+                        id='content'
+                        placeholder='500자 이내로 입력해주세요.'
+                        {...field}
+                        maxLength={500}
+                      />
+                      <div className={`absolute bottom-2 right-6 text-sm ${textCount === 500 ? 'text-state-error' : 'text-gray-500'}`}>{textCount}/500</div>
+                    </div>
                   </FormControl>
                   <FormMessage className='text-state-error text-right' />
                 </FormItem>
@@ -232,7 +250,7 @@ function AddEpigram() {
                       type='button'
                       className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3 bg-blue-500 text-white rounded'
                       onClick={handleAddTag}
-                      disabled={field.value.length >= 3 || currentTag.length === 0}
+                      disabled={currentTag.length === 0}
                     >
                       저장
                     </Button>
@@ -259,7 +277,6 @@ function AddEpigram() {
           </form>
         </Form>
       </div>
-
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
         <AlertDialogContent className='bg-white'>
           <AlertDialogHeader>

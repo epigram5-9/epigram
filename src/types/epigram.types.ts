@@ -32,8 +32,8 @@ export interface Epigram {
   id: number;
   likeCount: number;
   tags: { id: number; name: string }[];
-  referenceUrl: string;
-  referenceTitle: string;
+  referenceUrl: string | null;
+  referenceTitle: string | null;
   author: string;
   content: string;
 }
