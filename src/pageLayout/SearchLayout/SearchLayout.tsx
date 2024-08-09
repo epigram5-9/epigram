@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import Header from '@/components/Header/Header';
+import NewHeader from '@/components/Header/NewHeader';
 import SearchBar from '@/components/search/SearchBar';
 import RecentSearches from '@/components/search/RecentSearches';
 import SearchResults from '@/components/search/SearchResults';
@@ -84,7 +84,7 @@ function SearchLayout() {
 
   return (
     <>
-      <Header icon='search' isLogo insteadOfLogo='' isProfileIcon isShareIcon={false} isButton={false} textInButton='' disabled={false} onClick={() => {}} />;
+      <NewHeader />
       <div className='container mx-auto max-w-screen-sm bg-blue-100'>
         <SearchBar onSearch={handleSearch} currentSearch={currentSearch} />
         <RecentSearches searches={searches} onSearch={handleSearch} onClear={handleClearAll} />

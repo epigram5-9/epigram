@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,9 +9,30 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import useRegisterMutation from '@/hooks/useRegisterMutation';
+import useRefreshToken from '@/hooks/useRefreshToken';
 
 export default function SignUp() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const { mutateAsync: refreshAccessToken } = useRefreshToken();
+  const router = useRouter();
+
+  useEffect(() => {
+    const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
+
+    if (refreshToken) {
+      const handleTokenRefresh = async () => {
+        try {
+          await refreshAccessToken({ refreshToken });
+          router.push('/epigrams'); // 토큰 갱신 후 리디렉션
+        } catch {
+          localStorage.removeItem('refreshToken');
+          router.push('/auth/SignIn');
+        }
+      };
+
+      handleTokenRefresh();
+    }
+  }, [refreshAccessToken, router]);
 
   const form = useForm<PostSignUpRequestType>({
     resolver: zodResolver(PostSignUpRequest),
