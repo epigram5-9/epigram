@@ -31,7 +31,7 @@ export default function NewHeader() {
 
   return (
     <div className='w-full px-6 py-4 bg-white border-b border-line-100 flex items-center gap-2.5 lg:px-[120px] md:px-[72px] md:h-[60px] lg:h-20 md:py-[19px] lg:py-[26px]'>
-      <div className='flex justify-between items-center w-full md:w-[744px] lg:w-[1920px]'>
+      <div className='max-w-screen-xl mx-auto flex justify-between items-center w-full md:w-[744px] lg:w-[1920px]'>
         <div className='flex items-center gap-3 md:gap-6 lg:gap-9'>
           <div className='flex items-center gap-3'>
             <button type='button' onClick={() => setIsSidebarOpen(!isSidebarOpen)} className='md:hidden'>

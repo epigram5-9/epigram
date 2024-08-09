@@ -61,7 +61,6 @@ export default function Chart({ monthlyEmotionLogs }: ChartProps) {
                 fill='#8884d8'
               >
                 {chartData.map((emotion, index) => (
-                  // TODO: index 값 Lint error. 임시로 주석 사용. 추후 수정 예정
                   // eslint-disable-next-line react/no-array-index-key
                   <Cell key={`cell-${index}`} fill={COLORS[emotion.name]} />
                 ))}

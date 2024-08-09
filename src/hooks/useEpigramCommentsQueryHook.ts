@@ -1,6 +1,6 @@
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
-import { CommentResponseType } from '@/schema/comment';
 import queries from '@/apis/queries';
+import { CommentResponseType } from '@/schema/comment';
 
 const useEpigramCommentsQuery = (epigramId: number) =>
   useInfiniteQuery<CommentResponseType, Error, InfiniteData<CommentResponseType>>({
