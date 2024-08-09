@@ -17,7 +17,7 @@ function RecentComments() {
 
   useEffect(() => {
     if (data) {
-      setComments((prevComments) => [...prevComments, ...data.list]);
+      setComments((prevComments) => [...prevComments.filter((comment) => !data.list.some((newComment) => newComment.id === comment.id)), ...data.list]);
       if (data.list.length > 0) {
         setCursor(data.list[data.list.length - 1].id);
       }
