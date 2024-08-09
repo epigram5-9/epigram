@@ -24,7 +24,7 @@ function EpigramFeed() {
 
   useEffect(() => {
     if (data) {
-      setEpigrams((prevEpigrams) => [...prevEpigrams, ...data.list]);
+      setEpigrams((prevEpigrams) => [...prevEpigrams, ...data.list.filter((epigram) => !new Set(prevEpigrams.map((e) => e.id)).has(epigram.id))]);
       if (data.list.length > 0) {
         setCursor(data.list[data.list.length - 1].id);
       }
